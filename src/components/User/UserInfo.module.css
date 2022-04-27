@@ -1,0 +1,102 @@
+.driverInfoWrapper{
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+    height: 370px;
+}
+
+.userProfilePic{
+    display: flex;
+    flex: 45%;
+    flex-direction: column;
+
+    color: #fff;
+}
+
+.userProfilePic img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carNumberAndName p{
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    font-size: bold;
+    letter-spacing: .5px;
+}
+
+
+.userInfo{
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    display: flex;  
+    flex: 55%;
+    /* justify-content: space-between; */
+    flex-direction: column;
+    
+    padding: 1rem ;
+}
+
+
+.userInfo p {
+    padding: .45rem 0;
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.userInfo span {
+    font-size: 1rem;
+}
+
+
+
+.actions_back{
+    width: 100%;
+    /* background-color: royalblue; */
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+.actions_back a {
+    padding: 0.3rem 0.45rem;
+    /* background-color: red; */
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color .5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.actions_back a:hover{
+    background-color: #fff;
+    color: #000;
+
+}
+
+
+.fallback{
+    text-align: center;
+    color: #fff;
+}
+
+
+
+@media (max-width: 600px) {
+    .driverInfoWrapper{
+        flex-direction: column;
+    }
+
+    .userInfo {
+        padding: 0;
+    }
+
+    .userInfo p{
+        padding: .25rem 0;
+    }
+}
