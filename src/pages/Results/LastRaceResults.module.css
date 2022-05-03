@@ -1,0 +1,110 @@
+.lastResultsSection{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    color: #fff;
+}
+
+
+.circuitInfoWrapper{
+    width: 100%;
+    height: 100px;
+    background : linear-gradient(to right, rgba(50, 70, 80, 0.7), rgba(237, 85, 85, 0.7)),
+    url('../../category\ images/circuits.jpg') no-repeat fixed;
+    padding: .25rem;
+    border-radius: 7px;
+}
+
+.circuitName{
+    height: 80%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    font-weight: 700;
+
+}
+
+.circuitData{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    font-size: .8rem;
+    text-transform: uppercase;
+}
+
+
+
+/* drivers results list */
+
+.driversResultsList{
+    max-height: 600px;
+    overflow: hidden;
+    overflow-y: auto;
+    margin: 10px 0;
+}
+
+
+.driverResultItem {
+    margin: 5px 0;
+    padding: 0.25rem;
+    border-bottom: 1px solid #5a5757;
+    border-right: 1px solid #5a5757;
+    border-radius: 7px;
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px,
+    rgb(0 0 0 / 23%) 0px 3px 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.driverResultItem > div {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.driverPosition{
+    width: 30px;
+}
+
+.team-color-bar{
+        height: 100%;
+        width: 2px;
+        padding: 0.5rem 0rem;
+        margin: 0 5px;
+}
+
+.actions_back {
+    width: 100%;
+    /* background-color: royalblue; */
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+.actions_back a {
+    padding: 0.3rem 0.45rem;
+    /* background-color: red; */
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color .5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.actions_back a:hover {
+    background-color: #fff;
+    color: #000;
+
+}

@@ -5,7 +5,9 @@ import Users from './components/User/Users';
 import UserInfo from './components/User/UserInfo';
 import Nav from './components/Nav/Nav';
 import Card from './components/UI/Card';
-import Footer from './components/Footer/Footer';
+import LastRaceResults from './pages/Results/LastRaceResults'
+import LastQualyResults from './pages/Results/LastQualyResults'
+
 
 function App() {
   return (
@@ -14,9 +16,10 @@ function App() {
         <Nav />
         <Routes>
           <Route path='/' element={<Users />}>
-
           </Route>
           <Route path='/:driverId' element={<UserInfo />}></Route>
+          <Route path='/race-results/last' element={<LastRaceResults />}></Route>
+          <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>
         </Routes>
       </Card>
       {/* <Footer /> */}
