@@ -20,7 +20,16 @@ const Category = () => {
 
     return (
         <section className={classes.carouselSection}>
-            <motion.div className={classes.carousel} ref={carouselRef}>
+            <motion.div
+                initial={{ scale: 1.2, rotate: 45 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20
+                }}
+                className={classes.carousel}
+                ref={carouselRef}>
                 <motion.div drag='x' dragConstraints={{ right: 0, left: -width }} whileTap={{ cursor: 'grabbing' }} className={classes['inner-carousel']}>
                     {categoryImages.map((category) => {
                         return (

@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import classes from './Users.module.css'
 import driversImageAndMoreInfo from '../../constants/driversImages';
 import Category from '../Category/Category';
+import { motion } from "framer-motion";
+import { driverCards } from '../../animationsPresets/animationsPresets'
+
 
 
 const Users = () => {
@@ -31,20 +34,24 @@ const Users = () => {
             <Category />
             <div>
                 <UserSearchForm />
-                <ul className={classes.usersList}>
+                <motion.ul
+                    variants={driverCards.containerDriverCards}
+                    initial="hidden"
+                    animate="visible"
+                    className={classes.usersList}>
                     {drivers && drivers.map((driver) => {
                         const driverProfilePic = driversImageAndMoreInfo.find((driverImg) => driver.driverId === driverImg.driverId);
                         return (
-                            <li className={classes.userItem} key={driver.driverId}>
+                            <motion.li variants={driverCards.driverCard} className={classes.userItem} key={driver.driverId}>
                                 <div className={classes.userProfilePic}>
                                     <img src={driverProfilePic.imgSrc} alt='profile' />
                                 </div>
                                 <p className={classes.username}>{driver.givenName + ' ' + driver.familyName}</p>
                                 <Link to={`/${driver.driverId}`} className={classes.actionView}>View More</Link>
-                            </li>
+                            </motion.li>
                         )
                     })}
-                </ul>
+                </motion.ul >
             </div>
         </>
     )
