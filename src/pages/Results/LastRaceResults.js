@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import useHttp from '../../hooks/useHttp';
 import classes from './LastRaceResults.module.css';
-import constructorsColors from '../../constants/constructorsColors';
 import Loader from '../../components/Loader/Loader';
 import { Link } from 'react-router-dom';
+import DriversRaceResults from '../../components/Results/DriversRaceResults';
 
 const LastRaceResults = () => {
     const [lastRaceResults, setLastResults] = useState([]);
     const { isLoading, error, sendRequest: fetchLastRaceResults } = useHttp();
-    console.log('isLoading', isLoading);
+    const [listCategory, setListCategory] = useState('LeaderBoard');
 
     useEffect(() => {
         const transformData = (responseData) => {
@@ -30,7 +30,13 @@ const LastRaceResults = () => {
 
     }, [lastRaceResults]);
 
+    const handleCategoryList = (e) => {
+        let ctgTitle = e.target.closest('p').textContent;
+        setListCategory(ctgTitle);
+    }
 
+    const activeLeaderBoard = listCategory === 'LeaderBoard' ? `${classes.categoryActive}` : '';
+    const activeFastestLap = listCategory === 'Fastest Lap' ? `${classes.categoryActive}` : '';
 
     return (
         <section className={classes.lastResultsSection}>
@@ -45,21 +51,11 @@ const LastRaceResults = () => {
                                 <span>{result.Races[0].date},{(result.Races[0].time).split('Z')[0]}</span>
                             </div>
                         </div>
-                        <ul className={classes.driversResultsList}>
-                            {result.Races[0].Results.map((driverResult) => (
-                                <li key={driverResult.Driver.code} className={classes.driverResultItem}>
-                                    <div>
-                                        <span className={classes.driverPosition}>#{driverResult.position}</span>
-                                        <div className={classes['team-color-bar']} style={{
-                                            backgroundColor: constructorsColors.find((info) =>
-                                                info.team === driverResult.Constructor.name).teamColor
-                                        }}></div>
-                                        <span>{`${driverResult.Driver.givenName} ${driverResult.Driver.familyName}`}</span>
-                                    </div>
-                                    <span>{driverResult.Time ? driverResult.Time.time : driverResult.status}</span>
-                                </li>
-                            ))}
-                        </ul>
+                        <div className={classes.category} >
+                            <p onClick={handleCategoryList} className={activeLeaderBoard}>LeaderBoard</p>
+                            <p onClick={handleCategoryList} className={activeFastestLap}>Fastest Lap</p>
+                        </div>
+                        <DriversRaceResults result={result} listCategory={listCategory} />
                     </div>
                 ))}
             {!isLoading && <div className={classes.actions_back}>
