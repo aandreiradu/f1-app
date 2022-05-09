@@ -33,13 +33,14 @@
     /* padding: 0rem 2rem; */
     width: 100%;
     height: 100%;
-    max-height: 150px;
+    max-height: 175px;
 }
 
 .userProfilePic img{
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* object-fit: cover; */
+    object-fit: contain;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     background-position: center center;

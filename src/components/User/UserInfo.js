@@ -82,7 +82,7 @@ const UserInfo = () => {
                                     <img src={driversImageAndMoreInfo.find((driver) => driver.driverId === driverId).imgSrc} alt='profile pic' />
                                     <div className={classes.carNumberAndName}>
                                         <p>{`${item.Driver.givenName} ${item.Driver.familyName}`}</p>
-                                        <span>Season {item.season} Car No. {item.Driver.permanentNumber}</span>
+                                        {/* <span>Season {item.season} Car No. {item.Driver.permanentNumber}</span> */}
                                     </div>
                                 </div>
                                 <div className={classes.userInfo}>
@@ -101,62 +101,34 @@ const UserInfo = () => {
                         ))}
                     </ul>
                 </section>
-                <p className={classes.standingsTitle}>Driver Standings</p>
-                {/* <ul className={classes.driverStandingsList}>
-                    {driverStandings.sort((a, b) => b.season - a.season).map((item) => (
-                        <li key={item.season} className={classes.driverStandingsItem}>
-                            <div className={classes.driverStandingsSeasonRounds}>
-                                <span>Season {item.season}</span>
-                                <div className={classes.rounds}>
-                                    <span className={classes.roundValue}>{item.round}</span>
-                                    <span className={classes.bar}></span>
-                                    <span className={classes.roundText}>Rounds</span>
-                                </div>
-                            </div>
-                            <div className={classes.driverStandingsInfo}>
-                                <div className={classes.position_wins}>
-                                    <span>WDC position: {item.DriverStandings[0].position}</span>
-                                    <span className={classes.bar}></span>
-                                    <span>WDC points: {item.DriverStandings[0].points}</span>
-                                </div>
-                                <div className={classes.wins_constructor}>
-                                    <span>Wins: {item.DriverStandings[0].wins}</span>
-                                    <span className={classes.bar}></span>
-                                    <span>Constructor: {item.DriverStandings[0].Constructors[0].name}</span>
-                                </div>
-                            </div>
-                        </li>
-                    ))}
-                </ul> */}
-                <section className={classes.tableStandings}>
-                    <table cellPadding={'0'} cellSpacing={'0'}>
-                        <thead>
-                            <tr><td>Season</td></tr>
-                            <tr><td>Rounds</td></tr>
-                            <tr><td>WDC Position</td></tr>
-                            <tr><td>WDC Points</td></tr>
-                            <tr><td>Wins</td></tr>
-                            <tr><td>Constructor</td></tr>
-                        </thead>
-                    </table>
-                    <div className={classes['tbl-content']}>
-                        <table cellPadding={'0'} cellSpacing={'0'}>
-                            <tbody>
-                                {driverStandings.sort((a, b) => b.season - a.season).map((item) => (
-                                    <tr key={item.season}>
-                                        <td>{item.season}</td>
-                                        <td>{item.round}</td>
-                                        <td>{item.round}</td>
-                                        <td>{item.DriverStandings[0].position}</td>
-                                        <td>{item.DriverStandings[0].points}</td>
-                                        <td>{item.DriverStandings[0].wins}</td>
-                                        <td>{item.DriverStandings[0].Constructors[0].name}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
+                {/* <section className={classes.tableStandings}> */}
+                <table>
+                    <caption>Statement Summary</caption>
+                    <thead>
+                        <tr>
+                            <td>Season</td>
+                            <td>Rounds</td>
+                            <td>WDC Position</td>
+                            <td>WDC Points</td>
+                            <td>Wins</td>
+                            <td>Constructor</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {driverStandings.sort((a, b) => b.season - a.season).map((item) => (
+                            <tr key={item.season}>
+                                <td>{item.season}</td>
+                                <td>{item.round}</td>
+                                <td>{item.round}</td>
+                                <td>{item.DriverStandings[0].position}</td>
+                                <td>{item.DriverStandings[0].points}</td>
+                                <td>{item.DriverStandings[0].wins}</td>
+                                <td>{item.DriverStandings[0].Constructors[0].name}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {/* </section> */}
             </div>
         )
     } else if (!isLoading) {

@@ -1,0 +1,248 @@
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,400i,600,600i");
+
+img,
+svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.wrapper {
+    color: #fff;
+    width: 100%;
+    margin: 40px auto;
+}
+
+.schedule-header {
+    border-top: solid 10px #e10600;
+    border-right: solid 10px #e10600;
+    border-top-right-radius: 15px;
+    padding-top: 10px;
+    padding-right: 10px;
+    margin-bottom: 40px;
+}
+
+.schedule-header .header-title {
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Titillium Web';
+}
+
+.header-competition {
+    text-transform: uppercase;
+}
+
+.cardSchedule {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    border-top: solid 2px #e10600;
+    border-right: solid 2px #e10600;
+    border-top-right-radius: 10px;
+    /* padding: 0 10px; */
+    padding-right: 10px;
+
+}
+
+.title {
+    position: absolute;
+    content: '';
+    top: -15px;
+    left: 0;
+    background-color: #000;
+    padding-right: 10px;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 24px;
+    font-family: 'Titillium Web';
+}
+
+.period {
+    width: 100%;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #949498;
+    margin: 15px 0;
+}
+
+.timeFlag {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timeFlag p {
+    font-family: 'Titillium Web';
+    font-size: 18px;
+    line-height: 24px;
+}
+
+
+.countryFlag {
+    width: 30px;
+    border-radius: 3px;
+    position: relative;
+    top: -2px;
+}
+
+.countryFlag img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.monthFlag {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.monthFlag p {
+    display: inline-block;
+    padding: 2px 8px 1px;
+    border-radius: 5px;
+    color: #000;
+    background: #fff;
+    white-space: nowrap;
+    font-family: 'Titillium Web';
+}
+
+.finishWrapper {
+    height: 18px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-left: 5px;
+}
+
+.finishWrapper img {
+    height: 100%;
+}
+
+.event-description {
+    font-family: 'Titillium Web';
+    padding-bottom: 10px;
+    border-bottom: 1px solid #949498;
+    margin-bottom: 10px;
+    min-height: 70px;
+    font-size: 1rem;
+}
+
+.event-description .country {
+    font-size: 1.23rem;
+    font-weight: bold;
+    font-family: 'Titillium Web';
+}
+
+.event-description .gpName {
+    font-size: 1.1rem;
+}
+
+.event-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.image-wrapper {
+    position: relative;
+    height: 80px;
+    background-color: #15151e;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px
+}
+
+.image-wrapper::before {
+    display: block;
+    content: " ";
+    /* background-image: url('https: //www.formula1.com/etc/designs/fom-website/images/patterns/white-stripe.png'); */
+    background-size: 12px;
+    min-width: 100%;
+    min-height: 100%;
+    opacity: .4;
+}
+
+.driver-info-wrapper {
+    padding-top: 2px;
+    background-color: #fff;
+    border-bottom-right-radius: 10px;
+    border-right: solid 1px #949498;
+    border-bottom: solid 1px #949498;
+}
+
+.driver-info {
+    /* border-right: solid 1px #949498;
+    border-bottom: solid 1px #949498;
+    border-bottom-right-radius: 10px; */
+    padding-right: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0;
+    color: #000;
+}
+
+.image-wrapper img {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* position 3 start */
+.position-3 {
+    order: 3;
+    flex: 0 0 31%;
+}
+
+.position-3 .image-wrapper {
+    height: 55px;
+}
+
+.position-3 .image-wrapper img {
+    max-width: 85px;
+}
+
+
+/* position 3 end */
+
+/* position-2 start */
+.position-2 {
+    order: 1;
+    flex: 0 0 33%;
+}
+
+.position-2 .image-wrapper {
+    height: 65px;
+}
+
+.position-2 .image-wrapper img {
+    width: 95%;
+    max-width: 90px;
+}
+
+/* position-2 end */
+
+
+/* position-1 start */
+.position-1 {
+    order: 2;
+    flex: 0 0 34%;
+}
+
+.position-1 .image-wrapper img {
+    max-width: 105px;
+}
+
+/* position-1 end */
+
+
+
+
+@media(min-width:576px) {
+    .cardSchedule {
+        max-width: 350px;
+    }
+}

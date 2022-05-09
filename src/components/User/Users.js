@@ -6,7 +6,7 @@ import driversImageAndMoreInfo from '../../constants/driversImages';
 import Category from '../Category/Category';
 import { motion } from "framer-motion";
 import { driverCards } from '../../animationsPresets/animationsPresets'
-
+import driversScheduleImages from '../../constants/scheduleImages';
 
 
 const Users = () => {
@@ -33,14 +33,14 @@ const Users = () => {
         <>
             <Category />
             <div>
-                <UserSearchForm />
+                {/* <UserSearchForm /> */}
                 <motion.ul
                     variants={driverCards.containerDriverCards}
                     initial="hidden"
                     animate="visible"
                     className={classes.usersList}>
                     {drivers && drivers.map((driver) => {
-                        const driverProfilePic = driversImageAndMoreInfo.find((driverImg) => driver.driverId === driverImg.driverId);
+                        const driverProfilePic = driversScheduleImages.find((driverImg) => driver.driverId === driverImg.driverId);
                         return (
                             <motion.li variants={driverCards.driverCard} className={classes.userItem} key={driver.driverId}>
                                 <div className={classes.userProfilePic}>

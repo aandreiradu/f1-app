@@ -7,6 +7,7 @@ import Nav from './components/Nav/Nav';
 import Card from './components/UI/Card';
 import LastRaceResults from './pages/Results/LastRaceResults'
 import LastQualyResults from './pages/Results/LastQualyResults'
+import Schedule from './components/Results/Schedule';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path='/:driverId' element={<UserInfo />}></Route>
           <Route path='/race-results/last' element={<LastRaceResults />}></Route>
           <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>
+          <Route path='/schedule/last' element={<Schedule />}></Route>
         </Routes>
       </Card>
       {/* <Footer /> */}
