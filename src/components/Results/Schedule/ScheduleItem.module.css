@@ -1,38 +1,5 @@
-@import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,400i,600,600i");
-
-img,
-svg {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-.wrapper {
-    color: #fff;
-    width: 100%;
-    margin: 40px auto;
-}
-
-.schedule-header {
-    border-top: solid 10px #e10600;
-    border-right: solid 10px #e10600;
-    border-top-right-radius: 15px;
-    padding-top: 10px;
-    padding-right: 10px;
-    margin-bottom: 40px;
-}
-
-.schedule-header .header-title {
-    font-size: 2rem;
-    font-weight: bold;
-    font-family: 'Titillium Web';
-}
-
-.header-competition {
-    text-transform: uppercase;
-}
-
 .cardSchedule {
+    width: 100%;
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -42,6 +9,7 @@ svg {
     border-top-right-radius: 10px;
     /* padding: 0 10px; */
     padding-right: 10px;
+    /* margin: 20px 5px; */
 
 }
 
@@ -127,12 +95,29 @@ svg {
     margin-bottom: 10px;
     min-height: 70px;
     font-size: 1rem;
+    cursor: pointer;
 }
 
 .event-description .country {
     font-size: 1.23rem;
     font-weight: bold;
     font-family: 'Titillium Web';
+}
+
+.event-description .event-country {
+    display: flex;
+    align-items: center;
+}
+
+.event-description .event-country i{
+    margin-left: 7px;
+    color: #e10600;
+    font-size: 1.03rem;
+    transition: transform .5s ease-out;
+}
+
+.event-description .event-country:hover i{
+    transform: translateX(4px);
 }
 
 .event-description .gpName {
@@ -236,13 +221,27 @@ svg {
     max-width: 105px;
 }
 
+
+.image-wrapper .notDisputed {
+    width: 100%;
+    height: 100%;
+}
+
+.notDisputed{
+    width: 100%;
+}
+
+.notDisputed img {
+    object-fit: contain;
+}
+
 /* position-1 end */
 
 
 
 
-@media(min-width:576px) {
+/* @media(min-width:576px) {
     .cardSchedule {
         max-width: 350px;
     }
-}
+} */

@@ -119,7 +119,6 @@ const UserInfo = () => {
                             <tr key={item.season}>
                                 <td>{item.season}</td>
                                 <td>{item.round}</td>
-                                <td>{item.round}</td>
                                 <td>{item.DriverStandings[0].position}</td>
                                 <td>{item.DriverStandings[0].points}</td>
                                 <td>{item.DriverStandings[0].wins}</td>

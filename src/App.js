@@ -7,14 +7,14 @@ import Nav from './components/Nav/Nav';
 import Card from './components/UI/Card';
 import LastRaceResults from './pages/Results/LastRaceResults'
 import LastQualyResults from './pages/Results/LastQualyResults'
-import Schedule from './components/Results/Schedule';
+import Schedule from './components/Results/Schedule/Schedule';
 
 
 function App() {
   return (
     <>
+      <Nav />
       <Card className="App">
-        <Nav />
         <Routes>
           <Route path='/' element={<Users />}>
           </Route>

@@ -18,10 +18,28 @@
 .navContent{
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
 
+.hamburgerMenu,
+.user-login{
+    /* height: 100%; */
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.25rem;
+    color: #fff;
+    padding: .5rem;
+    cursor: pointer;
+}
+
+.user-login{
+    background: #fff;
+        border-radius: 4px;
+    color: #15151e;
 }
 
 .navContent .logo{

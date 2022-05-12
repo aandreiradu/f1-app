@@ -21,7 +21,7 @@ import zhou from '../assets/schedule images/zhou.png'
 import russel from '../assets/schedule images/russell.png'
 import usa from '../assets/schedule images/usa.png'
 
-const driversScheduleImages = [
+const scheduleImages = [
     {
         driverId: 'albon',
         imgSrc: albon
@@ -106,8 +106,12 @@ const driversScheduleImages = [
         driverId: 'hulkenberg',
         imgSrc: hulkenberg
     },
+    {
+        driverId: 'usa',
+        imgSrc: usa
+    },
 ]
 
 
 
-export default driversScheduleImages;
+export default scheduleImages;
