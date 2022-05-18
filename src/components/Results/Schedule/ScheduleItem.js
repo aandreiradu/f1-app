@@ -4,7 +4,7 @@ import classes from './ScheduleItem.module.css'
 import raceFlag from '../../../assets/schedule images/flag-asset.png'
 import monthNames from '../../../Utils/months'
 import circuitLayouts from '../../../constants/circuitsLayouts';
-
+import { Link } from 'react-router-dom';
 
 const ScheduleItem = (props) => {
     const { circuitId, round, raceName, fp1, raceDate, country, thisRoundResults } = props;
@@ -16,9 +16,9 @@ const ScheduleItem = (props) => {
 
 
     let raceNotDisputed = (
-        <div className={`${classes['image-wrapper']} ${classes['notDisputed']}`}>
+        <Link to={`/schedule/${round}/${circuitId}`} className={`${classes['image-wrapper']} ${classes['notDisputed']}`}>
             <img className={classes['notDisputed']} src={circuitLayouts.find((circuit) => circuit.circuitId.toLocaleLowerCase() === circuitId.toLowerCase()).imgSrc} alt='circuit layout' />
-        </div>
+        </Link>
     )
 
     let content;
@@ -86,6 +86,7 @@ const ScheduleItem = (props) => {
                         <i className="fa-solid fa-chevron-right"></i>
                     </div>
                     <p className={classes.gpName}>{raceName}</p>
+                    {thisRoundResults && <Link className={classes['race-finishedBtn']} to={`/race-results/${round}/results`}>View Result</Link>}
                 </div>
                 <div className={classes['event-result']}>
                     {content}

@@ -1,14 +1,19 @@
 .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    animation: expand .5s;
+    animation: expand .4s;
     background: #000;
     color: #fff;
     z-index: 10;
     padding: 0 20px;
 }
+
+
 
 
 .sidebar-header {
@@ -21,7 +26,7 @@
 }
 
 .sidebar-menu,
-.user-login{
+.user-login {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,6 +35,8 @@
     padding: 0.5rem;
     cursor: pointer;
 }
+
+
 
 /* .sidebar-logo{
     height: 100%;
@@ -44,20 +51,94 @@
     color: #15151e;
 }
 
-.sidebar-header .sidebar-logo svg{
+.sidebar-header .sidebar-logo svg {
     height: 4rem;
 }
 
 .sidebar-links {
     display: flex;
     flex-direction: column;
+    /* opacity: 0; */
 }
 
-.sidebar-login {
+.sidebar-link-item {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* opacity: 0; */
+    /* padding: 10px 10px 10px 0; */
+    padding: 10px 10px 5px 0;
+    border: solid 1px #e10600;
+    border-top: 0;
+    border-left: 0;
+    border-bottom-right-radius: 10px;
+    margin: 5px 0;
+}
+
+/* 
+.show {
+    opacity: 1;
+    transition: all 1.5s cubic-bezier(.4, 0, .2, 1);
+} */
+
+.sidebar-link-item a {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .2px;
+    display: block;
+    padding: 5px 0px;
+    color: #fff;
+    position: relative;
+    line-height: 23px;
+    text-transform: uppercase;
+}
+
+.sidebar-login {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 15px;
+}
+
+.sidebar-auth,
+.sidebar-log {
+    display: flex;
+    /* flex: 1; */
+    width: 130px;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 0;
+}
+
+.sidebar-auth svg,
+.sidebar-log svg {
+    height: 25px;
+    width: 25px;
+}
+
+.sidebar-auth a,
+.sidebar-log a {
+    text-decoration: none;
+    color: #000;
+    margin: none;
+    border: none;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    /* background: transparent; */
+}
+
+.sidebar-auth {
+    color: #000;
+    background-color: #fff;
+}
+
+.sidebar-log {
+    background-color: #e10600;
+    color: #000;
 }
 
 

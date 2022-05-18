@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import useHttp from '../../hooks/useHttp';
-import classes from './LastRaceResults.module.css';
+import classes from '../Results/LastRaceResults.module.css';
+import { Link, useParams } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
-import { Link } from 'react-router-dom';
 import DriversRaceResults from '../../components/Results/DriversRaceResults';
 
-const LastRaceResults = () => {
+const RaceFinished = () => {
+    const { round } = useParams();
+    console.log('round', round);
     const [lastRaceResults, setLastResults] = useState([]);
-    const { isLoading, error, sendRequest: fetchLastRaceResults } = useHttp();
+    const { isLoading, error, sendRequest: fetchRaceResult } = useHttp();
     const [listCategory, setListCategory] = useState('LeaderBoard');
 
     useEffect(() => {
         const transformData = (responseData) => {
-            localStorage.setItem('lastRaceResults', JSON.stringify(responseData.MRData.RaceTable));
+            console.log('responde data', responseData)
             setLastResults([responseData.MRData.RaceTable]);
         }
-
-        fetchLastRaceResults(
-            { url: 'http://ergast.com/api/f1/current/last/results.json' },
+        fetchRaceResult(
+            { url: `https://ergast.com/api/f1/${new Date().getFullYear()}/${round}/results.json` },
             transformData
         )
-    }, [fetchLastRaceResults]);
+    }, [fetchRaceResult, round]);
+
 
 
 
     useEffect(() => {
-        // console.log('lastRaceResults', lastRaceResults);
+        console.log('lastRaceResults', lastRaceResults);
 
     }, [lastRaceResults]);
 
@@ -64,4 +66,4 @@ const LastRaceResults = () => {
     )
 }
 
-export default LastRaceResults
+export default RaceFinished

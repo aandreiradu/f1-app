@@ -6,7 +6,7 @@ import { RiMenu2Line, RiUser3Fill } from "react-icons/ri";
 import Sidebar from './Sidebar';
 
 
-const Nav = () => {
+const Nav = (props) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const menuOpenHandler = () => {
@@ -14,7 +14,7 @@ const Nav = () => {
     }
 
     if (menuOpen) {
-        return <Sidebar onClose={menuOpenHandler} />
+        return <Sidebar onClose={menuOpenHandler} /*open={menuOpen}*/ />
     } else {
         return (
             <nav className={classes.nav}>

@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RiCloseFill, RiUser3Fill } from 'react-icons/ri'
 import classes from './Sidebar.module.css';
 import { motion } from 'framer-motion'
 import { driverCards } from '../../animationsPresets/animationsPresets'
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Sidebar = (props) => {
+    // const { open } = props;
+    // console.log("open", open);
 
     const closeSidebarHandle = () => {
         props.onClose();
     }
+
+    // const sideBarItemsCS = open ? `${classes['sidebar-link-item']} ${classes['show']}` : `${classes['sidebar-link-item']}`;
+    // const ulSide = open ? `${classes['sidebar-links']} ${classes['show']}` : `${classes['sidebar-links']}`;
 
     return (
         <section className={classes.sidebar}>
@@ -17,7 +22,7 @@ const Sidebar = (props) => {
                 <div className={classes['sidebar-menu']}>
                     <RiCloseFill
                         onClick={closeSidebarHandle}
-                        className={classes['sidebar-icon']} />
+                        className={`${classes['sidebar-icon']} ${classes['closeMenu']}`} />
                 </div>
                 <div className={classes['sidebar-logo']}>
                     <motion.svg className={classes.svg}
@@ -46,28 +51,33 @@ const Sidebar = (props) => {
                     <RiUser3Fill className={classes['sidebar-icon']} />
                 </div>
             </div>
-            <ul className={classes['sidebar-links']}>
-                <li>
-                    <Link to='race-results/last'>Latest</Link>
+            {/* <ul className={classes['sidebar-links']}> */}
+            <ul className={`${classes['sidebar-links']} defaultTransition .defaultTransition-M1`}>
+                <li className={`${classes['sidebar-link-item']}`}>
+                    <Link onClick={() => props.onClose()} to='race-results/last'>Latest</Link>
+                    <i className="fa-solid fa-chevron-right"></i>
                 </li>
-                <li>
-                    <Link to='schedule/last'>Schedule</Link>
+                <li className={`${classes['sidebar-link-item']}`}>
+                    <Link onClick={() => props.onClose()} to='schedule/last'>Schedule</Link>
+                    <i className="fa-solid fa-chevron-right"></i>
                 </li>
-                <li>
-                    <Link to='standings'>Standins</Link>
+                <li className={`${classes['sidebar-link-item']} `}>
+                    <Link onClick={() => props.onClose()} to='standings'>Standins</Link>
+                    <i className="fa-solid fa-chevron-right"></i>
                 </li>
-                <li>
-                    <Link to='teams'>Teams</Link>
+                <li className={`${classes['sidebar-link-item']}`}>
+                    <Link onClick={() => props.onClose()} to='teams'>Teams</Link>
+                    <i className="fa-solid fa-chevron-right"></i>
                 </li>
             </ul>
-            <div className={classes['sidebar-login']}>
-                <div className={'sidebar-auth'}>
+            <div className={`${classes['sidebar-login']} defaultTransition defaultTransition-P1`}>
+                <div className={classes['sidebar-auth']}>
                     <RiUser3Fill className={classes['sidebar-icon']} />
-                    <button>SIGN IN</button>
+                    <Link to={'/'}>SIGN IN</Link>
                 </div>
-                <div className={'sidebar-log'}>
+                <div className={classes['sidebar-log']}>
                     <RiUser3Fill className={classes['sidebar-icon']} />
-                    <button>LOG IN</button>
+                    <Link to={'/'}>LOG IN</Link>
                 </div>
             </div>
         </section>

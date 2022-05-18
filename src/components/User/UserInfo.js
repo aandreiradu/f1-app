@@ -10,7 +10,7 @@ const UserInfo = () => {
     const [isLoading, setIsLoading] = useState(false);
     const params = useParams();
     const { driverId } = params;
-    console.log(driverId);
+    // console.log(driverId);
 
     const getUserInfoById = useCallback(async () => {
         setIsLoading(true);
@@ -22,22 +22,22 @@ const UserInfo = () => {
         }
 
         const responseData = await response.json();
-        console.log(responseData);
+        // console.log(responseData);
 
         if (responseData && responseData.MRData && responseData.MRData.StandingsTable.StandingsLists.length > 0) {
-            console.log('am intrat in if mrdata');
+            // console.log('am intrat in if mrdata');
             // localStorage.setItem('driverInfoId', JSON.stringify(responseData.MRData.StandingsTable.StandingsLists));
             const standingsList = responseData.MRData.StandingsTable.StandingsLists;
             setDriverStandings(standingsList);
-            console.log('standingsList', standingsList);
+            // console.log('standingsList', standingsList);
             const lastSeason = standingsList[standingsList.length - 1];
-            console.log('lastSeasonInfo', lastSeason);
+            // console.log('lastSeasonInfo', lastSeason);
 
             const lsInfo = [{
                 season: lastSeason.season,
                 ...lastSeason.DriverStandings[0]
             }];
-            console.log(lsInfo);
+            // console.log(lsInfo);
             // localStorage.setItem('lsInfo', JSON.stringify(lsInfo));
             setLastSeasonInfo(lsInfo);
             setIsLoading(false);
@@ -59,14 +59,14 @@ const UserInfo = () => {
         // }
 
         return () => {
-            console.log('cleanup function');
+            // console.log('cleanup function');
             setDriverStandings([]);
             setLastSeasonInfo([]);
         }
     }, [driverId, getUserInfoById]);
 
     useEffect(() => {
-        console.log('lastSeasonInfo state', lastSeasonInfo);
+        // console.log('lastSeasonInfo state', lastSeasonInfo);
     }, [lastSeasonInfo]);
 
 

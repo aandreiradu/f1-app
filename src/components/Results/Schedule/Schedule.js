@@ -13,7 +13,7 @@ const Schedule = () => {
 
     useEffect(() => {
         const transformData = (responseData) => {
-            console.log('responseData', responseData.MRData.RaceTable.Races);
+            // console.log('responseData', responseData.MRData.RaceTable.Races);
             setSeasonSchedule(responseData.MRData.RaceTable.Races);
         }
         sendRequest(
@@ -33,14 +33,12 @@ const Schedule = () => {
 
 
     useEffect(() => {
-        console.log('seasonSchedule state', seasonSchedule);
-        console.log('resultsSoFar state', resultsSoFar);
     }, [seasonSchedule, resultsSoFar]);
 
 
     return (
 
-        <div className={classes.wrapper}>
+        <div className={`${classes.wrapper} defaultTransition`}>
             {isLoading ? <Loader /> :
                 <div className={classes['schedule-header']}>
                     <h1 className={classes['header-title']}>F1 Schedule {new Date().getFullYear()}</h1>

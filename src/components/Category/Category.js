@@ -9,10 +9,10 @@ import classes from './Category.module.css'
 
 const Category = () => {
     const [width, setWidth] = useState(0);
-    console.log('render category')
+    // console.log('render category')
     const carouselRef = useRef();
     // const width = useWindowResize(carouselRef);
-    console.log('width', width);
+    // console.log('width', width);
 
     useEffect(() => {
         setWidth(carouselRef.current.scrollWidth - carouselRef.current.offsetWidth);

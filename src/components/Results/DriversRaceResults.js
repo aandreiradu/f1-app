@@ -9,8 +9,6 @@ const DriversRaceResults = (props) => {
     const { result, listCategory } = props;
 
 
-    console.log(listCategory);
-
     let content;
 
     switch (listCategory) {
