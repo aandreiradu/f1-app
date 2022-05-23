@@ -3,10 +3,12 @@ import Loader from '../../Loader/Loader'
 import classes from './Schedule.module.css'
 import useHttp from '../../../hooks/useHttp';
 import ScheduleItem from './ScheduleItem';
+import ErrorModal from '../../UI/ErrorModal';
 
 
 
 const Schedule = () => {
+    const [showModal, setShowModal] = useState(true);
     const [seasonSchedule, setSeasonSchedule] = useState([]);
     const [resultsSoFar, setResultsSoFar] = useState([]);
     const { isLoading, error, sendRequest } = useHttp();
@@ -31,26 +33,35 @@ const Schedule = () => {
         );
     }, [sendRequest]);
 
+    const confirmErrorModal = () => {
+        setShowModal(false);
+    }
 
-    useEffect(() => {
-    }, [seasonSchedule, resultsSoFar]);
+    let content;
+
+    if (error && showModal) {
+        content = <ErrorModal onConfirm={confirmErrorModal} />
+    } else {
+        content = (
+            <div className={`${classes.wrapper} defaultTransition`}>
+                {isLoading ? <Loader /> :
+                    <div className={classes['schedule-header']}>
+                        <h1 className={classes['header-title']}>F1 Schedule {new Date().getFullYear()}</h1>
+                        <p className={classes['header-competition']}>{new Date().getFullYear()} FIA FORMULA ONE WORLD CHAMPIONSHIP™ RACE CALENDAR</p>
+                        <div className={classes['schedule-results']}>
+                            {seasonSchedule && seasonSchedule.map((item) => (
+                                <ScheduleItem key={item.round} circuitId={item.Circuit.circuitId} thisRoundResults={resultsSoFar[item.round - 1]} round={item.round} raceName={item.raceName} raceDate={item.date} fp1={item.FirstPractice.date} country={item.Circuit.Location.country} />
+                            ))}
+                        </div>
+                    </div>
+                }
+            </div>
+        )
+    }
 
 
     return (
-
-        <div className={`${classes.wrapper} defaultTransition`}>
-            {isLoading ? <Loader /> :
-                <div className={classes['schedule-header']}>
-                    <h1 className={classes['header-title']}>F1 Schedule {new Date().getFullYear()}</h1>
-                    <p className={classes['header-competition']}>{new Date().getFullYear()} FIA FORMULA ONE WORLD CHAMPIONSHIP™ RACE CALENDAR</p>
-                    <div className={classes['schedule-results']}>
-                        {seasonSchedule && seasonSchedule.map((item) => (
-                            <ScheduleItem key={item.round} circuitId={item.Circuit.circuitId} thisRoundResults={resultsSoFar[item.round - 1]} round={item.round} raceName={item.raceName} raceDate={item.date} fp1={item.FirstPractice.date} country={item.Circuit.Location.country} />
-                        ))}
-                    </div>
-                </div>
-            }
-        </div>
+        content
     )
 }
 

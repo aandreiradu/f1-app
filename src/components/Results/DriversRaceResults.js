@@ -14,7 +14,7 @@ const DriversRaceResults = (props) => {
     switch (listCategory) {
         case 'LeaderBoard':
             return content = (
-                <ul className={classes.driversResultsList}>
+                <ul className={`${classes.driversResultsList} defaultTransition defaultTransition-5MS`}>
                     {result.Races[0].Results.map((driverResult) => (
                         <li key={driverResult.Driver.code} className={classes.driverResultItem}>
                             <div>
@@ -33,7 +33,7 @@ const DriversRaceResults = (props) => {
 
         case 'Fastest Lap':
             return content = (
-                <ul className={classes.driversResultsList}>
+                <ul className={`${classes.driversResultsList} defaultTransition defaultTransition-5MS`}>
                     {result.Races[0].Results.map((driverResult) => (
                         <li key={driverResult.Driver.code} className={classes.driverResultItemFS}>
                             <div className={classes.driverCN}>

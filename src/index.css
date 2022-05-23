@@ -28,6 +28,10 @@ a {
   animation-duration: 1s;
 }
 
+.defaultTransition-5MS{
+  animation-duration: .5s;
+}
+
 .defaultTransition-P1{
   animation-duration: 2s;
 }
