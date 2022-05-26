@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Link, NavLink } from 'react-router-dom';
 import F1Logo from '../../assets/f1_logo.svg';
 import classes from './Login.module.css'
 import useInput from '../../hooks/useInput';
 import { validatePassword, validateEmail } from '../../Utils/validators';
+import AuthContext from '../../store/auth-context';
+import useHttpFirebase from '../../hooks/useHttpFirebase';
+import ErrorModal from '../../components/UI/ErrorModal';
 
 const Login = () => {
+
+    const [showModal, setShowModal] = useState(true);
+    const { isLoading, error, sendRequest: loginRequest } = useHttpFirebase();
+    const authCtx = useContext(AuthContext);
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        if (authCtx.isLoggedIn) {
+            navigate('/');
+        }
+    }, [authCtx.isLoggedIn, navigate]);
+
+
     const {
         value: emailValue,
         changeHandler: emailChangeHandler,
@@ -31,19 +49,52 @@ const Login = () => {
         formIsValid = true;
     }
 
+    const setLoginToken = (stateData) => {
+        console.log('stateData', stateData);
+        const { expiresIn, idToken } = stateData;
+        const expirationTime = new Date(new Date().getTime() + +expiresIn * 1000);
+        authCtx.login(idToken, expirationTime.toISOString());
+        navigate('/');
+    }
+
     const submitFormHandler = (e) => {
         e.preventDefault();
+        setShowModal(true);
 
         if (!formIsValid) {
             return;
         }
 
+        loginRequest(
+            {
+                url: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_API_KEY}`,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: emailValue,
+                    password: passwordValue,
+                    returnSecureToken: true
+                })
+            }, setLoginToken
+
+        )
+
         resetEmail();
         resetPassword();
     }
 
+    const confirmErrorModal = () => {
+        setShowModal(false);
+    }
+
     const emailInputClasses = emailHasError ? `${classes['inputError']}` : '';
     const passwordInputClasses = passwordHasError ? `${classes['inputError']}` : '';
+
+    if (error && showModal) {
+        return <ErrorModal title='Ooops!' message={error} onConfirm={confirmErrorModal} />
+    }
 
     return (
         <section>

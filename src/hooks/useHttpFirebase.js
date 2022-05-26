@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-const useHttp = () => {
+const useHttpFirebase = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -16,13 +16,15 @@ const useHttp = () => {
                 body: requestConfig.body
             });
 
-            if (!response.ok) {
-                throw new Error('Request failed');
-            }
 
             const data = await response.json();
             console.log(data);
 
+            // firebase error handling
+            if (data.error) {
+                setIsLoading(false);
+                throw new Error(data.error.message);
+            }
 
             applyData(data);
             setIsLoading(false);
@@ -40,4 +42,4 @@ const useHttp = () => {
     }
 };
 
-export default useHttp;
+export default useHttpFirebase;

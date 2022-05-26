@@ -86,7 +86,7 @@ const ScheduleItem = (props) => {
                         <i className="fa-solid fa-chevron-right"></i>
                     </div>
                     <p className={classes.gpName}>{raceName}</p>
-                    {thisRoundResults && <Link className={classes['race-finishedBtn']} to={`/race-results/${round}/results`}>View Result</Link>}
+                    {thisRoundResults && <Link className={classes['race-finishedBtn']} to={`/race-results/${round}/results`}>View Results</Link>}
                 </div>
                 <div className={classes['event-result']}>
                     {content}

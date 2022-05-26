@@ -1,6 +1,6 @@
 
 import './App.css';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Users from './components/User/Users';
 import UserInfo from './components/User/UserInfo';
 import Nav from './components/Nav/Nav';
@@ -13,10 +13,19 @@ import CircuitSchedule from './components/Circuits/CircuitSchedule';
 import RaceFinished from './pages/Results/RaceFinished';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register'
+import { useContext, useEffect } from 'react';
+import AuthContext from './store/auth-context';
 
 function App() {
+  const navigate = useNavigate();
+  const authCtx = useContext(AuthContext);
+  const isAuth = authCtx.isLoggedIn;
 
-  const isAuth = false;
+  useEffect(() => {
+    if (!isAuth) {
+      return navigate('/auth/login');
+    }
+  }, [isAuth, navigate]);
 
   return (
     <>

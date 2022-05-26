@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import classes from './ErrorModal.module.css';
 
 const ErrorModal = (props) => {
+    console.log(props);
     const { message, title, onConfirm } = props;
 
     const confirmHandler = () => {
