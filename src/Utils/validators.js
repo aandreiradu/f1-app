@@ -14,5 +14,6 @@ export const validatePassword = (password) => {
 
 
 export const validateName = (name) => {
-    return name.trim() && name.trim().length >= 2;
+    const regex = /^[a-zA-Z ]*$/;
+    return name.trim() && name.trim().length >= 2 && regex.test(name);
 }

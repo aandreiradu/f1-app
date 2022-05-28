@@ -11,7 +11,7 @@ import ErrorModal from '../../components/UI/ErrorModal';
 
 const Register = () => {
     const [showModal, setShowModal] = useState(true);
-    const { isLoading, error, sendRequest: loginRequest } = useHttpFirebase();
+    const { isLoading, error, sendRequest: registerRequest } = useHttpFirebase();
     const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -66,6 +66,10 @@ const Register = () => {
         formIsValid = true;
     }
 
+    const setAuth = (stateData) => {
+        navigate('/auth/login');
+    }
+
 
     const submitFormHandler = (e) => {
         e.preventDefault();
@@ -84,21 +88,21 @@ const Register = () => {
 
         console.log(params);
 
-        // loginRequest(
-        //     {
-        //         url: `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_API_KEY}`,
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             email: emailValue,
-        //             password: passwordValue,
-        //             returnSecureToken: true
-        //         })
-        //     }, setLoginToken
+        registerRequest(
+            {
+                url: `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_API_KEY}`,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: emailValue,
+                    password: passwordValue,
+                    returnSecureToken: true
+                })
+            }, setAuth
 
-        // )
+        )
 
         resetEmail();
         resetPassword();
@@ -151,7 +155,7 @@ const Register = () => {
                             onBlur={firstNameBlurHandler}
                             value={firstNameValue}
                         />
-                        {firstNameHasError && <span className={classes.errorText}>First Name should be at least 2 characters long</span>}
+                        {firstNameHasError && <span className={classes.errorText}>First Name should contain only letters and be at least 2 characters long</span>}
                     </div>
                     <div className={classes['auth-fields']}>
                         <label htmlFor='lastName'>Last Name</label>
@@ -165,7 +169,7 @@ const Register = () => {
                             onBlur={lastNameBlurHandler}
                             value={lastNameValue}
                         />
-                        {lastNameHasError && <span className={classes.errorText}>Last Name should contain at least 2 characters long</span>}
+                        {lastNameHasError && <span className={classes.errorText}>Last Name should contain only letters and be at least 2 characters long</span>}
                     </div>
                     <div className={classes['auth-fields']}>
                         <label htmlFor='email'>Email Address</label>
@@ -187,6 +191,7 @@ const Register = () => {
                             className={passwordInputClasses}
                             name='password'
                             id='password'
+                            type="password"
                             placeholder='Enter your password'
                             value={passwordValue}
                             onChange={passwordChangeHandler}

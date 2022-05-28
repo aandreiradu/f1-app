@@ -135,6 +135,7 @@ const Login = () => {
                             className={passwordInputClasses}
                             name='password'
                             id='password'
+                            type='password'
                             placeholder='Enter your password'
                             value={passwordValue}
                             onChange={passwordChangeHandler}
