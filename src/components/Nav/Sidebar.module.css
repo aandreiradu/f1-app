@@ -98,7 +98,8 @@
     margin-top: 20px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: flex-end;
     align-items: center;
 
     padding: 0 15px;
@@ -118,12 +119,14 @@
 .sidebar-log svg {
     height: 25px;
     width: 25px;
+
+    color: #fff;
 }
 
 .sidebar-auth a,
 .sidebar-log a {
     text-decoration: none;
-    color: #000;
+    color: #fff;
     margin: none;
     border: none;
     text-transform: uppercase;

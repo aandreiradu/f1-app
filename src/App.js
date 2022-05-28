@@ -1,6 +1,6 @@
 
 import './App.css';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate,useLocation } from 'react-router-dom'
 import Users from './components/User/Users';
 import UserInfo from './components/User/UserInfo';
 import Nav from './components/Nav/Nav';
@@ -18,11 +18,15 @@ import AuthContext from './store/auth-context';
 
 function App() {
   const navigate = useNavigate();
+  let location = useLocation();
+  console.log(location);
+  const {pathname} = location;
   const authCtx = useContext(AuthContext);
   const isAuth = authCtx.isLoggedIn;
 
   useEffect(() => {
-    if (!isAuth) {
+    if (!isAuth && !pathname.includes('/register')) {
+      console.log('is not auth')
       return navigate('/auth/login');
     }
   }, [isAuth, navigate]);

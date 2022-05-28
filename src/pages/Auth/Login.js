@@ -10,7 +10,6 @@ import useHttpFirebase from '../../hooks/useHttpFirebase';
 import ErrorModal from '../../components/UI/ErrorModal';
 
 const Login = () => {
-
     const [showModal, setShowModal] = useState(true);
     const { isLoading, error, sendRequest: loginRequest } = useHttpFirebase();
     const authCtx = useContext(AuthContext);
@@ -116,7 +115,7 @@ const Login = () => {
                     <p>SIGN IN</p>
                 </div>
                 <div className={classes['auth-inputs']}>
-                    <div className={classes['auth-email']}>
+                    <div className={classes['auth-fields']}>
                         <label htmlFor='email'>Email Address</label>
                         <input
                             className={emailInputClasses}
@@ -130,7 +129,7 @@ const Login = () => {
                         />
                         {emailHasError && <span className={classes.errorText}>Incorrect email!</span>}
                     </div>
-                    <div className={classes['auth-password']}>
+                    <div className={classes['auth-fields']}>
                         <label htmlFor='password'>Password</label>
                         <input
                             className={passwordInputClasses}

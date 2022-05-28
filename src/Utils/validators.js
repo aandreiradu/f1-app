@@ -12,3 +12,7 @@ export const validatePassword = (password) => {
     return regularExpression.test(password);
 }
 
+
+export const validateName = (name) => {
+    return name.trim() && name.trim().length >= 2;
+}

@@ -84,8 +84,7 @@ header{
     border-bottom: 1px solid #ccc;
 }
 
-.auth-email,
-.auth-password{
+.auth-fields{
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -93,8 +92,7 @@ header{
    margin-bottom: 10px;
 }
 
-.auth-email label,
-.auth-password label {
+.auth-fields label {
     letter-spacing: .2px;
     color: #15151e;
     display: block;
@@ -102,8 +100,7 @@ header{
     padding: 0 10px;
 }
 
-.auth-email input,
-.auth-password input {
+.auth-fields input{
     color: #15151e;
     background-color: #fff;
     border: 1px solid #15151e;
@@ -113,10 +110,8 @@ header{
     border-radius: 10px;
 }
 
-.auth-email input:focus,
-.auth-email input:active,
-.auth-password input:focus,
-.auth-password input:active {
+.auth-fields input:focus,
+.auth-fields input:active{
     outline: none;
 }
 

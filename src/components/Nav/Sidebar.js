@@ -1,17 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext} from 'react'
 import { RiCloseFill, RiUser3Fill } from 'react-icons/ri'
 import classes from './Sidebar.module.css';
 import { motion } from 'framer-motion'
 import { driverCards } from '../../animationsPresets/animationsPresets'
 import { Link, NavLink } from 'react-router-dom';
+import AuthContext from '../../store/auth-context'
 
 const Sidebar = (props) => {
+    const authCtx = useContext(AuthContext);
+    const {isLoggedIn,logout} = authCtx;
+    console.log(authCtx);
     // const { open } = props;
     // console.log("open", open);
 
     const closeSidebarHandle = () => {
         props.onClose();
     }
+
+
 
     // const sideBarItemsCS = open ? `${classes['sidebar-link-item']} ${classes['show']}` : `${classes['sidebar-link-item']}`;
     // const ulSide = open ? `${classes['sidebar-links']} ${classes['show']}` : `${classes['sidebar-links']}`;
@@ -71,13 +77,13 @@ const Sidebar = (props) => {
                 </li>
             </ul>
             <div className={`${classes['sidebar-login']} defaultTransition defaultTransition-P1`}>
-                <div className={classes['sidebar-auth']}>
+                {/* <div className={classes['sidebar-auth']}>
                     <RiUser3Fill className={classes['sidebar-icon']} />
                     <Link to={'/'}>SIGN IN</Link>
-                </div>
+                </div> */}
                 <div className={classes['sidebar-log']}>
                     <RiUser3Fill className={classes['sidebar-icon']} />
-                    <Link to={'/'}>LOG IN</Link>
+                    {isLoggedIn && <Link onClick={logout} to={'/'}>LOG OUT</Link> }
                 </div>
             </div>
         </section>
