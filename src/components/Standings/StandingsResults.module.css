@@ -1,0 +1,30 @@
+.table-standings-wrap{
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #333;
+}
+
+.table-results{
+    background-color: #fff;
+}
+
+.table-results thead tr th {
+    padding: 10px 5px 5px;
+}
+
+.table-results tbody tr td {
+    padding: 18px 10px 14px;
+    text-align: center;
+}
+
+
+.limiter {
+    display: table-cell;
+    padding: 0;
+    width: 5%;
+}

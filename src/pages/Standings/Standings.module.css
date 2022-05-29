@@ -1,0 +1,14 @@
+.standings-filter-wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.standing-results{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    color: #fff;
+}

@@ -15,11 +15,11 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register'
 import { useContext, useEffect } from 'react';
 import AuthContext from './store/auth-context';
+import Standings from './pages/Standings/Standings';
 
 function App() {
   const navigate = useNavigate();
   let location = useLocation();
-  console.log(location);
   const {pathname} = location;
   const authCtx = useContext(AuthContext);
   const isAuth = authCtx.isLoggedIn;
@@ -40,6 +40,7 @@ function App() {
           <Route path='/auth/register' element={<Register />}></Route>
           <Route path='/' element={<Users />}></Route>
           <Route path='/:driverId' element={<UserInfo />}></Route>
+          <Route path='/standings' element={<Standings />} />
           <Route path='/race-results/last' element={<LastRaceResults />}></Route>
           <Route path='/race-results/:round/results' element={<RaceFinished />} />
           <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>
