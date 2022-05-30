@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,400i,600,600i");
+
+img,
+svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.wrapper {
+    color: #fff;
+    width: 100%;
+    margin: 40px auto;
+    border-top-right-radius: 17px;
+}
+
+.teams-header {
+    border-top: solid 10px #e10600;
+    border-right: solid 10px #e10600;
+    border-top-right-radius: 15px;
+    padding-top: 10px;
+    padding-right: 10px;
+    margin-bottom: 40px;
+}
+
+.teams-header .header-title {
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Titillium Web';
+}
+
+
+.teams-results {
+    width: 100%;
+    height: 100%;
+    /* display: flex;
+    flex-wrap: wrap; */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+}
+
+@media (max-width:676px) {
+    .wrapper{
+        margin: 20px auto;
+    }
+}
