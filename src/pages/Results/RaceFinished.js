@@ -44,7 +44,7 @@ const RaceFinished = () => {
         content = (
             <section className={classes.lastResultsSection}>
                 {isLoading ? <Loader /> :
-                    lastRaceResults && lastRaceResults.map((result) => (
+                    lastRaceResults && lastRaceResults.length > 0 && lastRaceResults.map((result) => (
                         <div key={'bearer' + Math.floor(Math.random() * 10000) + result.Races[0].raceName}>
                             <div className={classes.circuitInfoWrapper} key={result.round}>
                                 <p className={classes.circuitName}>{result.Races[0].raceName}</p>

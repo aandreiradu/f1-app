@@ -68,7 +68,7 @@ const Sidebar = (props) => {
                     <i className="fa-solid fa-chevron-right"></i>
                 </li>
                 <li className={`${classes['sidebar-link-item']} `}>
-                    <Link onClick={() => props.onClose()} to='/standings'>Standins</Link>
+                    <Link onClick={() => props.onClose()} to='/standings'>Standings</Link>
                     <i className="fa-solid fa-chevron-right"></i>
                 </li>
                 <li className={`${classes['sidebar-link-item']}`}>

@@ -4,6 +4,7 @@ import classes from './Nav.module.css';
 import { driverCards } from '../../animationsPresets/animationsPresets'
 import { RiMenu2Line, RiUser3Fill } from "react-icons/ri";
 import Sidebar from './Sidebar';
+import { Link } from 'react-router-dom';
 
 
 const Nav = (props) => {
@@ -24,6 +25,7 @@ const Nav = (props) => {
                     </div>
                     <div className={`${classes.logo} ${classes.item}`}>
                         {/* <img src={imageSrc} alt='logo' /> */}
+                        <Link to={'/'} >
                         <motion.svg className={classes.svg}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 560 400"
@@ -45,6 +47,7 @@ const Nav = (props) => {
                             >
                             </motion.path>
                         </motion.svg>
+                        </Link>
                     </div>
                     <div className={classes['user-login']}>
                         <RiUser3Fill />

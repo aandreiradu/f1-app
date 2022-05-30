@@ -16,6 +16,7 @@ import Register from './pages/Auth/Register'
 import { useContext, useEffect } from 'react';
 import AuthContext from './store/auth-context';
 import Standings from './pages/Standings/Standings';
+import Teams from './pages/Teams/Teams';
 
 function App() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ function App() {
           <Route path='/' element={<Users />}></Route>
           <Route path='/:driverId' element={<UserInfo />}></Route>
           <Route path='/standings' element={<Standings />} />
+          <Route path='/teams' element={<Teams/>}></Route>
           <Route path='/race-results/last' element={<LastRaceResults />}></Route>
           <Route path='/race-results/:round/results' element={<RaceFinished />} />
           <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>

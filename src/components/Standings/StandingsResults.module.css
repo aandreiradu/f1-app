@@ -28,3 +28,13 @@ table {
     padding: 0;
     width: 5%;
 }
+
+.standing-result-row:nth-child(odd) {
+    background-color: #f4f4f4;
+}
+
+.noContent_text {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+}
