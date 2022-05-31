@@ -88,6 +88,8 @@ const StandingsResults = (props) => {
   const [noContent, setNoContent] = useState(false);
   let { type, year } = props;
   const { isLoading, error, sendRequest: getStandingsData } = useHttp();
+
+
   let tHead = buildContentHeadByType(type);
   let tBody = buildContentBodyByType(
     type,
@@ -134,24 +136,22 @@ const StandingsResults = (props) => {
         }
       }
     } else if(stateData.MRData.StandingsTable.StandingsLists.length === 0) {
-      console.log('no data here');
       setNoContent(true);
     }
   };
 
   useEffect(() => {
-    // setStandingsResultsConstructor([])
-    // setStandingsResultsDriver([]);
+
     getStandingsData({ url: URL }, parseResponseData);
     if (noContent) {
       setNoContent(false);
     }
   }, [year, type]);
 
-  useEffect(() => {
-    console.log("state", standingsResultsConstructor, standingsResultsDriver);
-    console.log('noCOntent',noContent)
-  }, [standingsResultsConstructor, standingsResultsDriver]);
+  // useEffect(() => {
+  //   console.log("state", standingsResultsConstructor, standingsResultsDriver);
+  //   console.log('noCOntent',noContent)
+  // }, [standingsResultsConstructor, standingsResultsDriver]);
 
   if (isLoading) {
     return <Loader />;
@@ -167,7 +167,6 @@ const StandingsResults = (props) => {
               className={classes["standing-result-row"]}
               key={result.Driver.driverId}
             >
-              {/* <td className={classes['limiter']}></td> */}
               <td>{result.position}</td>
               <td>{result.Driver?.code || result.Driver.familyName}</td>
               <td>{result.Driver.nationality}</td>
@@ -188,7 +187,6 @@ const StandingsResults = (props) => {
               className={classes["standing-result-row"]}
               key={result.Constructor.constructorId}
             >
-              {/* <td className={classes['limiter']}></td> */}
               <td>{result.position}</td>
               <td>{result.Constructor?.name}</td>
               <td className={classes["limiter"]}></td>

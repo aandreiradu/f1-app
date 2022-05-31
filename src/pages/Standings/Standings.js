@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import Loader from "../../components/Loader/Loader";
 import StandingsResults from "../../components/Standings/StandingsResults";
 import StandingType from "../../components/Standings/StandingType";
 import StandingYears from "../../components/Standings/StandingYears";

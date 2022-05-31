@@ -25,9 +25,11 @@ const useHttp = () => {
             const data = await response.json();
             console.log(data);
 
-
-            applyData(data);
-            setIsLoading(false);
+            // setTimeout(() => {
+                // for loading purpose
+                applyData(data);
+                setIsLoading(false);
+            // },5000)
 
         } catch (error) {
             setIsLoading(false);
