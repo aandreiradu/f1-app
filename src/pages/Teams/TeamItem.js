@@ -4,8 +4,8 @@ import teamsCars from "../../constants/teamsCars";
 import constructorColors from '../../constants/constructorsColors';
 
 const TeamItem = (props) => {
-  const { name, currentPosition, points, constructorId } = props;
-  console.log(constructorId);
+  const { name, currentPosition, points, constructorId,drivers } = props;
+
 
   return (
     <div className={classes.cardTeam}>
@@ -33,14 +33,12 @@ const TeamItem = (props) => {
       </div>
       <div className={classes["cardTeam_drivers_info"]}>
         <div className={classes["cardTeam_driver"]}>
-          <span className={classes["cardTeam_driver_firstName"]}>Max</span>
-          <span className={classes["cardTeam_driver_lastName"]}>
-            Verstappen
-          </span>
+          <span className={classes["cardTeam_driver_firstName"]}>{drivers.length > 0 ? drivers[0].givenName : ''}</span>
+          <span className={classes["cardTeam_driver_lastName"]}>{drivers.length > 0 ? drivers[0].familyName : ''}</span>
         </div>
         <div className={classes["cardTeam_driver"]}>
-          <span className={classes["cardTeam_driver_firstName"]}>Sergio</span>
-          <span className={classes["cardTeam_driver_lastName"]}>Perez</span>
+          <span className={classes["cardTeam_driver_firstName"]}>{drivers.length > 0 ? drivers[1].givenName : ''}</span>
+          <span className={classes["cardTeam_driver_lastName"]}>{drivers.length > 0 ? drivers[1].familyName : ''}</span>
         </div>
       </div>
       <div className={classes["carTeam_car"]}>

@@ -6,9 +6,26 @@ import useHttp from "../../hooks/useHttp";
 import ErrorModal from "../../components/UI/ErrorModal";
 
 
+const buildLineUpByConstructorId = (cid,teams,drivers) => {
+  let lineUp = [];
+  teams.forEach((team) => {
+    drivers.filter((driver) => {
+      if(driver.Constructors[0].constructorId === cid) {
+          const {givenName,familyName} = driver.Driver;
+          if(!lineUp.find((imported) => imported.givenName === driver.Driver.givenName) && driver.Driver.familyName !== 'Hülkenberg') {
+              lineUp = [...lineUp,{'constructorId': driver.Constructors[0].constructorId,givenName,familyName,}];
+          }
+      }
+    });
+  })
+  return lineUp;
+};
+
+
 const Teams = () => {
   const [showModal,setShowModal] = useState(true);
   const [teams,setTeams] = useState([]);
+  const [teamsDrivers,setTeamsDrivers] = useState([]);
   const {isLoading,error,sendRequest: fetchTeams} = useHttp();
 
   const parseResponse = useCallback((teamsResponse) => {
@@ -23,17 +40,24 @@ const Teams = () => {
       }
   },[teams]);
 
+  const parseResponseDrivers = (driversResponse) => {
+    if(driversResponse.MRData.StandingsTable.StandingsLists.length > 0 && driversResponse.MRData.StandingsTable.StandingsLists[0].DriverStandings.length > 0) {
+      setTeamsDrivers(driversResponse.MRData.StandingsTable.StandingsLists[0].DriverStandings);
+    }
+  }
+
   useEffect(() => {
     fetchTeams(
       {url : 'http://ergast.com/api/f1/current/constructorStandings.json'},
       parseResponse
     )
+
+    fetchTeams(
+      {url: 'http://ergast.com/api/f1/current/driverStandings.json'},
+      parseResponseDrivers
+    )
   },[]);
 
-
-  useEffect(() => {
-    console.log('teams state',teams);
-  },[teams])
 
   return (
     <div className={`${classes.wrapper} defaultTransition`}>
@@ -42,17 +66,22 @@ const Teams = () => {
         F1 Teams {new Date().getFullYear()}
       </h1>
       </div>
+      {isLoading && <Loader />}
+      {!isLoading && 
       <div className={classes['teams-results']}>
-          {teams && teams.map((team,index) => (
-            <TeamItem 
+          {teams && teams.map((team,index) => {
+            const lineup = buildLineUpByConstructorId(team.Constructor.constructorId,teams,teamsDrivers);
+            // console.log(lineup);
+            return (<TeamItem 
               key={team.Constructor.constructorId}
               points = {team.points}
               name = {team.Constructor.name}
               currentPosition = {team.position}
               constructorId = {team.Constructor.constructorId}
-            />
-          ))}
-      </div>
+              drivers = {lineup}
+            />)
+          })}
+      </div> }
     </div>
   );
 };

@@ -92,7 +92,7 @@
 .cardTeam_standing_info_logo {
     height: 50px;
     background-color: #fff;
-    /* border-radius: 50%; */
+    border-radius: 5px;
 }
 
 .cardTeam_standing_info_logo img {
