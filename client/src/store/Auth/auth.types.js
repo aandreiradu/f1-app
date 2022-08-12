@@ -1,0 +1,5 @@
+export const AUTH_TYPES = {
+    "AUTH_SET_ACCESS_TOKEN" : "auth/AUTH_SET_ACCESS_TOKEN",
+    "AUTH_REFRESH_TOKEN" : 'auth/"AUTH_REFRESH_TOKEN"',
+    "AUTH_LOGOUT" : "auth/AUTH_LOGOUT",
+}
