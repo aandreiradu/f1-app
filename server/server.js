@@ -12,17 +12,24 @@ const verifyJWT = require('./middlewares/verifyJWT');
 
 connectDB();
 
+// handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
 app.use(credentials);
-app.use(cors(corsOptions));
+
+// cross origin resource sharing
+app.use(cors({corsOptions,credentials : true,origin: true}));
 
 // built-in middleware to handle urlencoded data ('content-type : application/x-www-form-urlencoded);
 app.use(express.urlencoded({ extended: false }));
 
+// built-in middleware for json
 app.use(express.json());
 
+// middleware for cookies
 app.use(cookieParser());
 
-app.use('/', express.static(path.join(__dirname, '/public')));
+// built-in middleware for static  files
+app.use(express.static(path.join(__dirname, "/public")));
 
 // routes
 app.use('/',require('./routes/root'));

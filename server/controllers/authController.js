@@ -9,13 +9,18 @@ const handleLogin = async (req, res) => {
   if (!username || !password) {
     return res
       .status(400)
-      .json({ message: "Username and password are required!", statusCode : 400 });
+      .json({
+        message: "Username and password are required!",
+        statusCode: 400,
+      });
   }
 
   try {
     const searchUser = await User.findOne({ username }).exec();
     if (!searchUser) {
-      return res.status(401).json({ message: "User not found", statusCode: 401 });
+      return res
+        .status(401)
+        .json({ message: "User not found", statusCode: 401 });
     }
 
     const match = await bcrpy.compare(password, searchUser.password);
@@ -49,25 +54,24 @@ const handleLogin = async (req, res) => {
     searchUser.refreshToken = generateRefreshToken;
     await searchUser.save();
 
-    // set refresh token at cookie level - httpOnly level
-    res.cookie("jwt", generateRefreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-    
     console.log({
-        accessToken : generateAccessToken,
-        refreshToken :generateRefreshToken
+      accessToken: generateAccessToken,
+      refreshToken: generateRefreshToken,
     });
 
-    res.json({ accessToken: generateAccessToken, statusCode: 201 });
+    // set refresh token at cookie level - httpOnly level
+
+    return res
+    .cookie("jwt", generateRefreshToken, {
+      httpOnly: true,
+      secure: true, //remove when testing with browser / keep it when testing with ThunderClient
+      maxAge: 24 * 60 * 60 * 1000,
+    })
+    .json({ accessToken: generateAccessToken, statusCode: 201 });
   } catch (error) {
     console.log("error authController", error);
     return res.status(500).json({ message: error.message });
   }
 };
-
 
 module.exports = handleLogin;
