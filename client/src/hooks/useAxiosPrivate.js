@@ -4,7 +4,7 @@ import useRefreshToken from "./useRefreshToken";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../store/Auth/auth.selector";
 
-const useAxiosPrivate = () => {
+const useAxiosPrivate = (removeAuthorization) => {
   const refresh = useRefreshToken();
   const accessToken = useSelector(selectAccessToken);
 
@@ -12,12 +12,12 @@ const useAxiosPrivate = () => {
     // request interceptor :
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
-        // console.log("config requestIntercept", config);
-        if (
-          !(config?.headers["Authorization"] || config?.headers["Authorization"])
-        ) {
-          // console.log("nu este setat auth header");
-          config.headers["Authorization"] = `Bearer ${accessToken}`; //attach on the auth header the existing accessToken;
+        console.log("config requestIntercept", config);
+        if(removeAuthorization && (! (config?.headers?.Authorization || config?.headers?.authorization))){
+          console.log("nu este setat auth header");
+          // config.headers['Authorization'] = `Bearer ${accessToken}`; //attach on the auth header the existing accessToken;
+          Object.defineProperty(config,'Authorization',{value : `Bearer ${accessToken}`})
+
         }
         return config;
       },
@@ -38,11 +38,13 @@ const useAxiosPrivate = () => {
           prevRequest.sent = true;
 
           // generate new access token;
-          const newAccessToken = await refresh();
-          console.log("new newAccessToken", newAccessToken);
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-          // console.log("axios private", prevRequest);
-          return axiosPrivate(prevRequest);
+          if(removeAuthorization) {
+            const newAccessToken = await refresh();
+            console.log("new newAccessToken", newAccessToken);
+            prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+            // console.log("axios private", prevRequest);
+            return axiosPrivate(prevRequest);
+          }
         }
 
         return Promise.reject(error);

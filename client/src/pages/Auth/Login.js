@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from 'react-redux';
-import { setAccessToken } from '../../store/Auth/auth.actions';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setAccessToken } from "../../store/Auth/auth.actions";
 import { useNavigate } from "react-router-dom";
 import { Link, NavLink } from "react-router-dom";
 import F1Logo from "../../assets/f1_logo.svg";
 import classes from "./Login.module.css";
 import useInput from "../../hooks/useInput";
 import { validatePassword, validateUserame } from "../../Utils/validators";
-// import AuthContext from "../../store/auth-context";
 import useHttp from "../../hooks/useHttp";
 import ErrorModal from "../../components/UI/ErrorModal";
 import LoaderIcon from "../../components/LoaderReusable/LoaderIcon";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const Login = () => {
+  const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(true);
   const [errorAuth, setErrorAuth] = useState("");
   const { isLoading, error, sendRequest: loginRequest } = useHttp();
   const navigate = useNavigate();
-
 
   const {
     value: usernameValue,
@@ -53,7 +53,7 @@ const Login = () => {
       dispatch(setAccessToken(accessToken));
       resetPassword();
       resetusername();
-      navigate('/');
+      navigate("/");
     } else {
       if (
         statusCode === 400 &&
@@ -73,34 +73,47 @@ const Login = () => {
     }
   };
 
-  const submitFormHandler = (e) => {
+  const submitFormHandler = async (e) => {
     e.preventDefault();
     setShowModal(true);
 
     if (!formIsValid) {
       return;
     }
-
-    loginRequest(
-      {
-        url: "http://localhost:3300/login",
+    try {
+      const responseLogin = await axiosPrivate({
         method: "POST",
+        url: "/login",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        data: JSON.stringify({
           username: usernameValue,
           password: passwordValue,
         }),
-      },
-      setAuth
-    );
+      });
+      console.log("responseLogin", responseLogin);
+      const {
+        data: { accessToken, statusCode, message },
+      } = responseLogin || null;
+      if (responseLogin) {
+        setAuth({ accessToken, statusCode, message });
+      }
+    } catch (error) {
+      const {
+        response: {
+          data: { message, statusCode, ...others },
+        },
+      } = error || null;
+      setAuth({ message, statusCode, others });
+    }
   };
 
   const emailInputClasses = usernameHasError ? `${classes["inputError"]}` : "";
   const passwordInputClasses = passwordHasError
     ? `${classes["inputError"]}`
     : "";
+    
   const confirmErrorModal = () => {
     setShowModal(false);
   };

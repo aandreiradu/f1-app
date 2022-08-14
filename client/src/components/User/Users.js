@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-// import UserSearchForm from './UserSearchForm';
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classes from "./Users.module.css";
 import Category from "../Category/Category";
 import { motion } from "framer-motion";
 import { driverCards } from "../../animationsPresets/animationsPresets";
 import driversScheduleImages from "../../constants/scheduleImages";
-import useHttp from "../../hooks/useHttp";
 import ErrorModal from "../UI/ErrorModal";
 import Loader from "../Loader/Loader";
 import SearchDriver from "../SearchDriver/SearchDriver";
+import useAxiosInterceptors from "../../hooks/useHttpInterceptors";
 
 const Users = () => {
+  const { isLoading, error, sendRequest } =
+    useAxiosInterceptors(true);
   const [showModal, setShowModal] = useState(true);
   const [drivers, setDrivers] = useState([]);
-  const [searchedDriver,setSearchedDriver] = useState('');
-  const { isLoading, error, sendRequest } = useHttp();
+  const [searchedDriver, setSearchedDriver] = useState("");
 
   const handleDriverSearch = (searchInput) => {
     setSearchedDriver(searchInput);
-  }
+  };
 
   const transformData = (dataSet) => {
     console.log(dataSet);
@@ -30,8 +30,11 @@ const Users = () => {
   useEffect(() => {
     sendRequest(
       {
-        url: "http://ergast.com/api/f1/2022/drivers.json",
-        method: "GET",
+        url : "http://ergast.com/api/f1/2022/drivers.json",
+        method : "GET",
+        data : null,
+        headers : null,
+        withCredentials : false
       },
       transformData
     );
@@ -44,7 +47,7 @@ const Users = () => {
   let content;
 
   if (error && showModal) {
-    content = <ErrorModal onConfirm={confirmErrorModal} />;
+    content = <ErrorModal title='Ooops!' message = {error?.message} onConfirm={confirmErrorModal} />;
   } else {
     content = (
       <>
@@ -63,7 +66,14 @@ const Users = () => {
               >
                 {drivers &&
                   drivers?.map((driver) => {
-                    if(driver?.familyName?.toLowerCase().includes(searchedDriver.toLowerCase()) || driver?.givenName?.toLowerCase().includes(searchedDriver.toLowerCase())) {
+                    if (
+                      driver?.familyName
+                        ?.toLowerCase()
+                        .includes(searchedDriver.toLowerCase()) ||
+                      driver?.givenName
+                        ?.toLowerCase()
+                        .includes(searchedDriver.toLowerCase())
+                    ) {
                       const driverProfilePic = driversScheduleImages.find(
                         (driverImg) => driver.driverId === driverImg.driverId
                       );

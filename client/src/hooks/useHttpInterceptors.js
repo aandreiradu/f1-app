@@ -26,7 +26,7 @@ const httpReducer = (state, action) => {
       };
 
     case "ERROR":
-      console.log('ERROR TYPE. Payload is ', action.payload);
+      console.log("ERROR TYPE. Payload is ", action.payload);
       return {
         isLoading: false,
         error: action.payload,
@@ -40,8 +40,8 @@ const httpReducer = (state, action) => {
   }
 };
 
-const useAxiosInterceptors = () => {
-  const axiosPrivate = useAxiosPrivate();
+const useAxiosInterceptors = (withoutAuthorization) => {
+  const axiosPrivate = useAxiosPrivate(withoutAuthorization);
   const [httpState, dispatch] = useReducer(httpReducer, initialState);
 
   useEffect(() => {
@@ -53,14 +53,15 @@ const useAxiosInterceptors = () => {
   }, []);
 
   const sendRequest = useCallback(
-    async (url, method, headers, body) => {
-      console.log("RECEIVED", {
-        url,
+    async (requestConfig, applyData) => {
+      console.log("RECEIVED", requestConfig);
+      const {
         method,
-        body,
+        url,
+        data: body,
         headers,
-      });
-
+        withCredentials,
+      } = requestConfig;
       dispatch({ type: "SEND" });
 
       try {
@@ -69,9 +70,11 @@ const useAxiosInterceptors = () => {
           url,
           data: body,
           headers,
+          withCredentials,
         });
         console.log("response useAxiosInterceptors", response);
         dispatch({ type: "RESPONSE", payload: response?.data });
+        applyData(response?.data);
       } catch (error) {
         console.error("error useAxiosInterceptors", error);
         dispatch({ type: "ERROR", payload: error?.response?.data || error });

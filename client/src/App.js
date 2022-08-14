@@ -1,5 +1,5 @@
 
-import { useContext, useEffect } from 'react';
+import {  useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from './store/Auth/auth.selector';
 import './App.css';
@@ -29,7 +29,7 @@ function App() {
     if(!(accessToken && isAuth)) {
       return navigate('/login');
     }
-  },[accessToken,isAuth]);
+  },[accessToken,isAuth,navigate]);
 
 
   return (
