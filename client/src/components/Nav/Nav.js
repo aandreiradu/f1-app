@@ -5,17 +5,26 @@ import { driverCards } from '../../animationsPresets/animationsPresets'
 import { RiMenu2Line, RiUser3Fill } from "react-icons/ri";
 import Sidebar from './Sidebar';
 import { Link } from 'react-router-dom';
+import UserProfilePopUp from '../NavUserProfilePopUp/UserProfilePopUp';
 
 
 const Nav = (props) => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [showProfiler,setShowProfiler] = useState(false);
 
     const menuOpenHandler = () => {
         setMenuOpen((prevState) => !prevState);
     }
 
+    const handleProfiler = (event) => {
+        event.stopPropagation();
+        setShowProfiler((prev) => !prev);
+    }
+
+    const justOpenProfiler = () =>  setShowProfiler(true);
+
     if (menuOpen) {
-        return <Sidebar onClose={menuOpenHandler} /*open={menuOpen}*/ />
+        return <Sidebar onClose={menuOpenHandler} onProfiler={justOpenProfiler} />
     } else {
         return (
             <nav className={classes.nav}>
@@ -41,7 +50,7 @@ const Nav = (props) => {
                                 initial="hidden"
                                 animate="visible"
                                 transition={{
-                                    default: { duration: 2, ease: "easeInOut" },
+                                    default: { duration: 1.2, ease: "easeInOut" },
                                     fill: { duration: 1.25, ease: [1, 0, 0.8, 1] }
                                 }}
                             >
@@ -49,8 +58,12 @@ const Nav = (props) => {
                         </motion.svg>
                         </Link>
                     </div>
-                    <div className={classes['user-login']}>
+                    <div className={classes['user-login']} onClick={handleProfiler}>
                         <RiUser3Fill />
+                        {
+                            showProfiler && 
+                            <UserProfilePopUp/>
+                        }
                     </div>
                 </div>
             </nav>

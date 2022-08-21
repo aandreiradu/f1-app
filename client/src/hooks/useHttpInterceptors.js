@@ -44,10 +44,6 @@ const useAxiosInterceptors = (withoutAuthorization) => {
   const axiosPrivate = useAxiosPrivate(withoutAuthorization);
   const [httpState, dispatch] = useReducer(httpReducer, initialState);
 
-  useEffect(() => {
-    console.log("httpState NOWW!!!", httpState);
-  }, [httpState]);
-
   const clear = useCallback(() => {
     dispatch({ type: "CLEAR" });
   }, []);
@@ -61,7 +57,8 @@ const useAxiosInterceptors = (withoutAuthorization) => {
         data: body,
         headers,
         withCredentials,
-      } = requestConfig;
+        others
+      } = requestConfig || {};
       dispatch({ type: "SEND" });
 
       try {
@@ -71,9 +68,10 @@ const useAxiosInterceptors = (withoutAuthorization) => {
           data: body,
           headers,
           withCredentials,
+          ...others
         });
-        console.log("response useAxiosInterceptors", response);
         dispatch({ type: "RESPONSE", payload: response?.data });
+        console.log('response',response);
         applyData(response?.data);
       } catch (error) {
         console.error("error useAxiosInterceptors", error);

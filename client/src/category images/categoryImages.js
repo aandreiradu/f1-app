@@ -6,8 +6,8 @@ import schedule from './schedule.png';
 
 
 const categoryImages = [
-    { id: 'raceResults', imgSrc: raceResults, title: '2022 Race Results', path: 'race-results/last' },
-    { id: 'schedule', imgSrc: schedule, title: '2022 Schedule', path: 'schedule/last' },
+    { id: 'raceResults', imgSrc: raceResults, title: 'Last Race Results', path: 'race-results/last' },
+    { id: 'schedule', imgSrc: schedule, title: `${new Date().getFullYear()} Schedule`, path: 'schedule/last' },
     { id: 'qualyfing', imgSrc: qualyfing, title: '2022 Qualyfing Results', path: 'qualyfing-results/last' },
     { id: 'circuits', imgSrc: circuits, title: '2022 Circuits', path: 'circuits/last' },
 ];

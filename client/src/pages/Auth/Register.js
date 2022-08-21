@@ -82,7 +82,7 @@ const Register = () => {
       resetPassword();
       resetUsername();
       resetfullName();
-      navigate("/auth/login");
+      navigate("/login");
     } else {
       // username or email in use
       if (statusCode === 409) {

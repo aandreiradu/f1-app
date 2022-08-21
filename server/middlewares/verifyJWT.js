@@ -4,6 +4,7 @@ const verifyJWT = (req,res,next) => {
     console.log('start verify JWT');
 
     const authHeader = req.headers.authorization || req.headers.Authorization;
+
     if(!authHeader) {
         console.log('nu are bearer in header');
         return res.status(401).json({message : 'Unauthorized'});

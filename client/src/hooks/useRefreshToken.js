@@ -12,6 +12,7 @@ const useRefreshToken = () => {
 
     const {accessToken} = response.data || null;
     if(accessToken) {
+        console.log('REFRESH GENERATED NEW ACCESS TOKEN', JSON.stringify(accessToken));
         dispatch(refreshToken(accessToken));
     }
     return accessToken;

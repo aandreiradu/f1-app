@@ -6,7 +6,8 @@
     position: sticky;
     top: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, .8);
+    /* background-color: rgba(0, 0, 0, .8); */
+    background-color: #e10600;
     z-index: 10;
 }
 
@@ -37,9 +38,17 @@
 }
 
 .user-login{
-    background: #fff;
-        border-radius: 4px;
-    color: #15151e;
+    position: relative;
+    background: #15151e;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.user-login:active,
+.user-login:focus,
+.user-login svg:active,
+.user-login svg:focus{
+    outline: none;
 }
 
 .navContent .logo{

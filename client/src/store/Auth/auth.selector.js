@@ -16,3 +16,8 @@ export const selectIsAuth = createSelector(
     [selectAuthReducer],
     (auth) => auth
 )
+
+export const selectFullName = createSelector(
+    [selectAuthReducer],
+    (auth) => auth?.fullName
+)

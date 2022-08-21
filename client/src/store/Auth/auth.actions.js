@@ -2,8 +2,8 @@ import { AUTH_TYPES } from './auth.types';
 import { createAction } from '../../Utils/reducer/createAction';
 
 
-export const setAccessToken = (token) => {
-    return createAction(AUTH_TYPES.AUTH_SET_ACCESS_TOKEN,{accessToken : token});
+export const setAccessToken = (token,fullName) => {
+    return createAction(AUTH_TYPES.AUTH_SET_ACCESS_TOKEN,{accessToken : token,fullName});
 }
 
 export const refreshToken = (token) => {

@@ -7,18 +7,32 @@ import F1Logo from "../../assets/f1_logo.svg";
 import classes from "./Login.module.css";
 import useInput from "../../hooks/useInput";
 import { validatePassword, validateUserame } from "../../Utils/validators";
-import useHttp from "../../hooks/useHttp";
 import ErrorModal from "../../components/UI/ErrorModal";
 import LoaderIcon from "../../components/LoaderReusable/LoaderIcon";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAxiosInterceptors from "../../hooks/useHttpInterceptors";
+import { useEffect } from "react";
 
 const Login = () => {
-  const axiosPrivate = useAxiosPrivate();
+  const { isLoading,error,sendRequest } = useAxiosInterceptors(false);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(true);
-  const [errorAuth, setErrorAuth] = useState("");
-  const { isLoading, error, sendRequest: loginRequest } = useHttp();
+  const [errorAuth,setErrorAuth] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('effect login error run');
+      if(error) {
+        console.log('error login',error);
+        if(error.response && error.response.data) {
+          const { response: { data: { message, statusCode, ...others }}} = error || null;
+          setAuth({ message, statusCode, others });
+        } else {
+          const { message, code,...others } = error;
+          console.log('else',message,code);
+          setAuth({ message, statusCode : code, others });
+        }
+      }
+  },[error]);
 
   const {
     value: usernameValue,
@@ -45,20 +59,20 @@ const Login = () => {
   }
 
   const setAuth = (stateData) => {
-    console.log("stateData", stateData);
-    const { accessToken, statusCode, message } = stateData || null;
+    console.log('setAuth params',stateData);
+    const { accessToken, statusCode, message, fullName } = stateData || null;
 
     // happy path, redirect to homepage;
     if (statusCode === 201 && accessToken) {
-      dispatch(setAccessToken(accessToken));
+      dispatch(setAccessToken(
+        accessToken,
+        fullName
+      ));
       resetPassword();
       resetusername();
       navigate("/");
     } else {
-      if (
-        statusCode === 400 &&
-        message === "Username and password are required!"
-      ) {
+      if ( statusCode === 400 && message === "Username and password are required!") {
         setErrorAuth(message);
         setShowModal(true);
       } else if (
@@ -69,9 +83,21 @@ const Login = () => {
       ) {
         setErrorAuth(message);
         setShowModal(true);
+      } else {
+        console.log('last else set auth');
+        setShowModal(true);
+        setErrorAuth(message)
       }
     }
   };
+
+  const responseLoginHandler = (responseLogin) => {
+    console.log('responseLogin',responseLogin);
+    const { accessToken, statusCode, message,fullName } = responseLogin || null;
+    if (responseLogin) {
+      setAuth({ accessToken, statusCode, message,fullName });
+    }
+  }
 
   const submitFormHandler = async (e) => {
     e.preventDefault();
@@ -80,36 +106,25 @@ const Login = () => {
     if (!formIsValid) {
       return;
     }
-    try {
-      const responseLogin = await axiosPrivate({
-        method: "POST",
+
+    sendRequest(
+      {
         url: "/login",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: "POST",
         data: JSON.stringify({
           username: usernameValue,
           password: passwordValue,
         }),
-      });
-      console.log("responseLogin", responseLogin);
-      const {
-        data: { accessToken, statusCode, message },
-      } = responseLogin || null;
-      if (responseLogin) {
-        setAuth({ accessToken, statusCode, message });
-      }
-    } catch (error) {
-      const {
-        response: {
-          data: { message, statusCode, ...others },
+        headers: {
+          "Content-Type": "application/json",
         },
-      } = error || null;
-      setAuth({ message, statusCode, others });
-    }
+        withCredentials: true,
+      },
+      responseLoginHandler
+    );
   };
 
-  const emailInputClasses = usernameHasError ? `${classes["inputError"]}` : "";
+  const emailInputClasses = usernameHasError ? `${classes["inputError"]}` : '';
   const passwordInputClasses = passwordHasError
     ? `${classes["inputError"]}`
     : "";
@@ -120,25 +135,18 @@ const Login = () => {
 
   return (
     <section>
+      {errorAuth && showModal && (
+        <ErrorModal
+          title="Ooops!"
+          message={errorAuth || 'Something went wrong. Try again later!'}
+          onConfirm={confirmErrorModal}
+        />
+      )}
       <header>
         <div className={classes["logo"]}>
           <img src={F1Logo} alt="F1-logo" />
         </div>
       </header>
-      {error && showModal && (
-        <ErrorModal
-          title="Ooops!"
-          message={error}
-          onConfirm={confirmErrorModal}
-        />
-      )}
-      {errorAuth && showModal && (
-        <ErrorModal
-          title="Ooops!"
-          message={errorAuth}
-          onConfirm={confirmErrorModal}
-        />
-      )}
       <div className={classes["sub-header"]}>
         <NavLink
           to="/login"
@@ -173,13 +181,13 @@ const Login = () => {
               type="text"
               name="username"
               id="username"
-              placeholder="Enter your username"
+              // placeholder="Enter your username"
               onChange={usernameChangeHandler}
               onBlur={usernameBlurHandler}
               value={usernameValue}
             />
             {usernameHasError && (
-              <span className={classes.errorText}>Incorrect username!</span>
+              <span className={classes.errorText}>Invalid username</span>
             )}
           </div>
           <div className={classes["auth-fields"]}>
@@ -189,7 +197,7 @@ const Login = () => {
               name="password"
               id="password"
               type="password"
-              placeholder="Enter your password"
+              // placeholder="Enter your password"
               value={passwordValue}
               onChange={passwordChangeHandler}
               onBlur={passwordBlurHandler}

@@ -28,7 +28,8 @@ const icon = {
     visible: {
         opacity: 1,
         pathLength: 1,
-        fill: "rgba(225, 6, 0,1)"
+        // fill: "rgba(225, 6, 0,1)"
+        fill: "rgba(255, 255, 255, 1)"
     }
 };
 

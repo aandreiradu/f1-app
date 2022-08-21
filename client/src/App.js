@@ -16,20 +16,15 @@ import CircuitSchedule from './components/Circuits/CircuitSchedule';
 import RaceFinished from './pages/Results/RaceFinished';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register'
-// import AuthContext from './store/auth-context';
 import Standings from './pages/Standings/Standings';
 import Teams from './pages/Teams/Teams';
+import Persist from './components/PersistLogin/PersistLogin';
+import Footer from './components/Footer/Footer';
 
 function App() {
   const { accessToken,isAuth } = useSelector(selectIsAuth);
   const navigate = useNavigate();
   let location = useLocation();
-  
-  useEffect(() => {
-    if(!(accessToken && isAuth)) {
-      return navigate('/login');
-    }
-  },[accessToken,isAuth,navigate]);
 
 
   return (
@@ -39,18 +34,21 @@ function App() {
         <Routes>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
-          <Route path='/' element={<Users />}></Route>
-          <Route path='/:driverId' element={<UserInfo />}></Route>
-          <Route path='/standings' element={<Standings />} />
-          <Route path='/teams' element={<Teams/>}></Route>
-          <Route path='/race-results/last' element={<LastRaceResults />}></Route>
-          <Route path='/race-results/:round/results' element={<RaceFinished />} />
-          <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>
-          <Route path='/schedule/last' element={<Schedule />}></Route>
-          <Route path='/schedule/:round/:circuitId' element={<CircuitSchedule />} />
+
+          <Route element={<Persist/>}>
+            <Route path='/' element={<Users />}></Route>
+            <Route path='/:driverId' element={<UserInfo />}></Route>
+            <Route path='/standings' element={<Standings />} />
+            <Route path='/teams' element={<Teams/>}></Route>
+            <Route path='/race-results/last' element={<LastRaceResults />}></Route>
+            <Route path='/race-results/:round/results' element={<RaceFinished />} />
+            <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>
+            <Route path='/schedule/last' element={<Schedule />}></Route>
+            <Route path='/schedule/:round/:circuitId' element={<CircuitSchedule />} />
+          </Route>
         </Routes>
       </Card>
-      {/* <Footer /> */}
+        <Footer/>
     </>
   );
 }

@@ -50,6 +50,10 @@
     margin: 10px 0;
 }
 
+.driversResultsList::-webkit-scrollbar{
+    background-color: tomato;
+}
+
 
 .driverResultItem {
     margin: 5px 0;

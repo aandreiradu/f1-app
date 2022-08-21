@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const handleLogin = async (req, res) => {
   const { username, password } = req.body;
   console.log(username, password);
+  console.log(req.headers);
 
   if (!username || !password) {
     return res
@@ -47,7 +48,7 @@ const handleLogin = async (req, res) => {
     const generateRefreshToken = jwt.sign(
       { username: searchUser.username },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
 
     // save refresh token in database;
@@ -67,7 +68,7 @@ const handleLogin = async (req, res) => {
       secure: true, //remove when testing with browser / keep it when testing with ThunderClient
       maxAge: 24 * 60 * 60 * 1000,
     })
-    .json({ accessToken: generateAccessToken, statusCode: 201 });
+    .json({ accessToken: generateAccessToken, statusCode: 201, fullName : searchUser?.fullName });
   } catch (error) {
     console.log("error authController", error);
     return res.status(500).json({ message: error.message });

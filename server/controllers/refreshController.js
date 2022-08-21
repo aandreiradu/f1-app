@@ -2,28 +2,36 @@ const Users = require('../model/Users');
 const JSONWEBTOKEN = require('jsonwebtoken');
 
 const handleRefreshToken = async (req,res) => {
-    console.log('STOP REFRESH TOKEN');
-    console.log(req);
+    console.log('START REFRESH TOKEN');
     const {jwt} = req.cookies;
 
     console.log('jwt cookie',jwt);
 
     if(!jwt) {
-        return res.status(401).json({message: 'Unauthorized!', statusCode : 401});
+        console.log('nu are jwt pe cookie, return 401');
+        return res.status(401).json({message: 'Unauthorized', statusCode : 401});
     }
 
     const refreshToken = jwt; 
     const findUser = await Users.findOne({refreshToken}).exec();
 
     if(!findUser) {
-        return res.status(403).json({message : 'Forbidden!',statusCode : 403});
+        return res.status(403).json({message : 'Forbidden',statusCode : 403});
     }
 
     JSONWEBTOKEN.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET,(err,decode) => {
         console.log('verify jwt err ',err);
         console.log('verify jwt decode',decode);
         if(err || findUser.username !== decode.username) {
-            return res.status(403).json({message : 'Forbidden!',statusCode : 403});
+            // jwt expired or username not decoded; => clear the cookie and redirect to login;
+            return res
+              .status(403)
+              .clearCookie("jwt", {
+                httpOnly: true,
+                secure: true, 
+                maxAge: 24 * 60 * 60 * 1000,
+              })
+              .json({ message: "Forbidden", statusCode: 403 });   
         }
 
         const generateNewAccessToken = JSONWEBTOKEN.sign(

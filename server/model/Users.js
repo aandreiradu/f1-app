@@ -19,6 +19,6 @@ const userSchema = new mongoose.Schema({
   fullName : String,
 
   refreshToken: String,
-});
+},{timestamps : true});
 
 module.exports = mongoose.model("F1_User", userSchema);

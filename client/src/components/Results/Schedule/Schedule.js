@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Loader from "../../Loader/Loader";
 import classes from "./Schedule.module.css";
-import useHttp from "../../../hooks/useHttp";
 import ScheduleItem from "./ScheduleItem";
 import ErrorModal from "../../UI/ErrorModal";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -12,25 +11,38 @@ import {
 } from "../../../store/RaceResults/raceResults.actions";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRaceResultReducer } from "../../../store/RaceResults/raceResults.selector";
+import useAxiosInterceptors from "../../../hooks/useHttpInterceptors";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../store/Auth/auth.actions";
 
 const Schedule = () => {
+  const navigate = useNavigate();
   const {
     isLoading: isLoadingRR,
     results: raceResultsArray,
     error: errorRR,
   } = useSelector(selectRaceResultReducer);
-  const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(true);
   const [seasonSchedule, setSeasonSchedule] = useState([]);
-  const { isLoading, error, sendRequest } = useHttp();
+  const axiosPrivate = useAxiosPrivate(false);
+  const { isLoading, error, sendRequest } = useAxiosInterceptors(true);
+
+  const transformData = useCallback((responseData) => {
+    setSeasonSchedule(responseData.MRData.RaceTable.Races);
+  },[]);
 
   useEffect(() => {
-    const transformData = (responseData) => {
-      setSeasonSchedule(responseData.MRData.RaceTable.Races);
-    };
+
     sendRequest(
-      { url: "http://ergast.com/api/f1/current.json" },
+      {
+        url: "http://ergast.com/api/f1/current.json",
+        method: "GET",
+        data: null,
+        headers: null,
+        withCredentials: false,
+      },
       transformData
     );
   }, [sendRequest]);
@@ -57,6 +69,12 @@ const Schedule = () => {
           },
         } = error || null;
         console.log(message, statusCode);
+
+        if(message === 'Unauthorized' && statusCode === 401) {
+          dispatch(logout());
+          navigate('/login');
+        }
+
         dispatch(fetchRaceResultsFailure({ message, statusCode } || error));
       }
     };

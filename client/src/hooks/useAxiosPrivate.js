@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectAccessToken } from "../store/Auth/auth.selector";
 
 const useAxiosPrivate = (removeAuthorization) => {
+  console.log('removeAuthorization useAxiosPrivate',removeAuthorization);
   const refresh = useRefreshToken();
   const accessToken = useSelector(selectAccessToken);
 
@@ -13,10 +14,35 @@ const useAxiosPrivate = (removeAuthorization) => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         console.log("config requestIntercept", config);
-        if(removeAuthorization && (! (config?.headers?.Authorization || config?.headers?.authorization))){
+        if((!(config?.headers?.Authorization || config?.headers?.authorization))){
           console.log("nu este setat auth header");
-          // config.headers['Authorization'] = `Bearer ${accessToken}`; //attach on the auth header the existing accessToken;
-          Object.defineProperty(config,'Authorization',{value : `Bearer ${accessToken}`})
+          if(config.headers) {
+            if(!removeAuthorization){
+              config.headers['Authorization'] = `Bearer ${accessToken}`; //attach on the auth header the existing accessToken;
+            } else {
+              console.log("before delete", config.headers);
+              const filteredHeaders =
+                config?.headers &&
+                Object.keys(config.headers)
+                  .filter(
+                    (key) =>
+                      !key.includes("Authorization") ||
+                      !key.includes("Authorization")
+                  )
+                  .reduce((obj, key) => {
+                    return Object.assign(obj, {
+                      [key]: obj[key],
+                    });
+                  }, {});
+              console.log("FILTERED HEADERS ", config?.headers);
+              config.headers = {
+                ...config?.headers,
+                ...filteredHeaders,
+              };
+              console.log("FILTERED HEADERS RETURN", config?.headers);
+            }
+          } 
+          console.log('config headers requestIntercept NOW', config?.headers);
 
         }
         return config;
@@ -38,13 +64,15 @@ const useAxiosPrivate = (removeAuthorization) => {
           prevRequest.sent = true;
 
           // generate new access token;
-          if(removeAuthorization) {
+          // if(!removeAuthorization) {
+            console.log('da remove responseIntercept');
             const newAccessToken = await refresh();
             console.log("new newAccessToken", newAccessToken);
             prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-            // console.log("axios private", prevRequest);
+            
+            console.log('prevRequest headers responseIntercept NOW', prevRequest?.headers);
             return axiosPrivate(prevRequest);
-          }
+          // }
         }
 
         return Promise.reject(error);

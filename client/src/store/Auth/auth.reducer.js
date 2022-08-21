@@ -3,6 +3,7 @@ import { AUTH_TYPES } from "./auth.types";
 const initialState = {
   accessToken: null,
   isAuth: false,
+  fullName : null
 };
 
 export const authReducer = (state = initialState, action = {}) => {
@@ -14,12 +15,14 @@ export const authReducer = (state = initialState, action = {}) => {
       return {
         ...state,
         accessToken: payload.accessToken,
+        fullName : payload.fullName,
         isAuth: true,
       };
 
     case AUTH_TYPES.AUTH_REFRESH_TOKEN:
       return {
         ...state,
+        isAuth : true,
         accessToken: payload.accessToken,
       };
 

@@ -35,6 +35,4 @@ export const raceResultsReducer = (state=RACE_RESULTS_INITIAL_STATE,action = {})
         default :
             return state
     }
-
-        
 }

@@ -1,79 +1,37 @@
-import React, { useCallback} from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useState,useCallback } from 'react';
 import { RiCloseFill, RiUser3Fill } from 'react-icons/ri'
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../../store/Auth/auth.selector';
 import classes from './Sidebar.module.css';
 import { motion } from 'framer-motion'
 import { driverCards } from '../../animationsPresets/animationsPresets'
 import { Link } from 'react-router-dom';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import { logout } from '../../store/Auth/auth.actions';
 import ErrorModal from '../UI/ErrorModal';
-import { useState } from 'react';
+import useLogout from '../../hooks/useLogout';
 
 
 const Sidebar = (props) => {
-    const [errorLogin,setErrorLogin] = useState('');
     const [showModal,setShowModal] = useState(false);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const axiosPrivate = useAxiosPrivate();
+    const {errorLogin,logoutHandler} = useLogout();
     const isAuthenticted = useSelector(selectIsAuthenticated);
     console.log('sidebar isAuthenticted',isAuthenticted);
     
+
+    const confirmErrorModal = () => {
+        setShowModal(false);
+      };
 
     const closeSidebarHandle = () => {
         props.onClose();
     }
 
-    const logoutResponseInterpreter = useCallback(payload => {
-        console.log('logoutResponseInterpreter',payload);
-        const { status,statusCode,message } = payload || null;
-        
-        try {
-            // remove the acces token from store and set isAuth to false
-            dispatch(logout());
-            if( status === 204 && !message) {
-                // no jwt set, just redirect to login
-                console.log('no jwt set, redirect to login');
-                navigate('/login');
-            } else if((status === 204 || statusCode === 204) && message === 'Logout successfully') {
-                // user with asociated refresh token not found, just redirect;
-                console.log('user with asociated refresh token not found, just redirect');
-                navigate('/login');
-            } else if ((status === 200 || statusCode === 200) && message === 'Logout completed') {
-                // user with attached refresh token found in db, redirect;
-                navigate('/login');
-            }
-        } catch (error) {
-            console.error('error logoutResponseInterpreter',error);
-            setErrorLogin(error.message || error);
-            setShowModal(true);
-        }
-
-    },[dispatch,navigate]);
-
-    const logoutHandler = useCallback(async () => {
-        try {
-            const responseLogout = await axiosPrivate.get('/logout',{
-                withCredentials : true
-            });
-            console.log('responseLogout',responseLogout);
-            const { status, data : {message,statusCode} } = responseLogout || null;
-            
-            logoutResponseInterpreter({status,message,statusCode,responseLogout});
-        } catch (error) {
-            console.error('error logout',error);
-            console.error('error logoutResponseInterpreter',error);
-            setErrorLogin(error.message || error);
-            setShowModal(true);
-        }
-    },[axiosPrivate,logoutResponseInterpreter]);
-
-    const confirmErrorModal = () => {
-        setShowModal(false);
-      };
+    const handleProfiler = (e) => {
+        e.stopPropagation();
+        closeSidebarHandle();
+        props.onProfiler();
+    }
+    
+    
 
     return (
         <section className={classes.sidebar}>
@@ -106,7 +64,7 @@ const Sidebar = (props) => {
                         </motion.path>
                     </motion.svg>
                 </div>
-                <div className={classes['user-login']}>
+                <div className={classes['user-login']} onClick={handleProfiler}>
                     <RiUser3Fill className={classes['sidebar-icon']} />
                 </div>
             </div>
