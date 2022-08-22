@@ -1,5 +1,6 @@
 
-import {  useEffect } from 'react';
+import { useEffect,useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from './store/Auth/auth.selector';
 import './App.css';
@@ -20,37 +21,53 @@ import Standings from './pages/Standings/Standings';
 import Teams from './pages/Teams/Teams';
 import Persist from './components/PersistLogin/PersistLogin';
 import Footer from './components/Footer/Footer';
+import ErrorModal from './components/UI/ErrorModal';
 
 function App() {
+  const [showModal, setShowModal] = useState(false);
   const { accessToken,isAuth } = useSelector(selectIsAuth);
   const navigate = useNavigate();
   let location = useLocation();
 
+  const confirmErrorModal = () => {
+    setShowModal(false);
+  };
 
-  return (
-    <>
-      { (accessToken && isAuth) && <Nav />}
-      <Card className="App">
-        <Routes>
-          <Route path='/login' element={<Login />}></Route>
-          <Route path='/register' element={<Register />}></Route>
+  
+  if(!isMobile) {
+    console.log('IS NOT MOBILE ');
+    return  <ErrorModal title='Ooops!' 
+      message ={`Hei, looks like you're not using a mobile device. For the moment, this application is optimized only for mobile. 
+      
+        You can still use the device toolbar from `} onConfirm={confirmErrorModal} />
+  } else {
+    return (
+      <>
+        { (accessToken && isAuth) && <Nav />}
+        <Card className="App">
+          <Routes>
+            <Route path='/login' element={<Login />}></Route>
+            <Route path='/register' element={<Register />}></Route>
+  
+            <Route element={<Persist/>}>
+              <Route path='/' element={<Users />}></Route>
+              <Route path='/:driverId' element={<UserInfo />}></Route>
+              <Route path='/standings' element={<Standings />} />
+              <Route path='/teams' element={<Teams/>}></Route>
+              <Route path='/race-results/last' element={<LastRaceResults />}></Route>
+              <Route path='/race-results/:round/results' element={<RaceFinished />} />
+              <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>
+              <Route path='/schedule/last' element={<Schedule />}></Route>
+              <Route path='/schedule/:round/:circuitId' element={<CircuitSchedule />} />
+            </Route>
+          </Routes>
+        </Card>
+          <Footer/>
+      </>
+    );
+  }
 
-          <Route element={<Persist/>}>
-            <Route path='/' element={<Users />}></Route>
-            <Route path='/:driverId' element={<UserInfo />}></Route>
-            <Route path='/standings' element={<Standings />} />
-            <Route path='/teams' element={<Teams/>}></Route>
-            <Route path='/race-results/last' element={<LastRaceResults />}></Route>
-            <Route path='/race-results/:round/results' element={<RaceFinished />} />
-            <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>
-            <Route path='/schedule/last' element={<Schedule />}></Route>
-            <Route path='/schedule/:round/:circuitId' element={<CircuitSchedule />} />
-          </Route>
-        </Routes>
-      </Card>
-        <Footer/>
-    </>
-  );
+
 }
 
 export default App;

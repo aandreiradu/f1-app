@@ -44,23 +44,26 @@ const RaceFinished = () => {
         content = (
             <section className={classes.lastResultsSection}>
                 {isLoading ? <Loader /> :
-                    lastRaceResults && lastRaceResults.length > 0 && lastRaceResults.map((result) => (
-                        <div key={'bearer' + Math.floor(Math.random() * 10000) + result.Races[0].raceName}>
-                            <div className={classes.circuitInfoWrapper} key={result.round}>
-                                <p className={classes.circuitName}>{result.Races[0].raceName}</p>
-                                <div className={classes.circuitData}>
-                                    <span>Laps {result.Races[0].Results[0].laps}</span>
-                                    <span>Season {result.Races[0].season},Round {result.Races[0].round}</span>
-                                    <span>{result.Races[0].date},{(result.Races[0].time).split('Z')[0]}</span>
+                    lastRaceResults && lastRaceResults.length > 0 && lastRaceResults.map((result,index) => {
+                        console.log('RESULT HERE',result);
+                        return (
+                            <div key={index}>
+                                <div className={classes.circuitInfoWrapper} key={result?.round}>
+                                    <p className={classes.circuitName}>{result?.Races[0].raceName || 'N/A'}</p>
+                                    <div className={classes.circuitData}>
+                                        <span>Laps {result?.Races[0]?.Results[0]?.laps || 'N/A'}</span>
+                                        <span>Season {result?.Races[0]?.season || 'N/A'},Round {result?.Races[0]?.round || 'N/A'}</span>
+                                        <span>{result?.Races[0]?.date || 'N/A'},{(result.Races[0]?.time || 'N/A').split('Z')[0]}</span>
+                                    </div>
                                 </div>
+                                <div className={classes.category} >
+                                    <p onClick={handleCategoryList} className={activeLeaderBoard}>LeaderBoard</p>
+                                    <p onClick={handleCategoryList} className={activeFastestLap}>Fastest Lap</p>
+                                </div>
+                                <DriversRaceResults result={result?.Races[0]?.Results || []} listCategory={listCategory} />
                             </div>
-                            <div className={classes.category} >
-                                <p onClick={handleCategoryList} className={activeLeaderBoard}>LeaderBoard</p>
-                                <p onClick={handleCategoryList} className={activeFastestLap}>Fastest Lap</p>
-                            </div>
-                            <DriversRaceResults result={result} listCategory={listCategory} />
-                        </div>
-                    ))}
+                        )
+                    })}
                 {!isLoading && <div className={classes.actions_back}>
                     <Link to={'/'}>Go Back</Link>
                 </div>}

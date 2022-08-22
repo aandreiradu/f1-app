@@ -10,8 +10,11 @@
 .circuitInfoWrapper{
     width: 100%;
     height: 100px;
+    /* background : linear-gradient(to right, rgba(50, 70, 80, 0.7), rgba(237, 85, 85, 0.7)),
+    url('../../category\ images/circuits.jpg') no-repeat fixed; */
     background : linear-gradient(to right, rgba(50, 70, 80, 0.7), rgba(237, 85, 85, 0.7)),
-    url('../../category\ images/circuits.jpg') no-repeat fixed;
+    url('../../category\ images/circuits.jpg') no-repeat center center;
+    background-size: cover;
     padding: .25rem;
     border-radius: 7px;
 }

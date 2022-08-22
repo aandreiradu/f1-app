@@ -5,24 +5,59 @@ import Loader from '../../components/Loader/Loader';
 import { Link } from 'react-router-dom';
 import DriversRaceResults from '../../components/Results/DriversRaceResults';
 import ErrorModal from '../../components/UI/ErrorModal';
+import { useDispatch, useSelector } from 'react-redux';
+import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
+import { fetchLastRaceResultStart,fetchLastRaceResultSuccess,fetchLastRaceResultFailure } from '../../store/LastRaceResult/lastRaceResult.actions';
+import { selectLastResults } from '../../store/LastRaceResult/lastRaceResult.selector';
 
 const LastRaceResults = () => {
+    const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(true);
-    const [lastRaceResults, setLastResults] = useState([]);
-    const { isLoading, error, sendRequest: fetchLastRaceResults } = useHttp();
+    const lastRaceResults = useSelector(selectLastResults); 
+    console.log('lastRaceResults',lastRaceResults);
     const [listCategory, setListCategory] = useState('LeaderBoard');
+    const { isLoading, error,sendRequest } = useAxiosInterceptors(true);
+
+
 
     useEffect(() => {
-        const transformData = (responseData) => {
-            localStorage.setItem('lastRaceResults', JSON.stringify(responseData.MRData.RaceTable));
-            setLastResults([responseData.MRData.RaceTable]);
+        let isMounted = true;
+        const controller = new AbortController();
+
+        const getLastRaceResult = async () => {
+            dispatch(fetchLastRaceResultStart());
+
+            try {
+                sendRequest(
+                    {
+                        url: 'http://ergast.com/api/f1/current/last/results.json',
+                        method : 'GET',
+                        data : null,
+                        headers : null,
+                        withCredentials : false,
+                        signal : controller.signal
+                    },
+                    (responseDataSet) => {
+                        console.log('responseDataSet',responseDataSet);
+                        const lastRaceResultArray = responseDataSet?.MRData?.RaceTable?.Races;
+                        console.log('lastRaceResultArray',lastRaceResultArray);
+                        isMounted && dispatch(fetchLastRaceResultSuccess(lastRaceResultArray));
+                    }    
+                )
+
+            } catch(error) {
+                console.log('error LAST RACE RESULTS',error);
+                dispatch(fetchLastRaceResultFailure(error));
+            }
         }
 
-        fetchLastRaceResults(
-            { url: 'http://ergast.com/api/f1/current/last/results.json' },
-            transformData
-        )
-    }, [fetchLastRaceResults]);
+        getLastRaceResult();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        }
+    },[]);
 
 
     const handleCategoryList = (e) => {
@@ -45,24 +80,28 @@ const LastRaceResults = () => {
         content = (
             <section className={classes.lastResultsSection}>
                 {isLoading ? <Loader /> :
-                    lastRaceResults && lastRaceResults.map((result) => 
-                    (
-                        <div className='defaultTransition defaultTransition-5MS' key={'bearer' + Math.floor(Math.random() * 10000) + result.Races[0].raceName}>
-                            <div className={classes.circuitInfoWrapper} key={result.round}>
-                                <p className={classes.circuitName}>{result.Races[0].raceName}</p>
-                                <div className={classes.circuitData}>
-                                    <span>Laps {result.Races[0].Results[0].laps}</span>
-                                    <span>Season {result.Races[0].season},Round {result.Races[0].round}</span>
-                                    <span>{result.Races[0].date},{(result.Races[0].time).split('Z')[0]}</span>
+                    lastRaceResults && lastRaceResults?.map((result,index) => {
+                        console.log('lastRaceResults',lastRaceResults);
+                        console.log('result',result);
+                        return (
+                            <div className='defaultTransition defaultTransition-5MS' key={index}>
+                                <div className={classes.circuitInfoWrapper} key={result?.round}>
+                                    <p className={classes.circuitName}>{result?.raceName || 'N/A'}</p>
+                                    <div className={classes.circuitData}>
+                                        <span>Laps {result?.Results[0]?.laps || 'N/A'}</span>
+                                    <span>Season {result?.season || 'N/A'},Round {result?.round || 'N/A'}</span>
+                                        <span>{result?.date || 'N/A'},{(result?.time).split('Z')[0] || 'N/A'}</span>
+                                    </div>
                                 </div>
+                                <div className={classes.category} >
+                                    <p onClick={handleCategoryList} className={activeLeaderBoard}>LeaderBoard</p>
+                                    <p onClick={handleCategoryList} className={activeFastestLap}>Fastest Lap</p>
+                                </div>
+                                <DriversRaceResults result={lastRaceResults[0].Results || []} listCategory={listCategory} />
                             </div>
-                            <div className={classes.category} >
-                                <p onClick={handleCategoryList} className={activeLeaderBoard}>LeaderBoard</p>
-                                <p onClick={handleCategoryList} className={activeFastestLap}>Fastest Lap</p>
-                            </div>
-                            <DriversRaceResults result={result} listCategory={listCategory} />
-                        </div>
-                    ))}
+                        )
+                    }
+                    )}
                 {!isLoading && <div className={classes.actions_back}>
                     <Link to={'/'}>Go Back</Link>
                 </div>}

@@ -46,7 +46,7 @@ const Users = () => {
               signal : controller.signal
             },
             (dataSet) => {
-              const driversArray = dataSet?.MRData.DriverTable.Drivers;
+              const driversArray = dataSet?.MRData?.DriverTable?.Drivers;
               isMounted && dispatch(fetchDriversSuccess(driversArray));
             }
           );

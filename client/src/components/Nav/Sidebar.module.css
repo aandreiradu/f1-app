@@ -36,6 +36,12 @@
     cursor: pointer;
 }
 
+.sidebar-menu svg,
+.user-login svg {
+    width: 20px;
+    height: 20px;
+}
+
 
 
 /* .sidebar-logo{
