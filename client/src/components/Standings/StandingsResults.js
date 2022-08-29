@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "./StandingsResults.module.css";
 import useHttp from "../../hooks/useHttp";
 import Loader from "../Loader/Loader";
@@ -91,10 +91,7 @@ const StandingsResults = (props) => {
 
 
   let tHead = buildContentHeadByType(type);
-  let tBody = buildContentBodyByType(
-    type,
-    type === "Driver" ? standingsResultsDriver : standingsResultsConstructor
-  );
+  let tBody = buildContentBodyByType(type,type === "Driver" ? standingsResultsDriver : standingsResultsConstructor);
 
   let URL;
   if (!year && type === "Driver") {
@@ -108,31 +105,14 @@ const StandingsResults = (props) => {
   }
 
   let parseResponseData = (stateData) => {
-    if (
-      stateData &&
-      stateData.MRData &&
-      stateData.MRData.StandingsTable &&
-      stateData.MRData.StandingsTable.StandingsLists &&
-      stateData.MRData.StandingsTable.StandingsLists.length > 0
-    ) {
+    if ( stateData?.MRData?.StandingsTable?.StandingsLists?.length > 0) {
       if (type === "Driver") {
-        if (
-          stateData.MRData.StandingsTable.StandingsLists[0].DriverStandings
-            .length > 0
-        ) {
-          setStandingsResultsDriver(
-            stateData.MRData.StandingsTable.StandingsLists[0].DriverStandings
-          );
+        if (stateData?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings?.length > 0) {
+          setStandingsResultsDriver(stateData.MRData.StandingsTable.StandingsLists[0].DriverStandings);
         }
       } else if (type === "Constructor") {
-        if (
-          stateData.MRData.StandingsTable.StandingsLists[0].ConstructorStandings
-            .length > 0
-        ) {
-          setStandingsResultsConstructor(
-            stateData.MRData.StandingsTable.StandingsLists[0]
-              .ConstructorStandings
-          );
+        if (stateData?.MRData?.StandingsTable?.StandingsLists[0]?.ConstructorStandings?.length > 0) {
+          setStandingsResultsConstructor(stateData.MRData.StandingsTable.StandingsLists[0]?.ConstructorStandings);
         }
       }
     } else if(stateData.MRData.StandingsTable.StandingsLists.length === 0) {
@@ -141,17 +121,12 @@ const StandingsResults = (props) => {
   };
 
   useEffect(() => {
-
     getStandingsData({ url: URL }, parseResponseData);
     if (noContent) {
       setNoContent(false);
     }
   }, [year, type]);
 
-  // useEffect(() => {
-  //   console.log("state", standingsResultsConstructor, standingsResultsDriver);
-  //   console.log('noCOntent',noContent)
-  // }, [standingsResultsConstructor, standingsResultsDriver]);
 
   if (isLoading) {
     return <Loader />;
@@ -160,9 +135,7 @@ const StandingsResults = (props) => {
   if (type === "Driver") {
     tBody = (
       <tbody>
-        {standingsResultsDriver &&
-          standingsResultsDriver.length > 0 &&
-          standingsResultsDriver.map((result) => (
+        {standingsResultsDriver?.length > 0 && standingsResultsDriver?.map((result) => (
             <tr
               className={classes["standing-result-row"]}
               key={result.Driver.driverId}
@@ -180,9 +153,7 @@ const StandingsResults = (props) => {
   } else {
     tBody = (
       <tbody>
-        {standingsResultsConstructor &&
-          standingsResultsConstructor.length > 0 &&
-          standingsResultsConstructor.map((result) => (
+        { standingsResultsConstructor?.length > 0 && standingsResultsConstructor?.map((result) => (
             <tr
               className={classes["standing-result-row"]}
               key={result.Constructor.constructorId}

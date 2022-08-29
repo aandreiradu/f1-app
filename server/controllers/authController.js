@@ -32,12 +32,15 @@ const handleLogin = async (req, res) => {
     }
 
     // generate access token
+    const roles = Object.values(searchUser?.roles)?.filter(b => Boolean(b));
+    console.log('roles authController', {userRoles : searchUser.roles, roles});
     const generateAccessToken = jwt.sign(
       {
         F1_APP_USER: {
-          username: searchUser.username,
-          email: searchUser.email,
-          fullName: searchUser.fullName,
+          username: searchUser?.username,
+          email: searchUser?.email,
+          fullName: searchUser?.fullName,
+          roles
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -68,7 +71,7 @@ const handleLogin = async (req, res) => {
       secure: true, //remove when testing with browser / keep it when testing with ThunderClient
       maxAge: 24 * 60 * 60 * 1000,
     })
-    .json({ accessToken: generateAccessToken, statusCode: 201, fullName : searchUser?.fullName });
+    .json({ accessToken: generateAccessToken, statusCode: 201, fullName : searchUser?.fullName, roles });
   } catch (error) {
     console.log("error authController", error);
     return res.status(500).json({ message: error.message });

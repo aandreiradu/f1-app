@@ -3,7 +3,8 @@ import { AUTH_TYPES } from "./auth.types";
 const initialState = {
   accessToken: null,
   isAuth: false,
-  fullName : null
+  fullName : null,
+  roles : []
 };
 
 export const authReducer = (state = initialState, action = {}) => {
@@ -16,6 +17,10 @@ export const authReducer = (state = initialState, action = {}) => {
         ...state,
         accessToken: payload.accessToken,
         fullName : payload.fullName,
+        roles : [
+          ...state.roles,
+          ...payload?.roles
+        ],
         isAuth: true,
       };
 
@@ -24,12 +29,18 @@ export const authReducer = (state = initialState, action = {}) => {
         ...state,
         isAuth : true,
         accessToken: payload.accessToken,
+        fullName : payload.fullName,
+        roles : [
+          ...state.roles,
+          ...payload.roles
+        ]
       };
 
     case AUTH_TYPES.AUTH_LOGOUT:
       return {
         ...state,
         accessToken: null,
+        roles : [],
         isAuth: false,
       };
 

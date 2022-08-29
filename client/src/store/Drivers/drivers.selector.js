@@ -1,4 +1,3 @@
-import { DRIVERS_TYPES } from "./drivers.types";
 import { createSelector } from "reselect";
 
 

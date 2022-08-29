@@ -16,6 +16,21 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
 
+  roles : {
+      User : {
+        type: Number,
+        default : 971206
+      },
+
+      Admin : {
+        type : Number
+      },
+
+      Host : {
+        type : Number
+      }
+  },
+  
   fullName : String,
 
   refreshToken: String,

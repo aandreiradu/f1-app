@@ -8,7 +8,7 @@ import 'remixicon/fonts/remixicon.css'
 import { store } from './store/store';
 import { Provider } from 'react-redux';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('f1-app'));
 root.render(
     <BrowserRouter>
     <Provider store={store}>

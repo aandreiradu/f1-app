@@ -10,10 +10,10 @@ const useRefreshToken = () => {
         withCredentials : true
     });
 
-    const {accessToken} = response.data || null;
+    const {accessToken,fullName,roles} = response.data || null;
     if(accessToken) {
-        console.log('REFRESH GENERATED NEW ACCESS TOKEN', JSON.stringify(accessToken));
-        dispatch(refreshToken(accessToken));
+        console.log('REFRESH GENERATED NEW ACCESS TOKEN', JSON.stringify({accessToken,fullName,roles}));
+        dispatch(refreshToken(accessToken,fullName,roles));
     }
     return accessToken;
   }

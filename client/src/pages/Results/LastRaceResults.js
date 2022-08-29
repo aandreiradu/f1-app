@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import useHttp from '../../hooks/useHttp';
 import classes from './LastRaceResults.module.css';
 import Loader from '../../components/Loader/Loader';
 import { Link } from 'react-router-dom';

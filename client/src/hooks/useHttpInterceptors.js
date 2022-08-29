@@ -48,38 +48,35 @@ const useAxiosInterceptors = (withoutAuthorization) => {
     dispatch({ type: "CLEAR" });
   }, []);
 
-  const sendRequest = useCallback(
-    async (requestConfig, applyData) => {
-      console.log("RECEIVED", requestConfig);
-      const {
+  const sendRequest = useCallback(async (requestConfig, applyData) => {
+    console.log("RECEIVED", requestConfig);
+    const {
+      method,
+      url,
+      data: body,
+      headers,
+      withCredentials,
+      others,
+    } = requestConfig || {};
+    dispatch({ type: "SEND" });
+
+    try {
+      const response = await axiosPrivate({
         method,
         url,
         data: body,
         headers,
         withCredentials,
-        others
-      } = requestConfig || {};
-      dispatch({ type: "SEND" });
-
-      try {
-        const response = await axiosPrivate({
-          method,
-          url,
-          data: body,
-          headers,
-          withCredentials,
-          ...others
-        });
-        dispatch({ type: "RESPONSE", payload: response?.data });
-        console.log('response',response);
-        applyData(response?.data);
-      } catch (error) {
-        console.error("error useAxiosInterceptors", error);
-        dispatch({ type: "ERROR", payload: error?.response?.data || error });
-      }
-    },
-    [axiosPrivate]
-  );
+        ...others,
+      });
+      console.log("response", response);
+      dispatch({ type: "RESPONSE", payload: response?.data });
+      applyData(response?.data);
+    } catch (error) {
+      console.error("error useAxiosInterceptors", error);
+      dispatch({ type: "ERROR", payload: error?.response?.data || error });
+    }
+  }, []);
 
   return {
     isLoading: httpState.isLoading,

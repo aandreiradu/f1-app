@@ -33,6 +33,7 @@ const Users = () => {
       const controller = new AbortController();
 
       const getDrivers = async () => {
+        console.log('getDrivers RUN');
         dispatch(fetchDriversStart());
         
         try {
@@ -64,7 +65,7 @@ const Users = () => {
         controller.abort();
       }
 
-  },[]);
+  },[dispatch,sendRequest]);
 
   const confirmErrorModal = () => {
     setShowModal(false);

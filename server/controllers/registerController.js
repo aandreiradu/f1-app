@@ -43,7 +43,10 @@ const registerNewUser = async (req,res) => {
             username,
             password : hasedPassword,
             email,
-            fullName : fullname
+            fullName : fullname,
+            // roles : {
+                
+            // }
         }); 
 
         console.log('createUser response',createUser);

@@ -11,7 +11,7 @@ import Nav from './components/Nav/Nav';
 import Card from './components/UI/Card';
 import LastRaceResults from './pages/Results/LastRaceResults'
 import LastQualyResults from './pages/Results/LastQualyResults'
-import Schedule from './components/Results/Schedule/Schedule';
+import Schedule from './components/Schedule/Schedule'
 import Home from './pages/Home/Home';
 import CircuitSchedule from './components/Circuits/CircuitSchedule';
 import RaceFinished from './pages/Results/RaceFinished';
