@@ -66,12 +66,22 @@ const handleLogin = async (req, res) => {
     // set refresh token at cookie level - httpOnly level
 
     return res
-    .cookie("jwt", generateRefreshToken, {
-      httpOnly: true,
-      secure: true, //remove when testing with browser / keep it when testing with ThunderClient
-      maxAge: 24 * 60 * 60 * 1000,
-    })
-    .json({ accessToken: generateAccessToken, statusCode: 201, fullName : searchUser?.fullName, roles });
+      .cookie("jwt", generateRefreshToken, {
+        httpOnly: true,
+        secure: true, //remove when testing with browser / keep it when testing with ThunderClient
+        maxAge: 24 * 60 * 60 * 1000,
+      })
+      .json({
+        statusCode: 201,
+        accessToken: generateAccessToken,
+        fullName: searchUser?.fullName,
+        roles,
+        username,
+        email : searchUser?.email,
+        favoriteConstructor : searchUser?.favoriteConstructor,
+        favoriteDriver : searchUser?.favoriteDriver,
+        profilePicture : searchUser?.profileImage?.data
+      });
   } catch (error) {
     console.log("error authController", error);
     return res.status(500).json({ message: error.message });

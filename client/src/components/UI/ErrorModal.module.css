@@ -1,3 +1,15 @@
+@keyframes openScale {
+    0% {
+        transform: scale(0);
+
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
 .modal-wrapper{
     display: flex;
     align-items: center;
@@ -21,7 +33,6 @@
     max-width: 350px;
     width: 100%;
     border-radius: 10px;
-    position: relative;
 
     position: fixed;
     top: 30vh;
@@ -30,6 +41,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     z-index: 100;
     border-radius: 7px;
+    animation: .25s openScale linear;
 }
 
 .modal .overlay {
@@ -61,7 +73,7 @@
 }
 
 .modal p {
-    font-size: 13px;
+    font-size: 14px;
     color: #fff;
 }
 
@@ -83,4 +95,31 @@
 .modal button:hover {
     color: #fff;
     background-color: #26303B;
+}
+
+
+.modal_redirect {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #fff;
+}
+
+.modal-info-icon {
+    width: 14px;
+    margin-right: 5px;
+}
+
+.modal-link{
+    cursor: pointer;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.hide-modal-closeBtn {
+    display: none;
+}
+
+.extra-space {
+    margin-top: 20px;
 }

@@ -22,6 +22,8 @@ import Teams from './pages/Teams/Teams';
 import Persist from './components/PersistLogin/PersistLogin';
 import Footer from './components/Footer/Footer';
 import ErrorModal from './components/UI/ErrorModal';
+import UserProfile from './components/UserProfile/UserProfile';
+import UserProfileEdit from './components/UserProfileEdit/UserProfileEdit';
 
 function App() {
   const [showModal, setShowModal] = useState(false);
@@ -37,9 +39,13 @@ function App() {
   if(!isMobile) {
     console.log('IS NOT MOBILE ');
     return  <ErrorModal title='Ooops!' 
-      message ={`Hei, looks like you're not using a mobile device. For the moment, this application is optimized only for mobile. 
-      
-        You can still use the device toolbar from `} onConfirm={confirmErrorModal} />
+      message ={`Hei, looks like you're not using a mobile device. For the moment, this application is optimized only for mobile devices. 
+        You can access the application from your current device by opening the device toolbar from any browser. Click the link below to learn how to open the device toolbar. Please reload the page after activating the device toolbar.`} 
+      onConfirm={confirmErrorModal} 
+      linkURL = 'https://www.browserstack.com/guide/view-mobile-version-of-website-on-chrome#toc1'
+      linkText = 'Device Toolbar'
+      hideCloseBtn = 'hide'
+    />
   } else {
     return (
       <>
@@ -59,10 +65,12 @@ function App() {
               <Route path='/qualyfing-results/last' element={<LastQualyResults />}></Route>
               <Route path='/schedule/last' element={<Schedule />}></Route>
               <Route path='/schedule/:round/:circuitId' element={<CircuitSchedule />} />
+              <Route path='/profile/:username' element={<UserProfile/>} />
+              <Route path='/profile/edit/:username' element={<UserProfileEdit/>} />
             </Route>
           </Routes>
         </Card>
-          <Footer/>
+          {/* <Footer/> */}
       </>
     );
   }

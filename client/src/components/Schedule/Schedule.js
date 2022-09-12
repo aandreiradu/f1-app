@@ -3,57 +3,29 @@ import Loader from "../Loader/Loader";
 // import classes from "./Schedule.module.css";
 import ScheduleItem from "./ScheduleItem";
 import ErrorModal from "../UI/ErrorModal";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {
   fetchRaceResultsStart,
   fetchRaceResultsSuccess,
   fetchRaceResultsFailure,
 } from "../../store/RaceResults/raceResults.actions";
+import { fetchScheduleStart,fetchScheduleSuccess,fetchScheduleFailure } from '../../store/Schedule/schedule.actions';
 import { useDispatch, useSelector } from "react-redux";
-import { selectRaceResultReducer } from "../../store/RaceResults/raceResults.selector";
+import { selectRaceResults } from "../../store/RaceResults/raceResults.selector";
 import useAxiosInterceptors from "../../hooks/useHttpInterceptors";
-import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/Auth/auth.actions";
 import { ScheduleWrapper,ScheduleHeader,ScheduleHeaderTitle,ScheduleHeaderCompetition,ScheduleResults } from "./Schedule.styles";
+import { selectSchedule } from "../../store/Schedule/schedule.selector";
+import useAxiosInterceptorsPublic from "../../hooks/useHttpInterceptorsPublic";
 
 const Schedule = () => {
+  const seasonSchedule = useSelector(selectSchedule)
+  const raceResults = useSelector(selectRaceResults);
   const navigate = useNavigate();
-  const {
-    isLoading: isLoadingRR,
-    results: raceResultsArray,
-    error: errorRR,
-  } = useSelector(selectRaceResultReducer);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(true);
-  const [seasonSchedule, setSeasonSchedule] = useState([]);
-  const axiosPrivate = useAxiosPrivate(false);
-  const { isLoading, error, sendRequest } = useAxiosInterceptors(true);
-
-
-  console.log({
-    isLoadingRR,
-    isLoading
-  });
-
-  const transformData = useCallback((responseData) => {
-
-      setSeasonSchedule(responseData.MRData.RaceTable.Races);  
-  },[]);
-
-  useEffect(() => {
-
-    sendRequest(
-      {
-        url: "http://ergast.com/api/f1/current.json",
-        method: "GET",
-        data: null,
-        headers: null,
-        withCredentials: false,
-      },
-      transformData
-    );
-  }, [sendRequest]);
+  const { isLoading : isLoadingRR, error : errorRR, sendRequest : sendRequestRR } = useAxiosInterceptorsPublic();
+  const { isLoading : isLoadingFinishedRaces, error : errorFinishedRaces, sendRequest : sendRequestFinishedRaces } = useAxiosInterceptors();
 
   useEffect(() => {
     let isMounted = true;
@@ -62,29 +34,27 @@ const Schedule = () => {
     const getRaceResults = async () => {
       dispatch(fetchRaceResultsStart());
       try {
-        // const responseRR = await axiosPrivate.post("/api/getRaceResultByYear", {
-          // year: new Date().getFullYear(),
-          // signal: controller.signal,
-          /* WIP - todo
-          headers : {
-            roles : ['1997',1206]
-          },
-          roles : [1997,'1206']
-          */
-        // });
-        const responseRR = await axiosPrivate({
-          method : 'POST',
-          url : '/api/getRaceResultByYear',
-          signal : controller.signal,
-          data : {
-            year : new Date().getFullYear(),
-          }
-        });
-        
-        isMounted &&
-          responseRR?.data &&
-          responseRR?.data.length > 0 &&
-          dispatch(fetchRaceResultsSuccess(responseRR?.data));
+
+        if(raceResults && raceResults?.length > 0) {
+            console.log('avem raceResults, nu mai facem request boss',raceResults);
+        } else {
+          sendRequestFinishedRaces(
+            {
+              url : '/api/getRaceResultByYear',
+              method : 'POST',
+              body : {
+                year : new Date().getFullYear()
+              },
+              withCredentials : true,
+              signal: controller.signal
+            },
+            (responseFinishedRaces) => {
+              console.log('responseFinishedRaces',responseFinishedRaces);
+              isMounted && dispatch(fetchRaceResultsSuccess(responseFinishedRaces));
+            }
+          )        
+        }
+
       } catch (error) {
         const {
           response: {
@@ -101,13 +71,52 @@ const Schedule = () => {
         dispatch(fetchRaceResultsFailure({ message, statusCode } || error));
       }
     };
-
+    
     getRaceResults();
 
     return () => {
       isMounted = false;
       controller.abort();
     };
+  }, []);
+
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+
+    const getSchedule =  async () => {
+      dispatch(fetchScheduleStart());
+
+      try {
+      if(seasonSchedule && seasonSchedule?.length > 0) {
+        console.log('avem season schedule setat boss, nu mai facem request',seasonSchedule);
+      } else {
+        sendRequestRR({
+          url: "http://ergast.com/api/f1/current.json",
+          method : 'GET',
+          withCredentials : false,
+          signal: controller.signal
+        },(scheduleResponse) => {
+            console.log('scheduleResponse ', scheduleResponse);
+            const currentSchedule = scheduleResponse?.MRData?.RaceTable?.Races;
+            isMounted && dispatch(fetchScheduleSuccess(currentSchedule));
+        });
+      }
+
+      } catch(errorSchedule){
+        console.log('ERROR ON GETTING CURRENT SCHEDULE',errorSchedule);
+        dispatch(fetchScheduleFailure(errorSchedule?.message || errorSchedule || 'Someting went wrong! Try again later.'));
+
+      }
+    }
+    getSchedule();
+    
+      return () => {
+        isMounted = false;
+        controller.abort();
+      }
   }, []);
 
   const confirmErrorModal = () => {
@@ -133,24 +142,25 @@ const Schedule = () => {
             onConfirm={confirmErrorModal}
           />
         )}
-        {error && showModal && (
+        {(errorFinishedRaces || errorRR) && showModal && (
           <ErrorModal
-            message={error?.message || errorRR}
+            message={errorFinishedRaces?.message || errorRR?.message || 'Someting went wrong!'}
             title={"Someting went wrong!"}
             onConfirm={confirmErrorModal}
           />
         )}
         <ScheduleResults>
           {
-            (isLoading || isLoadingRR) ? (
+            (isLoadingFinishedRaces || isLoadingRR) ? (
               <Loader />
-          ) : (
+          ) :
+           (
             seasonSchedule &&
-            seasonSchedule.map((item) => (
+            seasonSchedule?.map((item) => (
               <ScheduleItem
                 key={item?.round}
                 circuitId={item?.Circuit?.circuitId}
-                thisRoundResults={raceResultsArray[item?.round - 1]}
+                thisRoundResults={raceResults[item?.round - 1]}
                 round={item?.round}
                 raceName={item?.raceName}
                 raceDate={item?.date}

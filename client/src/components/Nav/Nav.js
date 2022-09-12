@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import UserProfilePopUp from '../NavUserProfilePopUp/UserProfilePopUp';
 
 
-const Nav = (props) => {
+const Nav = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [showProfiler,setShowProfiler] = useState(false);
 
@@ -62,7 +62,7 @@ const Nav = (props) => {
                         <RiUser3Fill />
                         {
                             showProfiler && 
-                            <UserProfilePopUp/>
+                            <UserProfilePopUp active={showProfiler}/>
                         }
                     </div>
                 </div>

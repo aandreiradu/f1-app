@@ -4,6 +4,8 @@ import { raceResultsReducer } from './RaceResults/raceResults.reducer';
 import { driversReducer } from './Drivers/drivers.reducer';
 import { lastRaceResultReducer } from './LastRaceResult/lastRaceResult.reducer';
 import { teamsReducer } from './Teams/teams.reducer';
+import { scheduleReducer } from './Schedule/schedule.reducer';
+import { scheduleDetailsReducer } from './ScheduleDetails/scheduleDetails.reducer';
 
 
 const rootReducer = combineReducers({
@@ -11,7 +13,9 @@ const rootReducer = combineReducers({
     raceResults : raceResultsReducer,
     drivers : driversReducer,
     lastRaceResult : lastRaceResultReducer,
-    teams : teamsReducer
+    teams : teamsReducer,
+    schedule : scheduleReducer,
+    scheduleDetails : scheduleDetailsReducer
 });
 
 export default rootReducer;

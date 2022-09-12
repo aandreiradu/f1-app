@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import classes from "./StandingsResults.module.css";
-import useHttp from "../../hooks/useHttp";
+import useAxiosInterceptorsPublic from "../../hooks/useHttpInterceptorsPublic";
 import Loader from "../Loader/Loader";
 
 const buildContentHeadByType = (type) => {
@@ -87,7 +87,7 @@ const StandingsResults = (props) => {
     useState([]);
   const [noContent, setNoContent] = useState(false);
   let { type, year } = props;
-  const { isLoading, error, sendRequest: getStandingsData } = useHttp();
+  const { isLoading, error, sendRequest: getStandingsData } = useAxiosInterceptorsPublic();
 
 
   let tHead = buildContentHeadByType(type);
@@ -105,6 +105,7 @@ const StandingsResults = (props) => {
   }
 
   let parseResponseData = (stateData) => {
+    console.log('stateData',stateData);
     if ( stateData?.MRData?.StandingsTable?.StandingsLists?.length > 0) {
       if (type === "Driver") {
         if (stateData?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings?.length > 0) {
@@ -121,7 +122,12 @@ const StandingsResults = (props) => {
   };
 
   useEffect(() => {
-    getStandingsData({ url: URL }, parseResponseData);
+    getStandingsData(
+        { 
+          url: URL,
+          method : 'GET',
+          withCredentials: false
+        }, (stateData) => parseResponseData(stateData));
     if (noContent) {
       setNoContent(false);
     }

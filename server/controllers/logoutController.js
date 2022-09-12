@@ -7,9 +7,10 @@ const handleLogout = async (req, res) => {
   const { jwt } = cookies;
   console.log("jwt", jwt);
 
+
   if (!jwt) {
     console.log("n-are jwt setat");
-    return res.sendStatus(204);
+    return res.status(204).json({statusCode: 204 });
   }
 
   // find the user based on the refresh token
@@ -41,7 +42,7 @@ const handleLogout = async (req, res) => {
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       })
-      .json({ statusCode: 204, message: "Logout completed" });
+      .json({ statusCode: 200, message: "Logout completed" });
   } catch (error) {
     console.error("error logout");
     return res.status(500).json({ message: error.message });

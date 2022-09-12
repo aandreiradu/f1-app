@@ -10,11 +10,10 @@ import {
   validateName,
   validateUserame,
 } from "../../Utils/validators";
-import AuthContext from "../../store/auth-context";
-import useHttp from "../../hooks/useHttp";
 import ErrorModal from "../../components/UI/ErrorModal";
 import Loader from "../../components/Loader/Loader";
 import LoaderIcon from "../../components/LoaderReusable/LoaderIcon";
+import useHttpInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 
 const Register = () => {
   const [showModal, setShowModal] = useState(true);
@@ -23,8 +22,7 @@ const Register = () => {
     isLoading,
     error,
     sendRequest: registerRequest,
-  } = useHttp();
-  const authCtx = useContext(AuthContext);
+  } = useHttpInterceptorsPublic();
   const navigate = useNavigate();
 
   const {
@@ -74,9 +72,7 @@ const Register = () => {
     const { message, statusCode } = stateData || {};
 
     if (
-      statusCode === 201 &&
-      message === `User ${usernameValue} has been created!`
-    ) {
+      statusCode === 201 &&  message === `User ${usernameValue} has been created!`) {
       // happy path, user created successfully, redirect to login;
       resetEmail();
       resetPassword();
@@ -112,7 +108,7 @@ const Register = () => {
 
     registerRequest(
       {
-        url: `http://localhost:3300/register`,
+        url: '/register',
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,8 +119,7 @@ const Register = () => {
           password: passwordValue,
           email: emailValue,
         }),
-      },
-      setRegister
+      },(responseData) => setRegister(responseData)
     );
   };
 

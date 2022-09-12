@@ -8,7 +8,7 @@ import driversScheduleImages from "../../constants/scheduleImages";
 import ErrorModal from "../UI/ErrorModal";
 import Loader from "../Loader/Loader";
 import SearchDriver from "../SearchDriver/SearchDriver";
-import useAxiosInterceptors from "../../hooks/useHttpInterceptors";
+import useAxiosInterceptorsPublic from "../../hooks/useHttpInterceptorsPublic";
 import { fetchDriversStart,fetchDriversFailure, fetchDriversSuccess} from "../../store/Drivers/drivers.actions";
 import { selectDrivers } from "../../store/Drivers/drivers.selector";
 import DriverCard from "./DriverCard";
@@ -18,8 +18,7 @@ const Users = () => {
   // const { drivers /*,isLoading : isLoadingDrivers,error : errorDrivers*/  } = useSelector(selectDrivers);
   const drivers  = useSelector(selectDrivers);
   const dispatch = useDispatch();
-  const { isLoading, error, sendRequest } =
-    useAxiosInterceptors(true);
+  const { isLoading, error, sendRequest } = useAxiosInterceptorsPublic();
   const [showModal, setShowModal] = useState(true);
   const [searchedDriver, setSearchedDriver] = useState("");
 
@@ -37,20 +36,24 @@ const Users = () => {
         dispatch(fetchDriversStart());
         
         try {
-          sendRequest(
-            {
-              url: "http://ergast.com/api/f1/2022/drivers.json",
-              method: "GET",
-              data: null,
-              headers: null,
-              withCredentials: false,
-              signal : controller.signal
-            },
-            (dataSet) => {
-              const driversArray = dataSet?.MRData?.DriverTable?.Drivers;
-              isMounted && dispatch(fetchDriversSuccess(driversArray));
-            }
-          );
+
+          if(!drivers?.length > 0) {
+            console.log('n-avem drivers, request',drivers);
+            sendRequest(
+              {
+                url: "http://ergast.com/api/f1/2022/drivers.json",
+                method: "GET",
+                data: null,
+                headers: null,
+                withCredentials: false,
+                signal : controller.signal
+              },
+              (dataSet) => {
+                const driversArray = dataSet?.MRData?.DriverTable?.Drivers;
+                isMounted && dispatch(fetchDriversSuccess(driversArray));
+              }
+            );
+          }
         } catch(error) {
           console.log('error Drivers request',error);
           dispatch(fetchDriversFailure(error))

@@ -7,7 +7,6 @@ export const ProfilerFade = keyframes`
         /* height: 0; */
     }
 
-
     75%{
         opacity: .75;
     }
@@ -32,17 +31,43 @@ export const TriangleFade = keyframes`
     }
 `
 
+export const ScalingOpen = keyframes`
+    0%{
+        transform: scale(0);
+        
+    }
+
+    100%{
+        transform: scale(1);
+    }
+`
+
+export const ScalingClose = keyframes`
+    0%{
+        transform: scale(1);
+        
+    }
+
+    100%{
+        transform: scale(0);
+    }
+`
+
 export const ProfilerWrapper = styled.div`
     position: absolute;
     bottom: -220px;
     right: 7px;
     height: 200px;
     width: 200px;
-    background-color: rgba(255,255,255,.6);
+    /* background-color: rgba(255,255,255,.8); */
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+    /* background-image: radial-gradient( circle farthest-corner at 50% 111.2%,  rgba(255,124,0,1) 0%, rgba(255,124,0,1) 15.9%, rgba(255,163,77,1) 15.9%, rgba(255,163,77,1) 24.4%, rgba(19,30,37,1) 24.5%, rgba(19,30,37,1) 66% ); */
     border-radius: 5px;
     border-top-right-radius: 0;
-    padding: 0 .5rem;
-    animation: ${ProfilerFade} .25s ease-in;
+    padding: 0 .25rem;
+    animation-name: ${props => props.active ? ScalingOpen : ScalingClose};
+    animation-duration: .25s;
+    animation-timing-function: linear;
 `
 
 
@@ -56,17 +81,19 @@ export const ProfilerTriangle = styled.span`
     -webkit-clip-path: polygon(50% 0%,0% 100%,100% 100%);
     -webkit-clip-path: polygon(50% 0%,0% 100%,100% 100%);
     clip-path: polygon(50% 0%,0% 100%,100% 100%);
-    background-color: rgba(255,255,255,.6);
-    animation: ${TriangleFade} 1s ease-in;
+    /* background-color: rgba(255,255,255,.6); */
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+    animation: ${TriangleFade} .7s linear;
 `
 
 export const ProfilerUserName = styled.p`
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: bold;
     color: #000;
     font-style: italic;
     padding: 0.25rem 0;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #e10600;
+    text-align: right;
 `
 
 export const ProfilerLinksWrapper = styled.div`
@@ -79,9 +106,32 @@ export const ProfilerLinksWrapper = styled.div`
 
 export const ProfilerLinks = styled(Link)`
     text-decoration: none;
-    color: tomato;
+    color: #000;
     font-size: 1rem;
-    margin: .5rem 0;
+    /* margin: .5rem 0; */
+
+    padding: 10px 10px 10px 0;
+    border: solid 1px #e10600;
+    border-top: 0;
+    border-left: 0;
+    border-bottom-right-radius: 10px;
+    line-height: 1;
+
+`
+
+export const LogoutLink = styled.span`
+    ${ProfilerLinks}
+    text-decoration: none;
+    color: #000;
+    font-size: 1rem;
+    /* margin: .5rem 0; */
+
+    padding: 10px 10px 10px 0;
+    border: solid 1px #e10600;
+    border-top: 0;
+    border-left: 0;
+    border-bottom-right-radius: 10px;
+    line-height: 1;
 `
 
 

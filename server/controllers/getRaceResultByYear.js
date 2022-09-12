@@ -3,6 +3,7 @@ const RaceResults = require('../model/RaceResults');
 
 const getRaceResultByYear = async (req,res) => {
     const {year} = req.body;
+    console.log(req.body,req.data);
 
     if(!year) {
         console.log('no year provided as payload');

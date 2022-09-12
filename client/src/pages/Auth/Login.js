@@ -13,7 +13,7 @@ import useAxiosInterceptors from "../../hooks/useHttpInterceptors";
 import { useEffect } from "react";
 
 const Login = () => {
-  const { isLoading,error,sendRequest } = useAxiosInterceptors(false);
+  const { isLoading,error,sendRequest } = useAxiosInterceptors();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(true);
   const [errorAuth,setErrorAuth] = useState('');
@@ -60,14 +60,19 @@ const Login = () => {
 
   const setAuth = (stateData) => {
     console.log('setAuth params',stateData);
-    const { accessToken, statusCode, message, fullName,roles } = stateData || null;
+    const { accessToken, statusCode, message, fullName,roles,username,email,favoriteConstructor,favoriteDriver,profilePicture } = stateData || null;
 
     // happy path, redirect to homepage;
     if (statusCode === 201 && accessToken) {
       dispatch(setAccessToken(
         accessToken,
         fullName,
-        roles
+        roles,
+        username,
+        email,
+        favoriteConstructor,
+        favoriteDriver,
+        profilePicture
       ));
       resetPassword();
       resetusername();
@@ -94,9 +99,9 @@ const Login = () => {
 
   const responseLoginHandler = (responseLogin) => {
     console.log('responseLogin',responseLogin);
-    const { accessToken, statusCode, message,fullName,roles } = responseLogin || null;
+    const { accessToken, statusCode, message,fullName,roles,username,email,favoriteConstructor,favoriteDriver,profilePicture } = responseLogin || null;
     if (responseLogin) {
-      setAuth({ accessToken, statusCode, message,fullName,roles });
+      setAuth({ accessToken, statusCode, message,fullName,roles,username,email,favoriteConstructor,favoriteDriver,profilePicture });
     }
   }
 
@@ -112,7 +117,7 @@ const Login = () => {
       {
         url: "/login",
         method: "POST",
-        data: JSON.stringify({
+        body: JSON.stringify({
           username: usernameValue,
           password: passwordValue,
         }),

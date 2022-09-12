@@ -49,7 +49,18 @@ const handleRefreshToken = async (req,res) => {
         );
 
         console.log('generateNewAccessToken',generateNewAccessToken);
-        return res.status(201).json({accessToken : generateNewAccessToken, roles, fullName : findUser?.fullName});
+        return res
+          .status(201)
+          .json({
+            accessToken: generateNewAccessToken,
+            roles,
+            fullName: findUser?.fullName,
+            username: findUser?.username,
+            email : findUser?.email,
+            favoriteDriver : findUser?.favoriteDriver,
+            favoriteConstructor : findUser.favoriteConstructor,
+            profilePicture : findUser?.profileImage?.data
+          });
     });
     
     console.log('STOP REFRESH TOKEN');

@@ -21,3 +21,13 @@ export const selectFullName = createSelector(
     selectAuthReducer,
     (auth) => auth?.fullName
 )
+
+export const selectUsername = createSelector(
+    selectAuthReducer,
+    auth => auth?.username
+);
+
+export const selectProfilePicture = createSelector(
+    selectAuthReducer,
+    auth => auth?.profilePicture
+);

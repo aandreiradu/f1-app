@@ -40,36 +40,39 @@ const httpReducer = (state, action) => {
   }
 };
 
-const useAxiosInterceptors = (withoutAuthorization) => {
-  const axiosPrivate = useAxiosPrivate(withoutAuthorization);
+const useAxiosInterceptors = () => {
+  const axiosPrivate = useAxiosPrivate();
   const [httpState, dispatch] = useReducer(httpReducer, initialState);
 
   const clear = useCallback(() => {
     dispatch({ type: "CLEAR" });
   }, []);
 
-  const sendRequest = useCallback(async (requestConfig, applyData) => {
-    console.log("RECEIVED", requestConfig);
+  const sendRequest = useCallback( async(requestConfig, applyData) => {
+    console.log("sendRequest RECEIVED", requestConfig);
     const {
       method,
       url,
-      data: body,
+      body,
       headers,
       withCredentials,
       others,
     } = requestConfig || {};
     dispatch({ type: "SEND" });
 
+
     try {
+      console.log('BODY',body);
       const response = await axiosPrivate({
         method,
         url,
-        data: body,
+        data : body,
         headers,
         withCredentials,
         ...others,
       });
       console.log("response", response);
+
       dispatch({ type: "RESPONSE", payload: response?.data });
       applyData(response?.data);
     } catch (error) {

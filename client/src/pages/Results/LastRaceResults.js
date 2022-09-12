@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import DriversRaceResults from '../../components/Results/DriversRaceResults';
 import ErrorModal from '../../components/UI/ErrorModal';
 import { useDispatch, useSelector } from 'react-redux';
-import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { fetchLastRaceResultStart,fetchLastRaceResultSuccess,fetchLastRaceResultFailure } from '../../store/LastRaceResult/lastRaceResult.actions';
 import { selectLastResults } from '../../store/LastRaceResult/lastRaceResult.selector';
+import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 
 const LastRaceResults = () => {
     const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const LastRaceResults = () => {
     const lastRaceResults = useSelector(selectLastResults); 
     console.log('lastRaceResults',lastRaceResults);
     const [listCategory, setListCategory] = useState('LeaderBoard');
-    const { isLoading, error,sendRequest } = useAxiosInterceptors(true);
+    const { isLoading, error,sendRequest } = useAxiosInterceptorsPublic();
 
 
 

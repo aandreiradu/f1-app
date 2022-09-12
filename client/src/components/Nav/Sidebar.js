@@ -11,7 +11,7 @@ import useLogout from '../../hooks/useLogout';
 
 
 const Sidebar = (props) => {
-    const [showModal,setShowModal] = useState(false);
+    const [showModal,setShowModal] = useState(true);
     const {errorLogin,logoutHandler} = useLogout();
     const isAuthenticted = useSelector(selectIsAuthenticated);
     console.log('sidebar isAuthenticted',isAuthenticted);

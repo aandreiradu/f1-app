@@ -118,10 +118,10 @@
 
 
 .category {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.25rem;
-        margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem;
+    margin-top: 5px;
 }
 
 .category p{
@@ -129,9 +129,11 @@
     font-size: 1rem;
 }
 
+
 .category .categoryActive {
-        border-bottom: 0.5px solid red;
-        font-style: italic;
-        font-weight: 600;
-        cursor: pointer;
+    border-bottom: 0.5px solid red;
+    font-style: italic;
+    font-weight: 600;
+    cursor: pointer;
 }
+

@@ -22,6 +22,7 @@ const useInput = (validator) => {
         blurHandler: inputBlurHandler,
         isValid: isValid,
         hasError: hasError,
+        isTouched,
         reset
     }
 

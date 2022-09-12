@@ -4,7 +4,12 @@ const initialState = {
   accessToken: null,
   isAuth: false,
   fullName : null,
-  roles : []
+  username : null,
+  roles : [],
+  email : null,
+  favoriteDriver : null,
+  favoriteConstructor : null,
+  profilePicture : null
 };
 
 export const authReducer = (state = initialState, action = {}) => {
@@ -17,11 +22,16 @@ export const authReducer = (state = initialState, action = {}) => {
         ...state,
         accessToken: payload.accessToken,
         fullName : payload.fullName,
+        username : payload.username,
         roles : [
           ...state.roles,
           ...payload?.roles
         ],
         isAuth: true,
+        email : payload.email,
+        favoriteDriver : payload.favoriteDriver,
+        favoriteConstructor : payload.favoriteConstructor,
+        profilePicture : payload.profilePicture
       };
 
     case AUTH_TYPES.AUTH_REFRESH_TOKEN:
@@ -30,18 +40,45 @@ export const authReducer = (state = initialState, action = {}) => {
         isAuth : true,
         accessToken: payload.accessToken,
         fullName : payload.fullName,
+        username : payload.username,
         roles : [
           ...state.roles,
           ...payload.roles
-        ]
+        ],
+        email : payload.email,
+        favoriteDriver : payload.favoriteDriver,
+        favoriteConstructor : payload.favoriteConstructor,
+        profilePicture : payload.profilePicture
       };
 
+    case AUTH_TYPES["AUTH/GET_USER_INFO"] :
+      return {
+        ...state,
+        fullName : payload.fullName,
+        username : payload.username,
+        email : payload.email,
+        favoriteDriver : payload.favoriteDriver,
+        favoriteConstructor : payload.favoriteConstructor
+      }
+
+    case AUTH_TYPES["PROFILE/UPDATE_PROFILE_PICTURE"] :
+      return {
+        ...state,
+        profilePicture : payload.profilePicture
+      };
+    
     case AUTH_TYPES.AUTH_LOGOUT:
       return {
         ...state,
         accessToken: null,
-        roles : [],
         isAuth: false,
+        fullName : null,
+        username : null,
+        roles : [],
+        email : null,
+        favoriteDriver : null,
+        favoriteConstructor : null,
+        profilePicture : null
       };
 
     default:

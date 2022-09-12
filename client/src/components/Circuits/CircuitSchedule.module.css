@@ -2,10 +2,10 @@
 
 
 * {
-    font-family: 'Titillium Web';
+    font-family: 'Titillium Web',cursive;
 }
 
-.race-hub {
+.race-hub-wrapper {
     margin: 20px 0;
 }
 
@@ -19,23 +19,15 @@
     border-radius: 10px;
 }
 
-.race-header {
-    position: relative;
-    height: 180px;
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-}
-
-
 
 .race-image {
     object-fit: cover;
     height: 100%;
     width: 100%;
-    filter: brightness(50%);
-    backdrop-filter: brightness(50%);
+    /* filter: brightness(50%);
+    backdrop-filter: brightness(50%); */
+    filter: brightness(65%);
+    backdrop-filter: brightness(65%);
 }
 
 .race-content {

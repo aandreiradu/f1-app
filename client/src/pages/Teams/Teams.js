@@ -5,6 +5,7 @@ import TeamItem from './TeamItem';
 import ErrorModal from "../../components/UI/ErrorModal";
 import { fetchTeamsStart,fetchTeamsFailure,fetchTeamsConstructorSuccess,fetchTeamsDriversSuccess } from "../../store/Teams/teams.actions";
 import useAxiosInterceptors from "../../hooks/useHttpInterceptors";
+import useAxiosInterceptorsPublic from "../../hooks/useHttpInterceptorsPublic";
 import { useDispatch,useSelector } from "react-redux";
 import { teamsDriversSelector,constructorsSelector } from "../../store/Teams/teams.selector";
 
@@ -31,8 +32,8 @@ const Teams = () => {
   console.log('teamsDrivers',teamsDrivers);
   console.log('teams',teams);
   const dispatch = useDispatch();
-  const { isLoading : isLoadingDrivers ,error : errorDrivers,sendRequest : sendRequestDrivers } = useAxiosInterceptors(true);
-  const { isLoading : isLoadingConstructors ,error : errorConstructor,sendRequest : sendRequestConstructor } = useAxiosInterceptors(true);
+  const { isLoading : isLoadingDrivers ,error : errorDrivers,sendRequest : sendRequestDrivers } = useAxiosInterceptorsPublic();
+  const { isLoading : isLoadingConstructors ,error : errorConstructor,sendRequest : sendRequestConstructor } = useAxiosInterceptorsPublic();
   const [showModal,setShowModal] = useState(true);
 
   const confirmErrorModal = () => {

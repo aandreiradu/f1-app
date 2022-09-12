@@ -6,11 +6,11 @@ import { ReactComponent as LinkedIn } from "../../assets/SVGs/linkedin.svg";
 
 export const FooterContainer = styled.footer`
     width: 100%;    
-    position: relative;
+    position: absolute;
     bottom: 0;
     left: 0;
     padding: 0.25rem 1rem;
-    margin: 20px 0px;
+    margin: 20px 0px 0px 0px;
     background-color: #000;
     display: flex;
     flex-direction: column;
