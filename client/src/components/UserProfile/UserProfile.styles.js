@@ -16,6 +16,8 @@ export const UserProfilePictureWrapper = styled.div`
     border-radius: 50%;
     background-color: #fff;
     position: relative;
+    width: 80px;
+    height: 80px;
 `
 
 // export const UserProfilePicture = styled(DefaultProfilePicture)`

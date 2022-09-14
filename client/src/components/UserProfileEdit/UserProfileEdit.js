@@ -1,4 +1,4 @@
-import axios from "../../api/axios";
+import LoaderIcon from '../LoaderReusable/LoaderIcon';
 import { updateProfilePicture } from "../../store/Auth/auth.actions";
 import ErrorModal from '../../components/UI/ErrorModal';
 import { acceptedExtensions } from '../../Utils/acceptedProfilePictureExtensions';
@@ -159,11 +159,6 @@ const UserProfileEdit = () => {
       favDriverInputValue,
       favConstructor,
     });
-
-    // sendRequest({
-    //   url : '/api/accounts/edit',
-    //   method: POST,
-    // })
   };
 
   const changeProfilePictureHandler = async (e) => {
@@ -214,43 +209,30 @@ const UserProfileEdit = () => {
         formData.append("profilePicture", uploadedPicture);
         formData.append("username", username);
 
-        // sendRequest(
-        //   {
-        //     url: "api/accounts/updateProfilePicture",
-        //     method: "POST",
-        //     body: {
-        //       formData,
-        //     },
-        //     headers: {},
-        //     withCredentials: true,
-        //     signal: controller.signal,
-        //   },
-        //   (responseFinishedRaces) => {
-        //     console.log("updateProfilePicture response", responseFinishedRaces);
-        //   }
-        // );
-        const apiResponse = await axios({
-          url: "http://localhost:3300/api/accounts/updateProfilePicture",
-          method: "POST",
-          data: formData,
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
+        sendRequest(
+          {
+            url: "api/accounts/updateProfilePicture",
+            method: "POST",
+            body: {
+              formData,
+            },
+            headers: {},
+            withCredentials: true,
+            signal: controller.signal,
           },
-          signal: controller.signal,
-        });
+          (apiResponse) => {
+            console.log('apiResponse',apiResponse);
+            const { message, statusCode, data } = apiResponse;
+            if (
+              message === "Profile picture uploaded successfully" && statusCode === 200) {
+              console.log("image uploaded successfully, dispatch and change the profile picture",apiResponse);
+              // setTimeout(() => {
+                dispatch(updateProfilePicture({ profilePicture: data }));
+              // },[5000]);
+            }
+          }
+        );
 
-        const { message, statusCode, data } = apiResponse?.data;
-        if (
-          message === "Profile picture uploaded successfully" &&
-          statusCode === 200
-        ) {
-          console.log(
-            "image uploaded successfully, dispatch and change the profile picture",
-            apiResponse?.data
-          );
-          dispatch(updateProfilePicture({ profilePicture: data }));
-        }
       } catch (error) {
         console.log("error", error);
         setShowErrorModal({
@@ -276,13 +258,17 @@ const UserProfileEdit = () => {
     <EditProfileContainer>
       {showErrorModal?.show && <ErrorModal onConfirm={closeModal} title={showErrorModal?.title || 'Ooops!'} message={showErrorModal?.message || 'Unexpected error occured'}  />}
       <UserProfilePictureWrapper>
-        <UserProfilePicture
-          src={
-            profilePicture
-              ? `data:image/png;base64,${imageStr}`
-              : "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/240px-F1.svg.png"
-          }
-        />
+        {
+          !isLoading ? 
+          <UserProfilePicture
+            src={
+              profilePicture
+                ? `data:image/png;base64,${imageStr}`
+                : "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/240px-F1.svg.png"
+            }
+          />
+          : <LoaderIcon hB1={20} hB2={40} hB3={20} barsColor={'#000'} heightContainer='100%' />
+        }
         <ChangeProfilePictureLabel htmlFor="imageUpload"></ChangeProfilePictureLabel>
         <ChangeProfilePicture
           type="file"

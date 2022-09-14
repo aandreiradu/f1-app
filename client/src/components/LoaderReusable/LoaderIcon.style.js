@@ -16,6 +16,7 @@ export const LoaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height : ${props => props.heightContainer};
 `;
 
 export const Loader = styled.div`
@@ -24,13 +25,14 @@ export const Loader = styled.div`
   width: 100%;
   justify-content: center;
   font-size: 12px;
+  height : ${props => props.heightContainer};
 `;
 
 export const Bar = styled.span`
   display: inline-block;
   width: ${(props) => props.wB1 || "3"}px;
   height: ${(props) => props.hB1 || "20"}px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: ${props => props.barsColor || 'rgba(255, 255, 255, 0.2)'};
   border-radius: 10px;
   animation: ${scaleUp} 1s linear infinite;
 

@@ -41,7 +41,8 @@ const Users = () => {
             console.log('n-avem drivers, request',drivers);
             sendRequest(
               {
-                url: "http://ergast.com/api/f1/2022/drivers.json",
+                // url: "http://ergast.com/api/f1/2022/drivers.json",
+                url: "http://ergast.com/api/f1/current/driverStandings.json",
                 method: "GET",
                 data: null,
                 headers: null,
@@ -49,7 +50,8 @@ const Users = () => {
                 signal : controller.signal
               },
               (dataSet) => {
-                const driversArray = dataSet?.MRData?.DriverTable?.Drivers;
+                const driversArray = dataSet?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings;
+                console.log('driversArray',driversArray);
                 isMounted && dispatch(fetchDriversSuccess(driversArray));
               }
             );
@@ -98,13 +100,21 @@ const Users = () => {
                   >
                     {
                       drivers && drivers?.map((driver,index) => {
-                        if (driver?.familyName?.toLowerCase().includes(searchedDriver.toLowerCase())  || driver?.givenName?.toLowerCase().includes(searchedDriver.toLowerCase())) {
-                            const driverProfilePic = driversScheduleImages.find((driverImg) => driver.driverId === driverImg.driverId);
+                        if (driver?.Driver?.familyName?.toLowerCase().includes(searchedDriver.toLowerCase())  || driver?.Driver.givenName?.toLowerCase().includes(searchedDriver.toLowerCase())) {
+                            const driverProfilePic = driversScheduleImages.find((driverImg) => driver?.Driver?.driverId === driverImg.driverId);
                             return (
                             <DriverCard
-                              key={index}
-                              driver = {driver}
-                              driverProfilePic = {driverProfilePic}
+                              key={driver?.Driver?.driverId || index}
+                              driverId = {driver?.Driver?.driverId}
+                              driverRank = {driver?.position}
+                              driverPoints = {driver?.points}
+                              driverName = {`${driver?.Driver?.givenName} ${driver?.Driver?.familyName}`}
+                              driverNationality=  {driver?.Driver?.nationality}
+                              constructorName = {driver?.Constructors[0]?.name}
+                              constructorId = {driver?.Constructors[0]?.constructorId}
+                              driverProfilePic = {driverProfilePic?.imgSrc}
+                              driverNumber = {driverProfilePic?.imgNumber}
+                              driverNationalityFlag = {driverProfilePic?.nationalityFlag}
                             />
                           );
                         }

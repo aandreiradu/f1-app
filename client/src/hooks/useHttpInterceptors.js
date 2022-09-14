@@ -50,6 +50,7 @@ const useAxiosInterceptors = () => {
 
   const sendRequest = useCallback( async(requestConfig, applyData) => {
     console.log("sendRequest RECEIVED", requestConfig);
+    let formDataReceived = false;
     const {
       method,
       url,
@@ -58,23 +59,35 @@ const useAxiosInterceptors = () => {
       withCredentials,
       others,
     } = requestConfig || {};
+    
+    // check for formData payload
+    console.log('body is instance of formdata', body?.formData instanceof FormData);
+    const formData = new FormData();
+    if(body?.formData instanceof FormData) {
+      for (const value of body?.formData?.entries()) {
+        formData.append([value[0]] , value[1]);
+      }
+      formDataReceived  = true;
+    }
+    
     dispatch({ type: "SEND" });
-
 
     try {
       console.log('BODY',body);
       const response = await axiosPrivate({
         method,
         url,
-        data : body,
+        data : !formDataReceived ? body : formData,
         headers,
         withCredentials,
         ...others,
       });
       console.log("response", response);
 
-      dispatch({ type: "RESPONSE", payload: response?.data });
-      applyData(response?.data);
+      setTimeout(() => {
+        dispatch({ type: "RESPONSE", payload: response?.data });
+        applyData(response?.data);
+      },10000)
     } catch (error) {
       console.error("error useAxiosInterceptors", error);
       dispatch({ type: "ERROR", payload: error?.response?.data || error });

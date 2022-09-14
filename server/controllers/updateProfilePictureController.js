@@ -69,7 +69,7 @@ const updateProfilePicture = async (req, res) => {
 
     await findUserByUsername.save();
     
-  
+    console.log(`Image uploaded successfully for username ${username}`);
     return res
       .status(200)
       .json({ message: "Image uploaded successfully", statusCode: 200, message: 'Profile picture uploaded successfully',data : bufferImg });
