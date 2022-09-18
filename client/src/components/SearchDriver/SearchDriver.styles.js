@@ -8,7 +8,8 @@ export const SearchDriverContainer = styled.div`
     justify-content: center;
     margin-top: 20px;
     border-radius: 5px;
-    border: 1px solid #e10600;
+    /* border: 1px solid #e10600; */
+    border: 1px solid #fff;
 `;
 
 

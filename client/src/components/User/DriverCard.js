@@ -25,9 +25,11 @@ import { Link } from "react-router-dom";
 const DriverCard = (props) => {
   const { driverId,driverRank,driverPoints,driverName,driverNationality,constructorName,constructorId,driverProfilePic,driverNumber,driverNationalityFlag } = props || {};
   
+  const teamColor = constructorsColors?.find(constructor => constructor.team === constructorName)?.teamColor || '';
+
   return (
     <Link to={`/${driverId}`}>
-    <DriverCardContainer variants={driverCardsAnimations?.driverCard} teamColor={constructorsColors?.find(constructor => constructor.team === constructorName)?.teamColor || ''}>
+    <DriverCardContainer variants={driverCardsAnimations?.driverCard} teamcolor={teamColor}>
       <DriverCardHeader>
         <DriverCardHeaderPosition>{driverRank || 'N/A'}</DriverCardHeaderPosition>
         <DriverCardHeaderStandings>
@@ -37,7 +39,7 @@ const DriverCard = (props) => {
       </DriverCardHeader>
       <DriverCardNameNationality>
         <DriverCardNameAndTeamColor>
-          <DriverCardTeamColor teamColor={constructorsColors?.find(constructor => constructor.team === constructorName)?.teamColor || ''}></DriverCardTeamColor>
+          <DriverCardTeamColor teamcolor={teamColor}></DriverCardTeamColor>
           <DriverCardName>{driverName || 'N/A'}</DriverCardName>
         </DriverCardNameAndTeamColor>
         <DriverNationalityFlagContainer>

@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { updateProfileInfo } from "../../store/Auth/auth.actions";
 import LoaderIcon from '../LoaderReusable/LoaderIcon';
 import { updateProfilePicture } from "../../store/Auth/auth.actions";
 import ErrorModal from '../../components/UI/ErrorModal';
@@ -24,18 +26,29 @@ import { buildTeams } from "../../Utils/buildTeams";
 import useAxiosInterceptors from "../../hooks/useHttpInterceptors";
 import { useDispatch } from "react-redux"; 
 import { arrayBufferToBase64 } from '../UserProfile/UserProfile';
-import { useState } from "react";
 
 const UserProfileEdit = () => {
   const [showErrorModal,setShowErrorModal] = useState({});
   const dispatch = useDispatch();
   const { sendRequest, isLoading, error, responseData } = useAxiosInterceptors();
   const location = useLocation();
-  const { fullName, username, email, favoriteConstructor, favoriteDriver } = location?.state;
-  console.log("location", location.state);
+  const { fullName, username, email, favoriteConstructor, favoriteDriver,profilePicture } = useSelector(selectIsAuth);
 
-  // profile picture area start
-  let { accessToken, profilePicture } = useSelector(selectIsAuth);
+
+  useEffect(() => {
+    console.log('ERROR SENDREQUEST',error);
+    const { message,statusCode } = error || {};
+    if(statusCode === 400 && message.includes('is already taken')) {
+      setShowErrorModal({
+        show : true,
+        message : 'Email already taken. Please pick another one'
+      });
+      emailReset();
+    }
+
+  },[error]);
+
+
   console.log("profilePicture", profilePicture);
   const imageStr =
     profilePicture?.data && arrayBufferToBase64(profilePicture?.data);
@@ -60,15 +73,15 @@ const UserProfileEdit = () => {
     reset: fullNameReset,
     isTouched: fullNameIsTouched,
   } = useInput((value) => validateName(value));
-  let {
-    value: usernameValue,
-    isValid: usernameIsValid,
-    changeHandler: usernameChangeHandler,
-    blurHandler: usernameBlurHandler,
-    hasError: usernameHasError,
-    reset: usernameReset,
-    isTouched: usernameIsTouched,
-  } = useInput((value) => validateUserame(value));
+  // let {
+  //   value: usernameValue,
+  //   isValid: usernameIsValid,
+  //   changeHandler: usernameChangeHandler,
+  //   blurHandler: usernameBlurHandler,
+  //   hasError: usernameHasError,
+  //   reset: usernameReset,
+  //   isTouched: usernameIsTouched,
+  // } = useInput((value) => validateUserame(value));
   let {
     value: emailValue,
     isValid: emailIsValid,
@@ -78,15 +91,15 @@ const UserProfileEdit = () => {
     reset: emailReset,
     isTouched: emailIsTouched,
   } = useInput((value) => validateEmail(value));
-  const {
-    value: passwordValue,
-    isValid: passwordIsValid,
-    changeHandler: passwordChangeHandler,
-    blurHandler: passwordBlurHandler,
-    hasError: passwordHasError,
-    reset: passwordReset,
-    isTouched: passwordIsTouched,
-  } = useInput((value) => validatePassword(value));
+  // const {
+  //   value: passwordValue,
+  //   isValid: passwordIsValid,
+  //   changeHandler: passwordChangeHandler,
+  //   blurHandler: passwordBlurHandler,
+  //   hasError: passwordHasError,
+  //   reset: passwordReset,
+  //   isTouched: passwordIsTouched,
+  // } = useInput((value) => validatePassword(value));
   const {
     value: favDriverValue,
     isValid: favDriverIsValid,
@@ -108,57 +121,101 @@ const UserProfileEdit = () => {
 
   let isFormValid = false;
 
-  if (
-    emailValue &&
-    emailIsValid &&
-    fullNameValue &&
-    fullNameIsValid &&
-    !usernameIsValid
-  ) {
-    isFormValid = true;
-    usernameValue = username;
-    usernameIsValid = true;
-  } else if (
-    fullName &&
-    fullNameIsValid &&
-    username &&
-    usernameIsValid &&
-    !emailIsValid
-  ) {
-    isFormValid = true;
-    emailIsValid = true;
-    emailValue = email;
-  } else if (emailIsValid && emailValue && username && usernameIsValid) {
-    isFormValid = true;
-    fullNameIsValid = true;
-    fullNameValue = fullName;
-  }
+  // if ( emailValue && emailIsValid && fullNameValue && fullNameIsValid /*&& !usernameIsValid*/) {
+  //   isFormValid = true;
+  //   // usernameValue = username;
+  //   // usernameIsTouched = true;
+  //   // usernameIsValid = true;
+  // } else if ( fullName && fullNameIsValid && username && !emailIsValid /*&& usernameIsValid*/ ) {
+  //   isFormValid = true;
+  //   emailIsValid = true;
+  //   emailIsTouched = true;
+  //   emailValue = email;
+  // } else if (emailIsValid && emailValue && username /*&& usernameIsValid*/) {
+  //   isFormValid = true;
+  //   fullNameIsValid = true;
+  //   fullNameIsTouched = true;
+  //   fullNameValue = fullName;
+  // }
 
-  if (usernameIsValid && emailIsValid && fullNameIsValid) {
+  if (emailIsValid && fullNameIsValid) {
     isFormValid = true;
   }
 
   const submitDataHandler = (e) => {
     e.preventDefault();
+    console.log(e);
+    e.target.disabled = true;
+    const controller = new AbortController();
 
-    if (!usernameIsValid && !emailIsValid && !fullNameIsValid) {
+    if (!emailIsValid && !fullNameIsValid /*&& !usernameIsValid*/) {
       isFormValid = false;
       return;
     }
 
-    const fullNameInputValue = fullNameValue;
-    const usernameInputValue = usernameValue;
-    const emailInputValue = emailValue;
-    const favDriverInputValue = favDriverValue;
-    const favConstructor = favTeamValue;
+    const fullNameInputValue = fullNameValue?.trim();
+    // const usernameInputValue = usernameValue;
+    const emailInputValue = emailValue?.trim();
+    const favDriverInputValue = favDriverValue?.trim();
+    const favConstructor = favTeamValue?.trim();
 
     console.log({
       fullNameInputValue,
-      usernameInputValue,
+      // usernameInputValue,
       emailInputValue,
       favDriverInputValue,
       favConstructor,
     });
+    try {
+      sendRequest(
+        {
+          url: "/api/accounts/edit",
+          method: "POST",
+          body: {
+            username,
+            email : emailInputValue,
+            favoriteDriver : favDriverInputValue,
+            favoriteConstructor : favTeamValue,
+            fullName : fullNameValue
+          },
+          withCredentials: true,
+          signal: controller.signal,
+        },
+        (apiResponse) => {
+          console.log('apiResponse',apiResponse);
+          const { message, statusCode, data } = apiResponse;
+
+          if(statusCode === 200 && message === `User informations for username ${username} updated successfully`) {
+            console.log('backend response ok => dispatch');
+
+            let payload = {};
+            fullNameInputValue && Object.assign(payload,{fullName : fullNameInputValue});
+            emailInputValue && Object.assign(payload,{email : emailInputValue});
+            favDriverInputValue && Object.assign(payload,{favoriteDriver : favDriverInputValue});
+            favConstructor && Object.assign(payload,{favoriteConstructor : favConstructor});
+
+            
+            console.log('payload',payload);
+            dispatch(updateProfileInfo(payload));
+            e.target.disabled = false;
+            favDriverReset();
+            fullNameReset();
+            emailReset();
+            favTeamReset();
+            setShowErrorModal({
+              show : true,
+              title : 'You rock!',
+              message : 'Profile updated successfully ✅'
+            });
+            setTimeout(() => {
+                setShowErrorModal({});
+            }, 3500);
+          }
+        }
+      );  
+    }catch(error) {
+      console.log('ERRORRRRR HAEJRGOAJER @@@',error);
+    }
   };
 
   const changeProfilePictureHandler = async (e) => {
@@ -296,7 +353,7 @@ const UserProfileEdit = () => {
       />
 
       {/* USERNAME */}
-      <UserProfileEditItem
+      {/* <UserProfileEditItem
         id="username"
         value={usernameValue}
         labelText="Username"
@@ -307,7 +364,7 @@ const UserProfileEdit = () => {
         defaultValue={username}
         errorText={"Username is required"}
         isRequired={true}
-      />
+      /> */}
 
       {/* EMAIL */}
       <UserProfileEditItem
@@ -329,9 +386,9 @@ const UserProfileEdit = () => {
         value={favDriverValue}
         labelText="Favorite Driver"
         changeHandler={favDriverChangeHandler}
-        blurHandler={favDriverBlurHandler}
-        isValid={favDriverIsValid}
-        isTouched={favDriverIsTouched}
+        // blurHandler={favDriverBlurHandler}
+        // isValid={favDriverIsValid}
+        // isTouched={favDriverIsTouched}
         defaultValue={favoriteDriver}
         isRequired={false}
       />
@@ -342,15 +399,18 @@ const UserProfileEdit = () => {
         value={favTeamValue}
         labelText="Favorite Constructor Team"
         changeHandler={favTeamChangeHandler}
-        blurHandler={favTeamBlurHandler}
-        isValid={favTeamIsValid}
-        isTouched={favTeamIsTouched}
+        // blurHandler={favTeamBlurHandler}
+        // isValid={favTeamIsValid}
+        // isTouched={favTeamIsTouched}
         defaultValue={favoriteConstructor}
         isRequired={false}
       />
 
       <SaveChangesBtn disabled={!isFormValid} onClick={submitDataHandler}>
-        Submit
+        {isLoading ? 
+          <LoaderIcon hB1={10} hB2={20} hB3={10} barsColor={'#000'} />
+          : 'Submit'
+        }
       </SaveChangesBtn>
     </EditProfileContainer>
   );

@@ -118,7 +118,7 @@
     width: 130px;
     align-items: center;
     justify-content: center;
-    padding: 2px 0;
+    padding: 5px 0;
 }
 
 .sidebar-auth svg,
@@ -141,13 +141,14 @@
 }
 
 .sidebar-auth {
-    color: #000;
+    color: #fff;
     background-color: #fff;
 }
 
 .sidebar-log {
     background-color: #e10600;
-    color: #000;
+    color: #fff;
+    border-radius: 7px;
 }
 
 

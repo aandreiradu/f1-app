@@ -23,15 +23,7 @@ const UserProfile = () => {
   console.log('imageStr',imageStr);
 
   const goToProfileEditHandler = () => {
-    navigate(`/profile/edit/${username}`,{
-        state : {
-            username,
-            fullName,
-            email,
-            favoriteConstructor,
-            favoriteDriver
-        }
-    })
+    navigate(`/profile/edit/${username}`)
   }
 
   return (

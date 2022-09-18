@@ -10,7 +10,7 @@ import {
 
 
 const UserProfileEditItem = (props) => {
-  const { labelText,id,type,changeHandler,blurHandler,isValid,isTouched,defaultValue,isRequired,errorText,value } = props;
+  const { labelText,id,type,changeHandler,blurHandler,isValid,isTouched,defaultValue,isRequired,errorText,value,placeholder } = props;
   console.log({id : defaultValue});
   
   return (
@@ -34,9 +34,8 @@ const UserProfileEditItem = (props) => {
           onChange={changeHandler}
           type={type || "text"}
           onBlur={blurHandler}
-          // placeholder={defaultValue}
         />
-        {(isTouched && isRequired) && (
+        {(isTouched /*&& isRequired*/) && (
           <EditProfileInputIcon
             aria-autocomplete="false"
             valid={isValid ? 1 : 0}

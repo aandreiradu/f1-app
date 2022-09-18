@@ -29,7 +29,7 @@ export const UserProfilePicture = styled.img`
     width: 80px;
     height: 80px;
     /* padding: 5px; */
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 50%;
 `
 

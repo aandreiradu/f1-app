@@ -62,8 +62,10 @@ export const DriverCardContainer = styled(motion.li)`
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  border-top: solid 2px #e10600;
-  border-right: solid 2px #e10600;
+  /* border-top: solid 2px #e10600;
+  border-right: solid 2px #e10600; */
+  border-top: solid 2px #fff;
+  border-right: solid 2px #fff;
   border-top-right-radius: 10px;
   /* padding: 0 10px; */
   padding-right: 10px;
@@ -73,7 +75,7 @@ export const DriverCardContainer = styled(motion.li)`
 
 
   &:hover {
-    border-color: ${props => props.teamColor ? props.teamColor : '#e10600'};
+    border-color: ${props => props.teamcolor ?? '#e10600'};
     transition: .25s border-color linear;
   }
 

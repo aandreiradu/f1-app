@@ -17,5 +17,6 @@ export const logout = () => {
     return createAction(AUTH_TYPES.AUTH_LOGOUT);
 }
 
-
 export const updateProfilePicture = (profilePicture) => createAction(AUTH_TYPES['PROFILE/UPDATE_PROFILE_PICTURE'],profilePicture);
+
+export const updateProfileInfo = (profileInfo) => createAction(AUTH_TYPES['PROFILE/UPDATE_PROFILE_INFO'],profileInfo);

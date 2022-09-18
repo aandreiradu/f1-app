@@ -66,7 +66,13 @@ export const authReducer = (state = initialState, action = {}) => {
         ...state,
         profilePicture : payload.profilePicture
       };
-    
+
+    case AUTH_TYPES["PROFILE/UPDATE_PROFILE_INFO"] :
+      return {
+        ...state,
+        ...payload
+      }
+
     case AUTH_TYPES.AUTH_LOGOUT:
       return {
         ...state,

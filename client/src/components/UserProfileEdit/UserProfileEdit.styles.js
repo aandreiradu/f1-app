@@ -5,8 +5,9 @@ import { ProfilerFade } from '../NavUserProfilePopUp/UserProfilePopUp.styles';
 
 export const EditProfileContainer = styled(UserProfileContainer)`
     padding: 0 1rem;
-    background-color: #767575;
-    height: 100%;
+    /* background-color: #767575; */
+    height: 85vh;
+    position: relative;
 `
 
 export const ChangeProfilePictureLabel = styled.label`
@@ -89,7 +90,7 @@ export const EditProfileInput = styled.input`
 
     &::placeholder{
         color: #ccc;
-        font-size: 14px;
+        font-size: 12px;
         font-style: italic;
     }
 `
@@ -112,6 +113,8 @@ export const EditProfileErrorText = styled.p`
 
 
 export const SaveChangesBtn = styled(EditProfileBtn)`
+    position: absolute;
+    bottom:0;
     margin: 20px 0;
     width: 150px;
     font-size: 1rem;

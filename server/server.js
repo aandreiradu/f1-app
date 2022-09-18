@@ -51,7 +51,7 @@ app.use(verifyJWT);
 app.use('/api/addRaceResult',require('./routes/api/addRaceResult'));
 app.use('/api/getRaceResultByYear',require('./routes/api/getRaceResultByYear'));
 app.use('/api/accounts/updateProfilePicture',require('./routes/api/updateUserInfo'));
-app.use('/api/accounts/edit',require('./routes/api/getUserInformations'));
+app.use('/api/accounts/edit',require('./routes/api/updateUserInformations'));
 
 
 app.all('*', (req, res) => {

@@ -84,10 +84,10 @@ const useAxiosInterceptors = () => {
       });
       console.log("response", response);
 
-      setTimeout(() => {
+      // setTimeout(() => {
         dispatch({ type: "RESPONSE", payload: response?.data });
         applyData(response?.data);
-      },10000)
+      // },10000)
     } catch (error) {
       console.error("error useAxiosInterceptors", error);
       dispatch({ type: "ERROR", payload: error?.response?.data || error });

@@ -89,10 +89,14 @@ const Login = () => {
       ) {
         setErrorAuth(message);
         setShowModal(true);
+        // resetusername();
+        // resetPassword();
       } else {
         console.log('last else set auth');
         setShowModal(true);
-        setErrorAuth(message)
+        setErrorAuth(message);
+        // resetPassword();
+        // resetusername();
       }
     }
   };
@@ -106,9 +110,11 @@ const Login = () => {
   }
 
   const submitFormHandler = async (e) => {
+    setErrorAuth('');
+    setShowModal(false);
     e.preventDefault();
     setShowModal(true);
-
+    const controller = new AbortController();
     if (!formIsValid) {
       return;
     }
@@ -125,6 +131,7 @@ const Login = () => {
           "Content-Type": "application/json",
         },
         withCredentials: true,
+        controller : controller.signal
       },
       responseLoginHandler
     );
