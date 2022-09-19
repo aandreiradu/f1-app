@@ -1,8 +1,7 @@
 import axios from "axios";
 
 
-// const BASE_URL = 'http://localhost:3300';
-const BASE_URL = 'https://f1-app.onrender.com';
+const BASE_URL = 'http://localhost:3300';
 
 export default axios.create({
     baseURL : BASE_URL
