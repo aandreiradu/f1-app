@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const LastQualyResults = () => {
-    return (
-        <div>LastQualyResults</div>
-    )
-}
+	return <div>LastQualyResults</div>;
+};
 
-export default LastQualyResults
+export default LastQualyResults;
