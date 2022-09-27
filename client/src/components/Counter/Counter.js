@@ -53,12 +53,11 @@ const Counter = (props) => {
 		const intervalId = setInterval(() => {
 			const { title, dateTime: eventTime } =
 				decideActivity({
-					// FP1: `${upcomingRace?.FirstPractice?.date} ${upcomingRace?.FirstPractice?.time}`,
-					FP1: `${'2022-09-28 01:13'}`
-					// FP2: `${upcomingRace?.SecondPractice?.date} ${upcomingRace?.SecondPractice?.time}`,
-					// FP3: `${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`,
-					// Qualy: `${upcomingRace?.Qualifying?.date} ${upcomingRace?.Qualifying?.time}`,
-					// Race: `${upcomingRace?.date} ${upcomingRace?.time}`
+					FP1: `${upcomingRace?.FirstPractice?.date} ${upcomingRace?.FirstPractice?.time}`,
+					FP2: `${upcomingRace?.SecondPractice?.date} ${upcomingRace?.SecondPractice?.time}`,
+					FP3: `${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`,
+					Qualy: `${upcomingRace?.Qualifying?.date} ${upcomingRace?.Qualifying?.time}`,
+					Race: `${upcomingRace?.date} ${upcomingRace?.time}`
 				}) || {};
 
 			const timeLeft = updateCountdown(eventTime);
