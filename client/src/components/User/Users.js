@@ -24,10 +24,10 @@ import {
 	fetchScheduleFailure,
 	setUpcomingEvent
 } from '../../store/Schedule/schedule.actions';
-import { buildWeekend, decideActivity } from '../../Utils/buildGPWeekend';
+import { buildWeekend } from '../../Utils/buildGPWeekend';
 
 const Users = () => {
-	// const { drivers /*,isLoading : isLoadingDrivers,error : errorDrivers*/  } = useSelector(selectDrivers);
+	// const { drivers ,isLoading : isLoadingDrivers,error : errorDrivers  } = useSelector(selectDrivers);
 	const seasonSchedule = useSelector(selectSchedule);
 	const upcomingRace = useSelector(selectUpcomingEvent);
 	console.log('upcomingRace', upcomingRace);
@@ -137,15 +137,6 @@ const Users = () => {
 		setShowModal(false);
 	};
 
-	// const { title: eventTitle, dateTime: eventTime } =
-	// 	decideActivity({
-	// 		FP1: `${upcomingRace?.FirstPractice?.date} ${upcomingRace?.FirstPractice?.time}`,
-	// 		FP2: `${upcomingRace?.SecondPractice?.date} ${upcomingRace?.SecondPractice?.time}`,
-	// 		FP3: `${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`,
-	// 		Qualy: `${upcomingRace?.Qualifying?.date} ${upcomingRace?.Qualifying?.time}`,
-	// 		Race: `${upcomingRace?.date} ${upcomingRace?.time}`
-	// 	}) || {};
-
 	let content;
 
 	if (error /*|| errorDrivers*/ && showModal) {
@@ -160,8 +151,6 @@ const Users = () => {
 					) : (
 						<>
 							<UpComingRace
-								// eventTitle={eventTitle}
-								// eventTime={eventTime}
 								countryHost={upcomingRace?.Circuit?.Location?.country}
 								raceDate={
 									upcomingRace
@@ -174,42 +163,7 @@ const Users = () => {
 										: ''
 								}
 								raceName={upcomingRace?.raceName}
-								fp1Day={String(
-									new Date(upcomingRace?.FirstPractice?.date).toString().split(' ')[0]
-								)}
-								fp1Time={String(
-									new Date(
-										`${upcomingRace?.FirstPractice?.date} ${upcomingRace?.FirstPractice?.time}`
-									)?.toLocaleTimeString()
-								)}
-								fp2Day={String(
-									new Date(upcomingRace?.SecondPractice?.date).toString().split(' ')[0]
-								)}
-								fp2Time={String(
-									new Date(
-										`${upcomingRace?.SecondPractice?.date} ${upcomingRace?.SecondPractice?.time}`
-									)?.toLocaleTimeString()
-								)}
-								fp3Day={String(
-									new Date(upcomingRace?.ThirdPractice?.date).toString().split(' ')[0]
-								)}
-								fp3Time={String(
-									new Date(
-										`${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`
-									)?.toLocaleTimeString()
-								)}
-								qualyDay={String(
-									new Date(upcomingRace?.ThirdPractice?.date).toString().split(' ')[0]
-								)}
-								qualyTime={String(
-									new Date(
-										`${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`
-									)?.toLocaleTimeString()
-								)}
-								raceDay={String(new Date(upcomingRace?.date).toString().split(' ')[0])}
-								raceTime={String(
-									new Date(`${upcomingRace?.date} ${upcomingRace?.time}`)?.toLocaleTimeString()
-								)}
+								upcomingRace={upcomingRace}
 							/>
 							<SearchDriver onSearch={handleDriverSearch} />
 							<motion.ul

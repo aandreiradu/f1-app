@@ -23,13 +23,16 @@ import {
 } from './UpComingRace.styles';
 import hostCountriesFlags from '../../assets/host countries';
 import Counter from '../Counter/Counter';
+import { buildUpcomingEventPerDays } from '../../Utils/buildGPWeekend';
 
 const UpComingRace = (props) => {
 	console.log('UpComingRace render');
+	const { countryHost, raceName, raceDate, eventTime, eventTitle, upcomingRace } = props || {};
+	const countryFlag = hostCountriesFlags?.find(
+		(country) => country?.name?.toLocaleLowerCase() === countryHost?.toLocaleLowerCase()
+	)?.imgSrc;
+
 	const {
-		countryHost,
-		raceName,
-		raceDate,
 		fp1Day,
 		fp1Time,
 		fp2Day,
@@ -39,18 +42,8 @@ const UpComingRace = (props) => {
 		qualyDay,
 		qualyTime,
 		raceDay,
-		raceTime,
-		eventTime,
-		eventTitle
-	} = props || {};
-	// debugger;
-	const countryFlag = hostCountriesFlags?.find(
-		(country) => country?.name?.toLocaleLowerCase() === countryHost?.toLocaleLowerCase()
-	)?.imgSrc;
-
-	console.log('eventTime', eventTime);
-	console.log('eventTitle', eventTitle);
-	// debugger;
+		raceTime
+	} = buildUpcomingEventPerDays(upcomingRace) || '';
 
 	return (
 		<UpComingRaceContainer>
@@ -67,7 +60,6 @@ const UpComingRace = (props) => {
 							{countryHost ? countryHost[0]?.toUpperCase() + countryHost?.substring(1) : 'N/A'}
 						</CountryName>
 					</CountryHost>
-					{/* <RaceDetailsContainer> */}
 					<RaceDetails>
 						<RaceName>{raceName || 'N/A'}</RaceName>
 						<RaceDate>{raceDate || 'N/A'}</RaceDate>
@@ -109,7 +101,6 @@ const UpComingRace = (props) => {
 					</RaceTimeItem>
 				</RaceTimeList>
 			</RaceTimeContainer>
-			{/* </RaceDetailsContainer> */}
 		</UpComingRaceContainer>
 	);
 };

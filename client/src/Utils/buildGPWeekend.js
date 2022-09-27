@@ -43,3 +43,47 @@ export const decideActivity = (eventActivity) => {
 	// console.log('decideActivity result', result);
 	return result;
 };
+
+export const buildUpcomingEventPerDays = (upcomingRace) => {
+	const fp1Day = String(new Date(upcomingRace?.FirstPractice?.date).toString().split(' ')[0]);
+	const fp1Time = String(
+		new Date(
+			`${upcomingRace?.FirstPractice?.date} ${upcomingRace?.FirstPractice?.time}`
+		)?.toLocaleTimeString()
+	);
+	const fp2Day = String(new Date(upcomingRace?.SecondPractice?.date).toString().split(' ')[0]);
+	const fp2Time = String(
+		new Date(
+			`${upcomingRace?.SecondPractice?.date} ${upcomingRace?.SecondPractice?.time}`
+		)?.toLocaleTimeString()
+	);
+	const fp3Day = String(new Date(upcomingRace?.ThirdPractice?.date).toString().split(' ')[0]);
+	const fp3Time = String(
+		new Date(
+			`${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`
+		)?.toLocaleTimeString()
+	);
+	const qualyDay = String(new Date(upcomingRace?.ThirdPractice?.date).toString().split(' ')[0]);
+	const qualyTime = String(
+		new Date(
+			`${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`
+		)?.toLocaleTimeString()
+	);
+	const raceDay = String(new Date(upcomingRace?.date).toString().split(' ')[0]);
+	const raceTime = String(
+		new Date(`${upcomingRace?.date} ${upcomingRace?.time}`)?.toLocaleTimeString()
+	);
+
+	return {
+		fp1Day,
+		fp1Time,
+		fp2Day,
+		fp2Time,
+		fp3Day,
+		fp3Time,
+		qualyDay,
+		qualyTime,
+		raceDay,
+		raceTime
+	};
+};

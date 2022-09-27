@@ -49,28 +49,24 @@ const Counter = (props) => {
 	const [timeUntilEvent, setTimeUntilEvent] = useState({});
 
 	useEffect(() => {
-		console.error('timeUntilEvent HEY', timeUntilEvent);
 		interval = timeUntilEvent?.eventTime ? 60000 : 1000;
-		console.error('interval este', interval);
 		const intervalId = setInterval(() => {
 			const { title, dateTime: eventTime } =
 				decideActivity({
-					FP1: `${upcomingRace?.FirstPractice?.date} ${upcomingRace?.FirstPractice?.time}`,
-					FP2: `${upcomingRace?.SecondPractice?.date} ${upcomingRace?.SecondPractice?.time}`,
-					FP3: `${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`,
-					Qualy: `${upcomingRace?.Qualifying?.date} ${upcomingRace?.Qualifying?.time}`,
-					Race: `${upcomingRace?.date} ${upcomingRace?.time}`
+					// FP1: `${upcomingRace?.FirstPractice?.date} ${upcomingRace?.FirstPractice?.time}`,
+					FP1: `${'2022-09-28 01:13'}`
+					// FP2: `${upcomingRace?.SecondPractice?.date} ${upcomingRace?.SecondPractice?.time}`,
+					// FP3: `${upcomingRace?.ThirdPractice?.date} ${upcomingRace?.ThirdPractice?.time}`,
+					// Qualy: `${upcomingRace?.Qualifying?.date} ${upcomingRace?.Qualifying?.time}`,
+					// Race: `${upcomingRace?.date} ${upcomingRace?.time}`
 				}) || {};
 
 			const timeLeft = updateCountdown(eventTime);
-			console.log('timeLeft', timeLeft);
 			if (timeLeft?.stop === true) {
-				console.log('CLEAR HERE STOP TOT');
 				clearInterval(intervalId);
 				clearInterval(storedIntervalId);
 				return;
 			}
-			console.log('updating the state');
 			setTimeUntilEvent({ title, eventTime: timeLeft });
 			setStoredIntervalId(intervalId);
 			setIsLoading(false);
