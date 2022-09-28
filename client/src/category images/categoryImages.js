@@ -5,13 +5,13 @@ import raceResults from './race-results.jpg';
 import schedule from './schedule.png';
 
 const categoryImages = [
-	{ id: 'raceResults', imgSrc: raceResults, title: 'Last Race Results', path: 'race-results/last' },
 	{
 		id: 'schedule',
 		imgSrc: schedule,
 		title: `${new Date().getFullYear()} Schedule`,
 		path: 'schedule/last'
 	},
+	{ id: 'raceResults', imgSrc: raceResults, title: 'Last Race Results', path: 'race-results/last' },
 	{
 		id: 'qualyfing',
 		imgSrc: qualyfing,

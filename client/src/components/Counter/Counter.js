@@ -60,8 +60,10 @@ const Counter = (props) => {
 					Race: `${upcomingRace?.date} ${upcomingRace?.time}`
 				}) || {};
 
+			console.log('eventTime', eventTime);
 			const timeLeft = updateCountdown(eventTime);
 			if (timeLeft?.stop === true) {
+				console.log('stop stop stop');
 				clearInterval(intervalId);
 				clearInterval(storedIntervalId);
 				return;
@@ -84,7 +86,6 @@ const Counter = (props) => {
 			) : (
 				<>
 					<EventTitle>{timeUntilEvent?.title} STARTS IN </EventTitle>
-
 					<CounterWrapper>
 						<CounterContainer>
 							<ConunterItemValue>{timeUntilEvent?.eventTime?.daysLeft || 0}</ConunterItemValue>

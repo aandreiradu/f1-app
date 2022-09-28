@@ -85,20 +85,21 @@ const UpComingRace = (props) => {
 						<RaceTimeItemRaceDay>{fp3Day}</RaceTimeItemRaceDay>
 						<RaceTimeItemRaceTime>{fp3Time}</RaceTimeItemRaceTime>
 					</RaceTimeItem>
-				</RaceTimeList>
-				<RaceTimeList>
+
+					{/* <RaceTimeList> */}
 					<RaceTimeItem>
 						<RaceTimeItemRaceType>QUALYFING</RaceTimeItemRaceType>
 						<RaceTimeItemRaceDay>{qualyDay}</RaceTimeItemRaceDay>
 						<RaceTimeItemRaceTime>{qualyTime}</RaceTimeItemRaceTime>
 					</RaceTimeItem>
-				</RaceTimeList>
-				<RaceTimeList>
+					{/* </RaceTimeList> */}
+					{/* <RaceTimeList> */}
 					<RaceTimeItem>
 						<RaceTimeItemRaceType>RACE</RaceTimeItemRaceType>
 						<RaceTimeItemRaceDay>{raceDay}</RaceTimeItemRaceDay>
 						<RaceTimeItemRaceTime>{raceTime}</RaceTimeItemRaceTime>
 					</RaceTimeItem>
+					{/* </RaceTimeList> */}
 				</RaceTimeList>
 			</RaceTimeContainer>
 		</UpComingRaceContainer>

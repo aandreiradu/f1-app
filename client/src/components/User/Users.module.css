@@ -1,5 +1,5 @@
 .usersList {
-    margin: 20px 0 ;
+    margin: 20px 0 120px 0;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));

@@ -100,9 +100,15 @@ export const RaceTimeList = styled.ul`
 
 export const RaceTimeItem = styled.li`
 	width: 100%;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
+	border: 1px solid #e10600;
+	border-top: 0;
+	border-right: 0;
+	border-radius: 10px;
+	padding: 10px 5px;
 `;
 
 export const RaceTimeItemRaceType = styled.span`
@@ -111,11 +117,11 @@ export const RaceTimeItemRaceType = styled.span`
 	font-weight: 400;
 	text-transform: uppercase;
 	line-height: 1;
-	width: 45%;
+	min-width: 20%;
 `;
 
 export const RaceTimeItemRaceDay = styled.span`
-	width: 35px;
+	width: 75px;
 	text-align: center;
 	text-transform: uppercase;
 	/* padding: 0 5px; */
