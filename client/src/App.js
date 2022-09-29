@@ -23,6 +23,8 @@ import Footer from './components/Footer/Footer';
 import ErrorModal from './components/UI/ErrorModal';
 import UserProfile from './components/UserProfile/UserProfile';
 import UserProfileEdit from './components/UserProfileEdit/UserProfileEdit';
+import AddDriver from './components/AddDriver/AddDriver';
+import AddTeam from './components/AddTeam/AddTeam';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -68,6 +70,8 @@ function App() {
 							<Route path="/schedule/:round/:circuitId" element={<CircuitSchedule />} />
 							<Route path="/profile/:username" element={<UserProfile />} />
 							<Route path="/profile/edit/:username" element={<UserProfileEdit />} />
+							<Route path="/profile/:username/insert/driver" element={<AddDriver />} />
+							<Route path="/profile/:username/insert/team" element={<AddTeam />} />
 						</Route>
 					</Routes>
 				</Card>

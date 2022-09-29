@@ -125,7 +125,7 @@ const Users = () => {
 			}
 		};
 
-		// getDrivers();
+		getDrivers();
 
 		return () => {
 			isMounted = false;

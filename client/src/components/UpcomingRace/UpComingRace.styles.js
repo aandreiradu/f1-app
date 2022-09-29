@@ -106,9 +106,9 @@ export const RaceTimeItem = styled.li`
 	justify-content: space-between;
 	border: 1px solid #e10600;
 	border-top: 0;
-	border-right: 0;
+	/* border-right: ; */
 	border-radius: 10px;
-	padding: 10px 5px;
+	padding: 10px 10px 10px 5px;
 `;
 
 export const RaceTimeItemRaceType = styled.span`

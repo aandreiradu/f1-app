@@ -110,9 +110,9 @@ export const EditProfileErrorText = styled.p`
 `;
 
 export const SaveChangesBtn = styled(EditProfileBtn)`
-	position: absolute;
-	bottom: 0;
-	margin: 20px 0;
+	/* position: absolute; */
+	/* bottom: 0; */
+	margin: 40px 0;
 	width: 150px;
 	font-size: 1rem;
 	transition: all 0.5s linear;
