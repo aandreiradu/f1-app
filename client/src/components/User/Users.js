@@ -137,14 +137,15 @@ const Users = () => {
 		setShowModal(false);
 	};
 
-	const onEventFinished = useCallback(() => {
+	const onEventFinished = () => {
+		debugger;
 		const nextEvent = seasonSchedule?.find(
-			(event) => new Date(event.date) > new Date(upcomingRace.date)
+			(event) => new Date(event?.date) > new Date(upcomingRace?.date)
 		);
 		if (nextEvent && Object?.keys(nextEvent)?.length > 0) {
 			dispatch(setUpcomingEvent(nextEvent));
 		}
-	}, [upcomingRace]);
+	};
 
 	let content;
 
