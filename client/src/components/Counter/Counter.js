@@ -42,6 +42,8 @@ const updateCountdown = (eventStart) => {
 };
 
 const Counter = (props) => {
+	console.log('COUNTER PROPS', props);
+	const { onEventFinished } = props;
 	let interval;
 	const [isLoading, setIsLoading] = useState(true);
 	const [storedIntervalId, setStoredIntervalId] = useState(0);
@@ -62,10 +64,14 @@ const Counter = (props) => {
 
 			console.log('eventTime', eventTime);
 			const timeLeft = updateCountdown(eventTime);
+			console.log('TIME LEFT ', timeLeft);
 			if (timeLeft?.stop === true) {
 				console.log('stop stop stop');
 				clearInterval(intervalId);
 				clearInterval(storedIntervalId);
+				setTimeUntilEvent({});
+				setIsLoading(true);
+				props.onEventFinished();
 				return;
 			}
 			setTimeUntilEvent({ title, eventTime: timeLeft });

@@ -26,8 +26,10 @@ import Counter from '../Counter/Counter';
 import { buildUpcomingEventPerDays } from '../../Utils/buildGPWeekend';
 
 const UpComingRace = (props) => {
+	console.log('upcoming race props', props);
 	console.log('UpComingRace render');
-	const { countryHost, raceName, raceDate, eventTime, eventTitle, upcomingRace } = props || {};
+	const { countryHost, raceName, raceDate, eventTime, eventTitle, upcomingRace, onEventFinished } =
+		props || {};
 	const countryFlag = hostCountriesFlags?.find(
 		(country) => country?.name?.toLocaleLowerCase() === countryHost?.toLocaleLowerCase()
 	)?.imgSrc;
@@ -66,7 +68,7 @@ const UpComingRace = (props) => {
 					</RaceDetails>
 				</UpcomingEventLeft>
 				<Bar />
-				<Counter eventTime={eventTime ? new Date(eventTime) : new Date()} eventTitle={eventTitle} />
+				<Counter onEventFinished={onEventFinished} />
 			</UpComingWrapper>
 			<RaceTimeContainer>
 				<RaceTimeList>

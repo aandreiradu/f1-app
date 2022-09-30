@@ -27,6 +27,7 @@ import {
 import { buildWeekend } from '../../Utils/buildGPWeekend';
 
 const Users = () => {
+	console.log('render main');
 	// const { drivers ,isLoading : isLoadingDrivers,error : errorDrivers  } = useSelector(selectDrivers);
 	const seasonSchedule = useSelector(selectSchedule);
 	const upcomingRace = useSelector(selectUpcomingEvent);
@@ -103,7 +104,6 @@ const Users = () => {
 					console.log('n-avem drivers, request', drivers);
 					sendRequest(
 						{
-							// url: "http://ergast.com/api/f1/2022/drivers.json",
 							url: 'http://ergast.com/api/f1/current/driverStandings.json',
 							method: 'GET',
 							data: null,
@@ -137,6 +137,15 @@ const Users = () => {
 		setShowModal(false);
 	};
 
+	const onEventFinished = useCallback(() => {
+		const nextEvent = seasonSchedule?.find(
+			(event) => new Date(event.date) > new Date(upcomingRace.date)
+		);
+		if (nextEvent && Object?.keys(nextEvent)?.length > 0) {
+			dispatch(setUpcomingEvent(nextEvent));
+		}
+	}, [upcomingRace]);
+
 	let content;
 
 	if (error /*|| errorDrivers*/ && showModal) {
@@ -164,6 +173,7 @@ const Users = () => {
 								}
 								raceName={upcomingRace?.raceName}
 								upcomingRace={upcomingRace}
+								onEventFinished={onEventFinished}
 							/>
 							<SearchDriver onSearch={handleDriverSearch} />
 							<motion.ul
