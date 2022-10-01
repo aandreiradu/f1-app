@@ -25,6 +25,7 @@ import UserProfile from './components/UserProfile/UserProfile';
 import UserProfileEdit from './components/UserProfileEdit/UserProfileEdit';
 import AddDriver from './components/AddDriver/AddDriver';
 import AddTeam from './components/AddTeam/AddTeam';
+import Qualyfing from './components/Qualyfing/Qualyfing';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -65,7 +66,7 @@ function App() {
 							<Route path="/teams" element={<Teams />}></Route>
 							<Route path="/race-results/last" element={<LastRaceResults />}></Route>
 							<Route path="/race-results/:round/results" element={<RaceFinished />} />
-							<Route path="/qualyfing-results/last" element={<LastQualyResults />}></Route>
+							<Route path="/qualyfing-results" element={<Qualyfing />}></Route>
 							<Route path="/schedule/last" element={<Schedule />}></Route>
 							<Route path="/schedule/:round/:circuitId" element={<CircuitSchedule />} />
 							<Route path="/profile/:username" element={<UserProfile />} />
