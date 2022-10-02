@@ -1,7 +1,20 @@
 import React from 'react';
+import { TableLimiter, TableRow } from './QualyfingResultItem.styles';
 
-const QualyfingResultItem = () => {
-	return <div>QualyfingResultItem</div>;
+const QualyfingResultItem = (props) => {
+	const { constructorId, driverName, position, Q1, Q2, Q3, team } = props;
+	return (
+		<TableRow>
+			<td>{position}</td>
+			<td>{driverName}</td>
+			<td>{team}</td>
+			{/* <TableLimiter></TableLimiter> */}
+			<td>{Q1}</td>
+			<td>{Q2}</td>
+			{/* <TableLimiter></TableLimiter> */}
+			<td>{Q3}</td>
+		</TableRow>
+	);
 };
 
 export default QualyfingResultItem;

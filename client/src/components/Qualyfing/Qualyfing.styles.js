@@ -20,6 +20,7 @@ export const QualyfingResultsContainer = styled.main`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	gap: 20px;
 `;
 
 export const QualyfingResultItem = styled.div``;

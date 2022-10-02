@@ -64,8 +64,9 @@ const Users = () => {
 						(scheduleResponse) => {
 							console.log('scheduleResponse ', scheduleResponse);
 							const currentSchedule = scheduleResponse?.MRData?.RaceTable?.Races;
+							console.log('currentSchedule', currentSchedule);
 							const upcomingEvent = currentSchedule?.find(
-								(event) => new Date(event.date) > new Date()
+								(event) => new Date(`${event?.date} ${event?.time}`) > new Date()
 							);
 							console.log('upcomingEvent', upcomingEvent);
 							isMounted && dispatch(setUpcomingEvent(upcomingEvent));

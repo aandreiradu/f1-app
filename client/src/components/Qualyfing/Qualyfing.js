@@ -28,6 +28,8 @@ const Qualyfing = () => {
 						key={event?.raceName}
 						countryHost={event?.Circuit?.Location?.country || 'N/A'}
 						grandPrixName={event?.raceName}
+						roundNo={event?.round}
+						season={event?.season}
 					></QualyfingResult>
 				))}
 			</QualyfingResultsContainer>

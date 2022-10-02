@@ -33,8 +33,9 @@ const borderWidthGrowing = keyframes`
 export const QualyfingResultRow = styled.div`
 	width: 100%;
 	display: flex;
+	flex-direction: column;
 	justify-content: space-between;
-	height: 40px;
+	height: 60px;
 	overflow: hidden;
 	animation: ${(props) =>
 		props.shouldAnimate
@@ -45,11 +46,12 @@ export const QualyfingResultRow = styled.div`
 					${growingHeightClose} .35s linear backwards
 			  `};
 	animation-fill-mode: forwards;
-	margin-bottom: 10px;
+	/* margin-bottom: 10px; */
 	border-top-right-radius: 10px;
 	border-top: 1px solid red;
 	border-right: 1px solid red;
 	border-color: ${(props) => props.shouldAnimate && '#fff'};
+	overflow-y: auto;
 `;
 
 export const QualyfingResultHeader = styled.div`
@@ -59,7 +61,7 @@ export const QualyfingResultHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height: 40px;
+	height: 60px;
 	border-color: ${(props) => props.shouldAnimate && '#fff'};
 	transition: border 0.35s ease-in;
 
