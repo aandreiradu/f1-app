@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import {
 	QualyfingHeader,
 	QualyfingHeaderCompetition,
@@ -9,6 +9,7 @@ import {
 import QualyfingResult from './QualyfingResult';
 import { useSelector } from 'react-redux';
 import { selectEventsWithQualyFinished } from '../../store/Schedule/schedule.selector';
+import { useEffect } from 'react';
 
 const Qualyfing = () => {
 	const qualyEvents = useSelector(selectEventsWithQualyFinished);

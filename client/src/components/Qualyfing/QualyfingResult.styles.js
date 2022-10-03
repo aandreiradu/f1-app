@@ -83,6 +83,10 @@ export const QualyfingResultHeader = styled.div`
 export const QualyfingResultHeaderIcon = styled(FontAwesomeIcon)`
 	width: 30px;
 	height: 20px;
+
+	:disabled {
+		background-color: tomato;
+	}
 `;
 
 export const QualyfingResultCountryHost = styled.h3`

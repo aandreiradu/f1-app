@@ -6,7 +6,9 @@ import {
 	ScheduleHeaderCompetition
 } from '../Schedule/Schedule.styles';
 
-export const QualyfingWrapper = styled(ScheduleWrapper)``;
+export const QualyfingWrapper = styled(ScheduleWrapper)`
+	margin-bottom: 100px;
+`;
 
 export const QualyfingHeader = styled(ScheduleHeader)``;
 
