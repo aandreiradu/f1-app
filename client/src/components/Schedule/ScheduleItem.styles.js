@@ -103,15 +103,9 @@ export const EventDescription = styled.div`
 	cursor: pointer;
 `;
 
-export const EventCountry = styled.div`
+export const EventCountryWrapper = styled.div`
 	display: flex;
 	align-items: center;
-
-	& p {
-		font-size: 1.23rem;
-		font-weight: bold;
-		font-family: 'Titillium Web';
-	}
 
 	& i {
 		margin-left: 7px;
@@ -123,6 +117,13 @@ export const EventCountry = styled.div`
 			transform: translateX(4px);
 		}
 	}
+`;
+
+export const EventCountry = styled(Link)`
+	color: #fff;
+	font-size: 1.23rem;
+	font-weight: bold;
+	font-family: 'Titillium Web';
 `;
 
 export const GrandPrixName = styled.p`

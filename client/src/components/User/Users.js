@@ -134,6 +134,7 @@ const Users = () => {
 	};
 
 	const onEventFinished = () => {
+
 		const nextEvent = seasonSchedule?.find(
 			(event) => new Date(event?.date) > new Date(upcomingRace?.date)
 		);

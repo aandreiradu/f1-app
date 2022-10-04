@@ -1,6 +1,6 @@
 const UTCtoRO = (date, time) => {
 	console.log('UTCtoRO received', date, time);
-	const roTIME = new Date(`${date}  ${time}`);
+	const roTIME = new Date(`${date} ${time}`);
 	roTIME.setHours(roTIME.getHours() + 3);
 
 	const hour = roTIME.getHours(roTIME);

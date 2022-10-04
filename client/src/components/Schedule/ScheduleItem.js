@@ -16,6 +16,7 @@ import {
 	EventDetails,
 	EventDescription,
 	EventCountry,
+	EventCountryWrapper,
 	GrandPrixName,
 	EventResult,
 	ImageWrapper,
@@ -121,9 +122,6 @@ const ScheduleItem = (props) => {
 					<p>
 						{dayFp1}-{raceDay}
 					</p>
-					{/* <div className={classes.countryFlag}> */}
-					{/* <img src={driversScheduleImages.find(item => item.driverId.toUpperCase().includes('USA')).imgSrc} alt='country flag' /> */}
-					{/* </div> */}
 				</TimeFlag>
 				<MonthFlag>
 					<p>{monthFp1 === monthRaceDay ? monthRaceDay : `${monthFp1}-${monthRaceDay}`}</p>
@@ -134,12 +132,12 @@ const ScheduleItem = (props) => {
 			</Period>
 			<EventDetails>
 				<EventDescription>
-					<EventCountry>
-						<p>{country}</p>
+					<EventCountryWrapper>
+						<EventCountry to={`/schedule/${round}/${circuitId}`}>{country}</EventCountry>
 						<Link to={`/schedule/${round}/${circuitId}`}>
 							<i className="fa-solid fa-chevron-right"></i>
 						</Link>
-					</EventCountry>
+					</EventCountryWrapper>
 					<GrandPrixName>{raceName}</GrandPrixName>
 					{thisRoundResults && (
 						<RaceFinishedBtn to={`/race-results/${round}/results`}>
