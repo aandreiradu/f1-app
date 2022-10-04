@@ -62,9 +62,11 @@ const useAxiosInterceptorsPublic = () => {
 				withCredentials,
 				...others
 			});
+			// setTimeout(() => {
 			console.log('response', response);
 			dispatch({ type: 'RESPONSE', payload: response?.data });
 			applyData(response?.data);
+			// }, 60000);
 		} catch (error) {
 			console.error('error useAxiosInterceptors', error);
 			dispatch({ type: 'ERROR', payload: error?.response?.data || error });

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSchedule, selectUpcomingEvent } from '../../store/Schedule/schedule.selector';
 import classes from './Users.module.css';
@@ -27,11 +27,9 @@ import {
 import { buildWeekend } from '../../Utils/buildGPWeekend';
 
 const Users = () => {
-	console.log('render main');
 	// const { drivers ,isLoading : isLoadingDrivers,error : errorDrivers  } = useSelector(selectDrivers);
 	const seasonSchedule = useSelector(selectSchedule);
 	const upcomingRace = useSelector(selectUpcomingEvent);
-	console.log('upcomingRace', upcomingRace);
 	const drivers = useSelector(selectDrivers);
 	const dispatch = useDispatch();
 	const { isLoading, error, sendRequest } = useAxiosInterceptorsPublic();
@@ -51,8 +49,11 @@ const Users = () => {
 			dispatch(fetchScheduleStart());
 
 			try {
-				if ((seasonSchedule && seasonSchedule?.length > 0) || upcomingRace) {
-					console.log('avem season schedule setat, nu mai facem request', seasonSchedule);
+				if (seasonSchedule && seasonSchedule?.length > 0) {
+					const upcomingEvent = seasonSchedule?.find(
+						(event) => new Date(`${event?.date} ${event?.time}`) > new Date()
+					);
+					dispatch(setUpcomingEvent(upcomingEvent));
 				} else {
 					sendRequest(
 						{
@@ -62,12 +63,10 @@ const Users = () => {
 							signal: controller.signal
 						},
 						(scheduleResponse) => {
-							console.log('scheduleResponse ', scheduleResponse);
 							const currentSchedule = scheduleResponse?.MRData?.RaceTable?.Races;
 							const upcomingEvent = currentSchedule?.find(
-								(event) => new Date(event.date) > new Date()
+								(event) => new Date(`${event?.date} ${event?.time}`) > new Date()
 							);
-							console.log('upcomingEvent', upcomingEvent);
 							isMounted && dispatch(setUpcomingEvent(upcomingEvent));
 							isMounted && dispatch(fetchScheduleSuccess(currentSchedule));
 						}
@@ -96,12 +95,10 @@ const Users = () => {
 		const controller = new AbortController();
 
 		const getDrivers = async () => {
-			console.log('getDrivers RUN');
 			dispatch(fetchDriversStart());
 
 			try {
 				if (!drivers?.length > 0) {
-					console.log('n-avem drivers, request', drivers);
 					sendRequest(
 						{
 							url: 'http://ergast.com/api/f1/current/driverStandings.json',
@@ -114,7 +111,6 @@ const Users = () => {
 						(dataSet) => {
 							const driversArray =
 								dataSet?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings;
-							console.log('driversArray', driversArray);
 							isMounted && dispatch(fetchDriversSuccess(driversArray));
 						}
 					);
@@ -138,7 +134,7 @@ const Users = () => {
 	};
 
 	const onEventFinished = () => {
-		debugger;
+
 		const nextEvent = seasonSchedule?.find(
 			(event) => new Date(event?.date) > new Date(upcomingRace?.date)
 		);

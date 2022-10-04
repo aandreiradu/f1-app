@@ -15,6 +15,7 @@ import RedBullRing from '../assets/circuit layouts/red_bull_ring.png';
 import Ricard from '../assets/circuit layouts/ricard.png';
 import Rodriguez from '../assets/circuit layouts/rodriguez.png';
 import Silverstone from '../assets/circuit layouts/silverstone.png';
+import Singapore from '../assets/circuit layouts/singapore.png';
 import Spa from '../assets/circuit layouts/spa.png';
 import Suzuka from '../assets/circuit layouts/suzuka.png';
 import Villeneuve from '../assets/circuit layouts/villeneuve.png';
@@ -109,6 +110,10 @@ const circuitLayouts = [
 	{
 		circuitId: 'zandvoort',
 		imgSrc: Zandvoort
+	},
+	{
+		circuitId: 'singapore',
+		imgSrc: Singapore
 	}
 ];
 
