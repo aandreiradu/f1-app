@@ -167,12 +167,12 @@ export const DriverNationalityFlagContainer = styled.div`
 	width: 45px;
 	height: 30px;
 	background-color: none;
-	border-radius: 5px;
 
 	& img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		border-radius: 5px;
 	}
 `;
 
