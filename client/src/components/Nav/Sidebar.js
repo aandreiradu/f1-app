@@ -73,25 +73,33 @@ const Sidebar = (props) => {
 					<Link onClick={() => props.onClose()} to="race-results/last">
 						Latest
 					</Link>
-					<i className="fa-solid fa-chevron-right"></i>
+					<Link onClick={() => props.onClose()} to="race-results/last">
+						<i className="fa-solid fa-chevron-right"></i>
+					</Link>
 				</li>
 				<li className={`${classes['sidebar-link-item']}`}>
 					<Link onClick={() => props.onClose()} to="schedule/last">
 						Schedule
 					</Link>
-					<i className="fa-solid fa-chevron-right"></i>
+					<Link onClick={() => props.onClose()} to="schedule/last">
+						<i className="fa-solid fa-chevron-right"></i>
+					</Link>
 				</li>
 				<li className={`${classes['sidebar-link-item']} `}>
 					<Link onClick={() => props.onClose()} to="/standings">
 						Standings
 					</Link>
-					<i className="fa-solid fa-chevron-right"></i>
+					<Link onClick={() => props.onClose()} to="/standings">
+						<i className="fa-solid fa-chevron-right"></i>
+					</Link>
 				</li>
 				<li className={`${classes['sidebar-link-item']}`}>
 					<Link onClick={() => props.onClose()} to="teams">
 						Teams
 					</Link>
-					<i className="fa-solid fa-chevron-right"></i>
+					<Link onClick={() => props.onClose()} to="teams">
+						<i className="fa-solid fa-chevron-right"></i>
+					</Link>
 				</li>
 			</ul>
 			<div className={`${classes['sidebar-login']} defaultTransition defaultTransition-P1`}>

@@ -27,7 +27,6 @@ import {
 import { buildWeekend } from '../../Utils/buildGPWeekend';
 
 const Users = () => {
-	// const { drivers ,isLoading : isLoadingDrivers,error : errorDrivers  } = useSelector(selectDrivers);
 	const seasonSchedule = useSelector(selectSchedule);
 	const upcomingRace = useSelector(selectUpcomingEvent);
 	const drivers = useSelector(selectDrivers);
@@ -82,7 +81,12 @@ const Users = () => {
 			}
 		};
 
-		getSchedule();
+		if (!seasonSchedule?.length) {
+			console.log('seasonSchedule este => req', seasonSchedule);
+			getSchedule();
+		} else {
+			console.log('seasonSchedule este => no req', seasonSchedule);
+		}
 
 		return () => {
 			isMounted = false;
@@ -98,7 +102,7 @@ const Users = () => {
 			dispatch(fetchDriversStart());
 
 			try {
-				if (!drivers?.length > 0) {
+				if (!drivers?.length) {
 					sendRequest(
 						{
 							url: 'http://ergast.com/api/f1/current/driverStandings.json',
@@ -121,20 +125,34 @@ const Users = () => {
 			}
 		};
 
-		getDrivers();
+		if (!drivers?.length) {
+			console.log('drivers este => req', drivers);
+			getDrivers();
+		} else {
+			console.log('drivers este no req', drivers);
+		}
 
 		return () => {
 			isMounted = false;
 			controller.abort();
 		};
-	}, [dispatch, sendRequest]);
+	}, []);
+
+	useEffect(() => {
+		console.log('effect scroll');
+		window.scrollTo(0, 0);
+		window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: 'smooth'
+		});
+	});
 
 	const confirmErrorModal = () => {
 		setShowModal(false);
 	};
 
 	const onEventFinished = () => {
-
 		const nextEvent = seasonSchedule?.find(
 			(event) => new Date(event?.date) > new Date(upcomingRace?.date)
 		);
@@ -184,11 +202,13 @@ const Users = () => {
 										if (
 											driver?.Driver?.familyName
 												?.toLowerCase()
-												.includes(searchedDriver.toLowerCase()) ||
-											driver?.Driver.givenName?.toLowerCase().includes(searchedDriver.toLowerCase())
+												?.includes(searchedDriver.toLowerCase()) ||
+											driver?.Driver.givenName
+												?.toLowerCase()
+												?.includes(searchedDriver?.toLowerCase())
 										) {
 											const driverProfilePic = driversScheduleImages.find(
-												(driverImg) => driver?.Driver?.driverId === driverImg.driverId
+												(driverImg) => driver?.Driver?.driverId === driverImg?.driverId
 											);
 											return (
 												<DriverCard

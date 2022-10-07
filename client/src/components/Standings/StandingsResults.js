@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classes from './StandingsResults.module.css';
 import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
-import Loader from '../Loader/Loader';
+import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 
 const buildContentHeadByType = (type) => {
 	switch (type) {
@@ -136,10 +136,6 @@ const StandingsResults = (props) => {
 		}
 	}, [year, type]);
 
-	if (isLoading) {
-		return <Loader />;
-	}
-
 	if (type === 'Driver') {
 		tBody = (
 			<tbody>
@@ -173,19 +169,24 @@ const StandingsResults = (props) => {
 	}
 
 	return (
-		<div className={classes['table-standings-wrap']}>
-			{!noContent ? (
-				<table className={classes['table-results']}>
-					{tHead}
-					{tBody}
-				</table>
+		<>
+			{isLoading ? (
+				<LoaderIcon text="Please Wait⏳" />
+			) : !noContent ? (
+				<div className={classes['standings-results-container']}>
+					<h1 className={classes['standing-results-header']}>{`${year} ${type} Standings`}</h1>
+					<table className={classes['table-results']}>
+						{tHead}
+						{tBody}
+					</table>
+				</div>
 			) : (
 				<p className={classes['noContent_text']}>
 					We're sorry, we dont have this data right now! <br />
 					Let's search for something else 👀
 				</p>
 			)}
-		</div>
+		</>
 	);
 };
 

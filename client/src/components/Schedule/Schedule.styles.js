@@ -7,7 +7,7 @@ export const ScheduleWrapper = styled.div`
 	${(props) => props}
 
 	@media (max-width: 676px) {
-		margin: 10px auto;
+		margin: 10px auto 75px auto;
 	}
 `;
 

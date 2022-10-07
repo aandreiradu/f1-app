@@ -13,6 +13,7 @@ import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 import { useDispatch, useSelector } from 'react-redux';
 import { teamsDriversSelector, constructorsSelector } from '../../store/Teams/teams.selector';
+import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 
 const buildLineUpByConstructorId = (cid, teams, drivers) => {
 	let lineUp = [];
@@ -141,7 +142,7 @@ const Teams = () => {
 				/>
 			)}
 			{isLoadingConstructors || isLoadingDrivers ? (
-				<Loader />
+				<LoaderIcon text="Please Wait!⏳" />
 			) : (
 				<div className={classes['teams-results']}>
 					{teams &&

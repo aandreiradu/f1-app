@@ -3,6 +3,12 @@ import { Link, useParams } from 'react-router-dom';
 import driversImageAndMoreInfo from '../../constants/driversImages';
 import Loader from '../../components/Loader/Loader';
 import classes from './UserInfo.module.css';
+import {
+	QualyResultsTable,
+	TableBody,
+	TableHeader,
+	TableRow
+} from '../Qualyfing/QualyfingResultItem.styles';
 
 const UserInfo = () => {
 	const [lastSeasonInfo, setLastSeasonInfo] = useState([]);
@@ -10,7 +16,6 @@ const UserInfo = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const params = useParams();
 	const { driverId } = params;
-	// console.log(driverId);
 
 	const getUserInfoById = useCallback(async () => {
 		setIsLoading(true);
@@ -24,28 +29,18 @@ const UserInfo = () => {
 		}
 
 		const responseData = await response.json();
-		// console.log(responseData);
 
-		if (
-			responseData &&
-			responseData.MRData &&
-			responseData.MRData.StandingsTable.StandingsLists.length > 0
-		) {
-			// console.log('am intrat in if mrdata');
-			// localStorage.setItem('driverInfoId', JSON.stringify(responseData.MRData.StandingsTable.StandingsLists));
+		if (responseData?.MRData?.StandingsTable?.StandingsLists?.length > 0) {
 			const standingsList = responseData.MRData.StandingsTable.StandingsLists;
 			setDriverStandings(standingsList);
-			// console.log('standingsList', standingsList);
-			const lastSeason = standingsList[standingsList.length - 1];
-			// console.log('lastSeasonInfo', lastSeason);
 
+			const lastSeason = standingsList[standingsList.length - 1];
 			const lsInfo = [
 				{
 					season: lastSeason.season,
 					...lastSeason.DriverStandings[0]
 				}
 			];
-			// console.log(lsInfo);
 			setLastSeasonInfo(lsInfo);
 			setIsLoading(false);
 		} else {
@@ -55,12 +50,6 @@ const UserInfo = () => {
 
 	useEffect(() => {
 		getUserInfoById();
-
-		return () => {
-			// console.log('cleanup function');
-			setDriverStandings([]);
-			setLastSeasonInfo([]);
-		};
 	}, [driverId, getUserInfoById]);
 
 	let content;
@@ -80,15 +69,14 @@ const UserInfo = () => {
 									/>
 									<div className={classes.carNumberAndName}>
 										<p>{`${item.Driver.givenName} ${item.Driver.familyName}`}</p>
-										{/* <span>Season {item.season} Car No. {item.Driver.permanentNumber}</span> */}
 									</div>
 								</div>
 								<div className={classes.userInfo}>
 									<p>
-										Team: <span>{item.Constructors[0].name}</span>
+										Code: <span> {item.Driver.code}</span>
 									</p>
 									<p>
-										Code: <span> {item.Driver.code}</span>
+										Team: <span>{item.Constructors[0].name}</span>
 									</p>
 									<p>
 										Date of birth: <span> {item.Driver.dateOfBirth}</span>
@@ -110,35 +98,32 @@ const UserInfo = () => {
 						))}
 					</ul>
 				</section>
-				{/* <section className={classes.tableStandings}> */}
-				<table>
-					<caption>Statement Summary</caption>
-					<thead>
+				<QualyResultsTable>
+					<TableHeader>
 						<tr>
-							<td>Season</td>
-							<td>Rounds</td>
-							<td>WDC Position</td>
-							<td>WDC Points</td>
-							<td>Wins</td>
-							<td>Constructor</td>
+							<th>Season</th>
+							<th>Rounds</th>
+							<th>WDC Position</th>
+							<th>WDC Points</th>
+							<th>Wins</th>
+							<th>Constructor</th>
 						</tr>
-					</thead>
-					<tbody>
+					</TableHeader>
+					<TableBody>
 						{driverStandings
-							.sort((a, b) => b.season - a.season)
+							.sort((a, b) => b?.season - a?.season)
 							.map((item) => (
-								<tr key={item.season}>
-									<td>{item.season}</td>
-									<td>{item.round}</td>
-									<td>{item.DriverStandings[0].position}</td>
-									<td>{item.DriverStandings[0].points}</td>
-									<td>{item.DriverStandings[0].wins}</td>
-									<td>{item.DriverStandings[0].Constructors[0].name}</td>
-								</tr>
+								<TableRow key={item?.season}>
+									<td>{item?.season}</td>
+									<td>{item?.round}</td>
+									<td>{item?.DriverStandings[0]?.position}</td>
+									<td>{item?.DriverStandings[0]?.points}</td>
+									<td>{item?.DriverStandings[0]?.wins}</td>
+									<td>{item?.DriverStandings[0]?.Constructors[0]?.name}</td>
+								</TableRow>
 							))}
-					</tbody>
-				</table>
-				{/* </section> */}
+					</TableBody>
+				</QualyResultsTable>
 				<div className={classes.actions_back}>
 					<Link to={'/'}>Go Back</Link>
 				</div>
@@ -148,7 +133,7 @@ const UserInfo = () => {
 		content = (
 			<>
 				<p className={classes.fallback}>
-					Currently, there are no informations about this driver. Maybe search for another one? 🤔{' '}
+					Currently, there are no informations about this driver. Maybe search for another one? 🤔
 				</p>
 				<div className={classes.actions_back}>
 					<Link to={'/'}>Go Back</Link>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Loader from '../Loader/Loader';
-// import classes from "./Schedule.module.css";
 import ScheduleItem from './ScheduleItem';
 import ErrorModal from '../UI/ErrorModal';
 import {
@@ -88,7 +87,12 @@ const Schedule = () => {
 			}
 		};
 
-		getRaceResults();
+		if (!raceResults?.length) {
+			console.log('raceResults estee => req', raceResults);
+			getRaceResults();
+		} else {
+			console.log('raceResults estee => no req', raceResults);
+		}
 
 		return () => {
 			isMounted = false;
@@ -130,7 +134,13 @@ const Schedule = () => {
 				);
 			}
 		};
-		getSchedule();
+
+		if (!seasonSchedule?.length) {
+			console.log('seasonSchedule este => req', seasonSchedule);
+			getSchedule();
+		} else {
+			console.log('seasonSchedule este => no req', seasonSchedule);
+		}
 
 		return () => {
 			isMounted = false;

@@ -37,4 +37,22 @@ table {
     text-align: center;
     font-size: 1rem;
     font-weight: 600;
+    color: #fff;
+}
+
+.standings-results-container{
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    padding-bottom: 10px;
+    color: #333;
+    /* background-color: #fff; */
+    border-radius: 10px;
+}
+
+.standing-results-header{
+    text-align: center;
+    padding: 5px 0;
 }

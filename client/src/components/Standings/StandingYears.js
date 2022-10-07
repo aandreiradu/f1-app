@@ -153,6 +153,7 @@ const StandingYears = (props) => {
 			<option value="1951">1951</option>
 
 			<option value="1950">1950</option>
+			<option value="1949">1949</option>
 		</select>
 	);
 };

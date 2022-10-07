@@ -8,10 +8,8 @@ const QualyfingResultItem = (props) => {
 			<td>{position}</td>
 			<td>{driverName}</td>
 			<td>{team}</td>
-			{/* <TableLimiter></TableLimiter> */}
 			<td>{Q1}</td>
 			<td>{Q2}</td>
-			{/* <TableLimiter></TableLimiter> */}
 			<td>{Q3}</td>
 		</TableRow>
 	);
