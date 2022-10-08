@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import useHttp from '../../hooks/useHttp';
+import { useEffect, useState } from 'react';
 import classes from '../Results/LastRaceResults.module.css';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
 import DriversRaceResults from '../../components/Results/DriversRaceResults';
 import ErrorModal from '../../components/UI/ErrorModal';
@@ -11,27 +10,38 @@ import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 const RaceFinished = () => {
 	const [showModal, setShowModal] = useState(true);
 	const { round } = useParams();
-	const [lastRaceResults, setLastResults] = useState([]);
-	const { isLoading, error, sendRequest: fetchRaceResult } = useHttp();
-	// const { isLoading,error,sendRequest } = useAxiosInterceptorsPublic();
+	const [lastRaceResults, setLastResults] = useState(null);
+	const { isLoading, error, sendRequest } = useAxiosInterceptorsPublic();
 	const [listCategory, setListCategory] = useState('LeaderBoard');
 
 	useEffect(() => {
-		const transformData = (responseData) => {
-			console.log('responde data', responseData);
-			setLastResults([responseData.MRData.RaceTable]);
+		let isMounted = true;
+		const controller = new AbortController();
+
+		const getRaceResultById = async () => {
+			sendRequest(
+				{
+					url: `https://ergast.com/api/f1/${new Date().getFullYear()}/${round}/results.json`,
+					method: 'GET',
+					withCredentials: false,
+					signal: controller.signal
+				},
+				(responseData) => {
+					console.log('response data here', responseData);
+					const raceTable = responseData?.MRData?.RaceTable;
+					console.log('raceTable', raceTable);
+					isMounted && setLastResults([raceTable]);
+				}
+			);
 		};
-		fetchRaceResult(
-			{ url: `https://ergast.com/api/f1/${new Date().getFullYear()}/${round}/results.json` },
-			transformData
-		);
-		// let isMounted = true;
-		// const controller = new AbortController();
 
-		// const getRaceResultById = async () => {
+		getRaceResultById();
 
-		// };
-	}, [fetchRaceResult, round]);
+		return () => {
+			isMounted = false;
+			controller.abort();
+		};
+	}, [round]);
 
 	const handleCategoryList = (e) => {
 		let ctgTitle = e.target.closest('p').textContent;
@@ -95,11 +105,6 @@ const RaceFinished = () => {
 							</div>
 						);
 					})
-				)}
-				{!isLoading && (
-					<div className={classes.actions_back}>
-						<Link to={'/'}>Go Back</Link>
-					</div>
 				)}
 			</section>
 		);

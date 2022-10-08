@@ -124,21 +124,13 @@ const UserInfo = () => {
 							))}
 					</TableBody>
 				</QualyResultsTable>
-				<div className={classes.actions_back}>
-					<Link to={'/'}>Go Back</Link>
-				</div>
 			</div>
 		);
 	} else if (!isLoading) {
 		content = (
-			<>
-				<p className={classes.fallback}>
-					Currently, there are no informations about this driver. Maybe search for another one? 🤔
-				</p>
-				<div className={classes.actions_back}>
-					<Link to={'/'}>Go Back</Link>
-				</div>
-			</>
+			<p className={classes.fallback}>
+				Currently, there are no informations about this driver. Maybe search for another one? 🤔
+			</p>
 		);
 	} else if (isLoading) {
 		content = <Loader />;

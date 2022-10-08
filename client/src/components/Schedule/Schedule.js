@@ -49,11 +49,11 @@ const Schedule = () => {
 		const controller = new AbortController();
 
 		const getRaceResults = async () => {
-			dispatch(fetchRaceResultsStart());
 			try {
 				if (raceResults && raceResults?.length > 0) {
 					console.log('avem raceResults, nu mai facem request', raceResults);
 				} else {
+					dispatch(fetchRaceResultsStart());
 					sendRequestFinishedRaces(
 						{
 							url: '/api/getRaceResultByYear',
@@ -87,12 +87,7 @@ const Schedule = () => {
 			}
 		};
 
-		if (!raceResults?.length) {
-			console.log('raceResults estee => req', raceResults);
-			getRaceResults();
-		} else {
-			console.log('raceResults estee => no req', raceResults);
-		}
+		getRaceResults();
 
 		return () => {
 			isMounted = false;
@@ -105,12 +100,11 @@ const Schedule = () => {
 		const controller = new AbortController();
 
 		const getSchedule = async () => {
-			dispatch(fetchScheduleStart());
-
 			try {
 				if (seasonSchedule && seasonSchedule?.length > 0) {
-					console.log('avem season schedule setat boss, nu mai facem request', seasonSchedule);
+					console.log('avem season schedule,nu mai facem request', seasonSchedule);
 				} else {
+					dispatch(fetchScheduleStart());
 					sendRequestRR(
 						{
 							url: 'https://ergast.com/api/f1/current.json',
@@ -135,12 +129,7 @@ const Schedule = () => {
 			}
 		};
 
-		if (!seasonSchedule?.length) {
-			console.log('seasonSchedule este => req', seasonSchedule);
-			getSchedule();
-		} else {
-			console.log('seasonSchedule este => no req', seasonSchedule);
-		}
+		getSchedule();
 
 		return () => {
 			isMounted = false;

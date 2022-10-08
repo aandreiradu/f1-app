@@ -15,8 +15,6 @@ const useInput = (validator) => {
 		setIsTouched(false);
 	};
 
-	console.log('VALUE IS');
-
 	return {
 		value: enteredValue,
 		changeHandler: inputChangeHandler,

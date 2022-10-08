@@ -20,18 +20,21 @@ export const scheduleReducer = (state = initialScheduleState, action = {}) => {
 		case SCHEDULE_TYPES.FETCH_SCHEDULE_SUCCESS:
 			return {
 				...state,
+				isLoading: false,
 				schedule: payload
 			};
 
 		case SCHEDULE_TYPES.FETCH_SCHEDULE_FAILURE:
 			return {
 				...state,
+				isLoading: false,
 				error: payload
 			};
 
 		case SCHEDULE_TYPES.SET_UPCOMING_RACE:
 			return {
 				...state,
+				isLoading: false,
 				upComingEvent: payload
 			};
 

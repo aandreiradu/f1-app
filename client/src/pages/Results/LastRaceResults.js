@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import classes from './LastRaceResults.module.css';
 import Loader from '../../components/Loader/Loader';
-import { Link } from 'react-router-dom';
 import DriversRaceResults from '../../components/Results/DriversRaceResults';
 import ErrorModal from '../../components/UI/ErrorModal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -114,11 +113,6 @@ const LastRaceResults = () => {
 							</div>
 						);
 					})
-				)}
-				{!isLoading && (
-					<div className={classes.actions_back}>
-						<Link to={'/'}>Go Back</Link>
-					</div>
 				)}
 			</section>
 		);

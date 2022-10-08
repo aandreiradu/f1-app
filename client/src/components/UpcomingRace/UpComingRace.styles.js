@@ -117,7 +117,7 @@ export const RaceTimeItemRaceType = styled.span`
 	font-weight: 400;
 	text-transform: uppercase;
 	line-height: 1;
-	min-width: 20%;
+	width: 25%;
 `;
 
 export const RaceTimeItemRaceDay = styled.span`

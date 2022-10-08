@@ -45,8 +45,6 @@ const Users = () => {
 		const controller = new AbortController();
 
 		const getSchedule = async () => {
-			dispatch(fetchScheduleStart());
-
 			try {
 				if (seasonSchedule && seasonSchedule?.length > 0) {
 					const upcomingEvent = seasonSchedule?.find(
@@ -54,6 +52,7 @@ const Users = () => {
 					);
 					dispatch(setUpcomingEvent(upcomingEvent));
 				} else {
+					dispatch(fetchScheduleStart());
 					sendRequest(
 						{
 							url: 'http://ergast.com/api/f1/current.json',
@@ -72,7 +71,6 @@ const Users = () => {
 					);
 				}
 			} catch (errorSchedule) {
-				console.log('ERROR ON GETTING CURRENT SCHEDULE', errorSchedule);
 				dispatch(
 					fetchScheduleFailure(
 						errorSchedule?.message || errorSchedule || 'Someting went wrong! Try again later.'
@@ -81,12 +79,7 @@ const Users = () => {
 			}
 		};
 
-		if (!seasonSchedule?.length) {
-			console.log('seasonSchedule este => req', seasonSchedule);
-			getSchedule();
-		} else {
-			console.log('seasonSchedule este => no req', seasonSchedule);
-		}
+		getSchedule();
 
 		return () => {
 			isMounted = false;
@@ -99,10 +92,9 @@ const Users = () => {
 		const controller = new AbortController();
 
 		const getDrivers = async () => {
-			dispatch(fetchDriversStart());
-
 			try {
 				if (!drivers?.length) {
+					dispatch(fetchDriversStart());
 					sendRequest(
 						{
 							url: 'http://ergast.com/api/f1/current/driverStandings.json',
@@ -138,15 +130,15 @@ const Users = () => {
 		};
 	}, []);
 
-	useEffect(() => {
-		console.log('effect scroll');
-		window.scrollTo(0, 0);
-		window.scrollTo({
-			top: 0,
-			left: 0,
-			behavior: 'smooth'
-		});
-	});
+	// useEffect(() => {
+	// 	console.log('effect scroll');
+	// 	window.scrollTo(0, 0);
+	// 	window.scrollTo({
+	// 		top: 0,
+	// 		left: 0,
+	// 		behavior: 'smooth'
+	// 	});
+	// });
 
 	const confirmErrorModal = () => {
 		setShowModal(false);
