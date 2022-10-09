@@ -3,12 +3,12 @@ import { ReactComponent as DefaultProfilePicture } from '../../assets/f1_logo.sv
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const UserProfileContainer = styled.main`
-	height: 80vh;
 	width: 100%;
 	color: #fff;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-bottom: 80px;
 `;
 
 export const UserProfilePictureWrapper = styled.div`

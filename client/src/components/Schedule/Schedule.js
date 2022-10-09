@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Loader from '../Loader/Loader';
+import Footer from '../Footer/Footer';
 import ScheduleItem from './ScheduleItem';
 import ErrorModal from '../UI/ErrorModal';
 import {
@@ -142,45 +143,48 @@ const Schedule = () => {
 	};
 
 	return (
-		<ScheduleWrapper className={`defaultTransition`}>
-			<>
-				<ScheduleHeader>
-					<ScheduleHeaderTitle>F1 Schedule {new Date().getFullYear()}</ScheduleHeaderTitle>
-					<ScheduleHeaderCompetition>
-						{new Date().getFullYear()} FIA FORMULA ONE WORLD CHAMPIONSHIP™ RACE CALENDAR
-					</ScheduleHeaderCompetition>
-				</ScheduleHeader>
-				{errorRR && showModal && (
-					<ErrorModal title="Oops!" message={errorRR?.message} onConfirm={confirmErrorModal} />
-				)}
-				{(errorFinishedRaces || errorRR) && showModal && (
-					<ErrorModal
-						message={errorFinishedRaces?.message || errorRR?.message || 'Someting went wrong!'}
-						title={'Someting went wrong!'}
-						onConfirm={confirmErrorModal}
-					/>
-				)}
-				<ScheduleResults>
-					{isLoadingFinishedRaces || isLoadingRR ? (
-						<Loader />
-					) : (
-						seasonSchedule &&
-						seasonSchedule?.map((item) => (
-							<ScheduleItem
-								key={item?.round}
-								circuitId={item?.Circuit?.circuitId}
-								thisRoundResults={raceResults[item?.round - 1]}
-								round={item?.round}
-								raceName={item?.raceName}
-								raceDate={item?.date}
-								fp1={item?.FirstPractice?.date}
-								country={item.Circuit?.Location?.country}
-							/>
-						))
+		<>
+			<ScheduleWrapper className={`defaultTransition`}>
+				<>
+					<ScheduleHeader>
+						<ScheduleHeaderTitle>F1 Schedule {new Date().getFullYear()}</ScheduleHeaderTitle>
+						<ScheduleHeaderCompetition>
+							{new Date().getFullYear()} FIA FORMULA ONE WORLD CHAMPIONSHIP™ RACE CALENDAR
+						</ScheduleHeaderCompetition>
+					</ScheduleHeader>
+					{errorRR && showModal && (
+						<ErrorModal title="Oops!" message={errorRR?.message} onConfirm={confirmErrorModal} />
 					)}
-				</ScheduleResults>
-			</>
-		</ScheduleWrapper>
+					{(errorFinishedRaces || errorRR) && showModal && (
+						<ErrorModal
+							message={errorFinishedRaces?.message || errorRR?.message || 'Someting went wrong!'}
+							title={'Someting went wrong!'}
+							onConfirm={confirmErrorModal}
+						/>
+					)}
+					<ScheduleResults>
+						{isLoadingFinishedRaces || isLoadingRR ? (
+							<Loader />
+						) : (
+							seasonSchedule &&
+							seasonSchedule?.map((item) => (
+								<ScheduleItem
+									key={item?.round}
+									circuitId={item?.Circuit?.circuitId}
+									thisRoundResults={raceResults[item?.round - 1]}
+									round={item?.round}
+									raceName={item?.raceName}
+									raceDate={item?.date}
+									fp1={item?.FirstPractice?.date}
+									country={item.Circuit?.Location?.country}
+								/>
+							))
+						)}
+					</ScheduleResults>
+				</>
+			</ScheduleWrapper>
+			{!(isLoadingFinishedRaces || isLoadingRR) && <Footer />}
+		</>
 	);
 };
 

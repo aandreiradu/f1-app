@@ -22,6 +22,7 @@ li {
 
 a {
   text-decoration: none;
+  color: unset;
 }
 
 .defaultTransition {

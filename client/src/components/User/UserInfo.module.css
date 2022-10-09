@@ -99,7 +99,7 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
-    padding-bottom: 100px;
+    margin-bottom: 40px ;
 }
 
 /* table {

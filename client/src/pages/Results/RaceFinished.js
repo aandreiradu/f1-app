@@ -6,6 +6,8 @@ import DriversRaceResults from '../../components/Results/DriversRaceResults';
 import ErrorModal from '../../components/UI/ErrorModal';
 import { DataNotPublished } from './RaceFinished.styles';
 import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
+import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
+import Footer from '../../components/Footer/Footer';
 
 const RaceFinished = () => {
 	const [showModal, setShowModal] = useState(true);
@@ -66,47 +68,50 @@ const RaceFinished = () => {
 		);
 	} else {
 		content = (
-			<section className={classes.lastResultsSection}>
-				{isLoading ? (
-					<Loader />
-				) : (
-					lastRaceResults &&
-					lastRaceResults?.length > 0 &&
-					lastRaceResults?.map((result, index) => {
-						console.log('RESULT HERE', result);
-						return (
-							<div key={index}>
-								<div className={classes.circuitInfoWrapper} key={result?.round}>
-									<p className={classes.circuitName}>{result?.Races[0]?.raceName || 'N/A'}</p>
-									<div className={classes.circuitData}>
-										<span>Laps {result?.Races[0]?.Results[0]?.laps || 'N/A'}</span>
-										<span>
-											Season {result?.Races[0]?.season || 'N/A'},Round{' '}
-											{result?.Races[0]?.round || 'N/A'}
-										</span>
-										<span>
-											{result?.Races[0]?.date || 'N/A'},
-											{(result.Races[0]?.time || 'N/A').split('Z')[0]}
-										</span>
+			<>
+				<section className={classes.lastResultsSection}>
+					{isLoading ? (
+						<LoaderIcon text="Please Wait ⏳" />
+					) : (
+						lastRaceResults &&
+						lastRaceResults?.length > 0 &&
+						lastRaceResults?.map((result, index) => {
+							console.log('RESULT HERE', result);
+							return (
+								<div key={index}>
+									<div className={classes.circuitInfoWrapper} key={result?.round}>
+										<p className={classes.circuitName}>{result?.Races[0]?.raceName || 'N/A'}</p>
+										<div className={classes.circuitData}>
+											<span>Laps {result?.Races[0]?.Results[0]?.laps || 'N/A'}</span>
+											<span>
+												Season {result?.Races[0]?.season || 'N/A'},Round{' '}
+												{result?.Races[0]?.round || 'N/A'}
+											</span>
+											<span>
+												{result?.Races[0]?.date || 'N/A'},
+												{(result.Races[0]?.time || 'N/A').split('Z')[0]}
+											</span>
+										</div>
 									</div>
+									<div className={classes.category}>
+										<p onClick={handleCategoryList} className={activeLeaderBoard}>
+											LeaderBoard
+										</p>
+										<p onClick={handleCategoryList} className={activeFastestLap}>
+											Fastest Lap
+										</p>
+									</div>
+									<DriversRaceResults
+										result={result?.Races[0]?.Results || []}
+										listCategory={listCategory}
+									/>
 								</div>
-								<div className={classes.category}>
-									<p onClick={handleCategoryList} className={activeLeaderBoard}>
-										LeaderBoard
-									</p>
-									<p onClick={handleCategoryList} className={activeFastestLap}>
-										Fastest Lap
-									</p>
-								</div>
-								<DriversRaceResults
-									result={result?.Races[0]?.Results || []}
-									listCategory={listCategory}
-								/>
-							</div>
-						);
-					})
-				)}
-			</section>
+							);
+						})
+					)}
+				</section>
+				{!isLoading && <Footer />}
+			</>
 		);
 	}
 

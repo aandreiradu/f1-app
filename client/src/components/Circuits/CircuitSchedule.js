@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import classes from './CircuitSchedule.module.css';
 import { useParams } from 'react-router-dom';
 import monthNames from '../../Utils/months';
 import scheduleCircuits from '../../constants/scheduleCircuits';
@@ -27,6 +26,7 @@ import {
 	RaceScheduleListing,
 	RaceHub
 } from './CircuitSchedule.styles';
+import Footer from '../../components/Footer/Footer';
 
 const buildWeekend = (state) => {
 	console.log('received', state);
@@ -234,6 +234,7 @@ const CircuitSchedule = () => {
 									);
 								})}
 						</RaceHubWrapper>
+						{!isLoading && <Footer />}
 					</>
 				)}
 			</>

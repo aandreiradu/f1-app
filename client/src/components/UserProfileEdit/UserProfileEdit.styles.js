@@ -6,7 +6,8 @@ import { ProfilerFade } from '../NavUserProfilePopUp/UserProfilePopUp.styles';
 export const EditProfileContainer = styled(UserProfileContainer)`
 	padding: 0 1rem;
 	/* background-color: #767575; */
-	height: 85vh;
+	/* height: 85vh; */
+	margin-bottom: 40px;
 	position: relative;
 `;
 

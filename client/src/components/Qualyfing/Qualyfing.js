@@ -18,6 +18,7 @@ import { selectEventsWithQualyFinished } from '../../store/Schedule/schedule.sel
 import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 import ErrorModal from '../UI/ErrorModal';
 import LoaderIcon from '../LoaderReusable/LoaderIcon';
+import Footer from '../Footer/Footer';
 
 const Qualyfing = () => {
 	const [showModal, setShowModal] = useState(true);
@@ -67,37 +68,44 @@ const Qualyfing = () => {
 	const confirmHandler = () => setShowModal(false);
 
 	return (
-		<QualyfingWrapper>
-			<QualyfingHeader>
-				<QualyfingHeaderTitle>F1 {new Date().getFullYear()} Qualyfing Results</QualyfingHeaderTitle>
-				<QualyfingHeaderCompetition>FIA FORMULA ONE WORLD CHAMPIONSHIP™</QualyfingHeaderCompetition>
-			</QualyfingHeader>
+		<>
+			<QualyfingWrapper>
+				<QualyfingHeader>
+					<QualyfingHeaderTitle>
+						F1 {new Date().getFullYear()} Qualyfing Results
+					</QualyfingHeaderTitle>
+					<QualyfingHeaderCompetition>
+						FIA FORMULA ONE WORLD CHAMPIONSHIP™
+					</QualyfingHeaderCompetition>
+				</QualyfingHeader>
 
-			{/* ERROR MODAL */}
-			{showModal && error && (
-				<ErrorModal
-					title="Ooops!"
-					message={error?.message || error || 'Something went wrong! Try again later.'}
-					onConfirm={confirmHandler}
-				/>
-			)}
+				{/* ERROR MODAL */}
+				{showModal && error && (
+					<ErrorModal
+						title="Ooops!"
+						message={error?.message || error || 'Something went wrong! Try again later.'}
+						onConfirm={confirmHandler}
+					/>
+				)}
 
-			{/* LOADING COMPONENT */}
-			{isLoading && <LoaderIcon text="Loading data, please wait ⏳" />}
+				{/* LOADING COMPONENT */}
+				{isLoading && <LoaderIcon text="Loading data, please wait ⏳" />}
 
-			{/* RESULTS */}
-			<QualyfingResultsContainer>
-				{qualyEvents?.map((event) => (
-					<QualyfingResult
-						key={event?.raceName}
-						countryHost={event?.Circuit?.Location?.country || 'N/A'}
-						grandPrixName={event?.raceName}
-						roundNo={event?.round}
-						season={event?.season}
-					></QualyfingResult>
-				))}
-			</QualyfingResultsContainer>
-		</QualyfingWrapper>
+				{/* RESULTS */}
+				<QualyfingResultsContainer>
+					{qualyEvents?.map((event) => (
+						<QualyfingResult
+							key={event?.raceName}
+							countryHost={event?.Circuit?.Location?.country || 'N/A'}
+							grandPrixName={event?.raceName}
+							roundNo={event?.round}
+							season={event?.season}
+						></QualyfingResult>
+					))}
+				</QualyfingResultsContainer>
+			</QualyfingWrapper>
+			{!isLoading && <Footer />}
+		</>
 	);
 };
 

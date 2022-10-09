@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import driversImageAndMoreInfo from '../../constants/driversImages';
 import Loader from '../../components/Loader/Loader';
 import classes from './UserInfo.module.css';
@@ -9,6 +9,7 @@ import {
 	TableHeader,
 	TableRow
 } from '../Qualyfing/QualyfingResultItem.styles';
+import Footer from '../Footer/Footer';
 
 const UserInfo = () => {
 	const [lastSeasonInfo, setLastSeasonInfo] = useState([]);
@@ -55,82 +56,90 @@ const UserInfo = () => {
 	let content;
 	if (lastSeasonInfo && lastSeasonInfo.length > 0 && !isLoading) {
 		content = (
-			<div className={classes.driverInfo}>
-				<section>
-					<ul>
-						{lastSeasonInfo.map((item) => (
-							<li className={classes.driverInfoWrapper} key={item.Driver.driverId}>
-								<div className={classes.userProfilePic}>
-									<img
-										src={
-											driversImageAndMoreInfo.find((driver) => driver.driverId === driverId).imgSrc
-										}
-										alt="profile pic"
-									/>
-									<div className={classes.carNumberAndName}>
-										<p>{`${item.Driver.givenName} ${item.Driver.familyName}`}</p>
+			<>
+				<div className={classes.driverInfo}>
+					<section>
+						<ul>
+							{lastSeasonInfo.map((item) => (
+								<li className={classes.driverInfoWrapper} key={item.Driver.driverId}>
+									<div className={classes.userProfilePic}>
+										<img
+											src={
+												driversImageAndMoreInfo.find((driver) => driver.driverId === driverId)
+													.imgSrc
+											}
+											alt="profile pic"
+										/>
+										<div className={classes.carNumberAndName}>
+											<p>{`${item.Driver.givenName} ${item.Driver.familyName}`}</p>
+										</div>
 									</div>
-								</div>
-								<div className={classes.userInfo}>
-									<p>
-										Code: <span> {item.Driver.code}</span>
-									</p>
-									<p>
-										Team: <span>{item.Constructors[0].name}</span>
-									</p>
-									<p>
-										Date of birth: <span> {item.Driver.dateOfBirth}</span>
-									</p>
-									<p>
-										Nationality: <span> {item.Driver.nationality}</span>
-									</p>
-									<p>
-										Season {item.season} drivers championship position: <span>{item.position}</span>
-									</p>
-									<p>
-										Season {item.season} points: <span>{item.points}</span>
-									</p>
-									<p>
-										Season {item.season} wins: <span>{item.wins}</span>
-									</p>
-								</div>
-							</li>
-						))}
-					</ul>
-				</section>
-				<QualyResultsTable>
-					<TableHeader>
-						<tr>
-							<th>Season</th>
-							<th>Rounds</th>
-							<th>WDC Position</th>
-							<th>WDC Points</th>
-							<th>Wins</th>
-							<th>Constructor</th>
-						</tr>
-					</TableHeader>
-					<TableBody>
-						{driverStandings
-							.sort((a, b) => b?.season - a?.season)
-							.map((item) => (
-								<TableRow key={item?.season}>
-									<td>{item?.season}</td>
-									<td>{item?.round}</td>
-									<td>{item?.DriverStandings[0]?.position}</td>
-									<td>{item?.DriverStandings[0]?.points}</td>
-									<td>{item?.DriverStandings[0]?.wins}</td>
-									<td>{item?.DriverStandings[0]?.Constructors[0]?.name}</td>
-								</TableRow>
+									<div className={classes.userInfo}>
+										<p>
+											Code: <span> {item.Driver.code}</span>
+										</p>
+										<p>
+											Team: <span>{item.Constructors[0].name}</span>
+										</p>
+										<p>
+											Date of birth: <span> {item.Driver.dateOfBirth}</span>
+										</p>
+										<p>
+											Nationality: <span> {item.Driver.nationality}</span>
+										</p>
+										<p>
+											Season {item.season} drivers championship position:{' '}
+											<span>{item.position}</span>
+										</p>
+										<p>
+											Season {item.season} points: <span>{item.points}</span>
+										</p>
+										<p>
+											Season {item.season} wins: <span>{item.wins}</span>
+										</p>
+									</div>
+								</li>
 							))}
-					</TableBody>
-				</QualyResultsTable>
-			</div>
+						</ul>
+					</section>
+					<QualyResultsTable>
+						<TableHeader>
+							<tr>
+								<th>Season</th>
+								<th>Rounds</th>
+								<th>WDC Position</th>
+								<th>WDC Points</th>
+								<th>Wins</th>
+								<th>Constructor</th>
+							</tr>
+						</TableHeader>
+						<TableBody>
+							{driverStandings
+								.sort((a, b) => b?.season - a?.season)
+								.map((item) => (
+									<TableRow key={item?.season}>
+										<td>{item?.season}</td>
+										<td>{item?.round}</td>
+										<td>{item?.DriverStandings[0]?.position}</td>
+										<td>{item?.DriverStandings[0]?.points}</td>
+										<td>{item?.DriverStandings[0]?.wins}</td>
+										<td>{item?.DriverStandings[0]?.Constructors[0]?.name}</td>
+									</TableRow>
+								))}
+						</TableBody>
+					</QualyResultsTable>
+				</div>
+				<Footer />
+			</>
 		);
 	} else if (!isLoading) {
 		content = (
-			<p className={classes.fallback}>
-				Currently, there are no informations about this driver. Maybe search for another one? 🤔
-			</p>
+			<>
+				<p className={classes.fallback}>
+					Currently, there are no informations about this driver. Maybe search for another one? 🤔
+				</p>
+				<Footer />
+			</>
 		);
 	} else if (isLoading) {
 		content = <Loader />;

@@ -25,6 +25,7 @@ import {
 	setUpcomingEvent
 } from '../../store/Schedule/schedule.actions';
 import { buildWeekend } from '../../Utils/buildGPWeekend';
+import Footer from '../Footer/Footer';
 
 const Users = () => {
 	const seasonSchedule = useSelector(selectSchedule);
@@ -223,6 +224,7 @@ const Users = () => {
 						</>
 					)}
 				</>
+				<Footer />
 			</>
 		);
 	}

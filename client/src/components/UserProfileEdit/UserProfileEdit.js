@@ -31,6 +31,7 @@ import { buildTeams } from '../../Utils/buildTeams';
 import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { useDispatch } from 'react-redux';
 import { arrayBufferToBase64 } from '../../Utils/arrayToBufferB64';
+import Footer from '../Footer/Footer';
 
 const UserProfileEdit = () => {
 	const [showErrorModal, setShowErrorModal] = useState({});
@@ -316,106 +317,113 @@ const UserProfileEdit = () => {
 	const closeModal = () => setShowErrorModal({});
 
 	return (
-		<EditProfileContainer>
-			{showErrorModal?.show && (
-				<ErrorModal
-					onConfirm={closeModal}
-					title={showErrorModal?.title || 'Ooops!'}
-					message={showErrorModal?.message || 'Unexpected error occured'}
-				/>
-			)}
-			<UserProfilePictureWrapper>
-				{!isLoading ? (
-					<UserProfilePicture
-						src={
-							profilePicture
-								? `data:image/png;base64,${imageStr}`
-								: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/240px-F1.svg.png'
-						}
+		<>
+			<EditProfileContainer>
+				{showErrorModal?.show && (
+					<ErrorModal
+						onConfirm={closeModal}
+						title={showErrorModal?.title || 'Ooops!'}
+						message={showErrorModal?.message || 'Unexpected error occured'}
 					/>
-				) : (
-					<LoaderIcon hB1={20} hB2={40} hB3={20} barsColor={'#000'} heightContainer="100%" />
 				)}
-				<ChangeProfilePictureLabel htmlFor="imageUpload"></ChangeProfilePictureLabel>
-				<ChangeProfilePicture type="file" id="imageUpload" onChange={changeProfilePictureHandler} />
-			</UserProfilePictureWrapper>
-			<UserPorfileInfo>
-				<h2>{fullName || 'N/A'}</h2>
-				<span>{`@${username}` || 'N/A'}</span>
-			</UserPorfileInfo>
+				<UserProfilePictureWrapper>
+					{!isLoading ? (
+						<UserProfilePicture
+							src={
+								profilePicture
+									? `data:image/png;base64,${imageStr}`
+									: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/240px-F1.svg.png'
+							}
+						/>
+					) : (
+						<LoaderIcon hB1={20} hB2={40} hB3={20} barsColor={'#000'} heightContainer="100%" />
+					)}
+					<ChangeProfilePictureLabel htmlFor="imageUpload"></ChangeProfilePictureLabel>
+					<ChangeProfilePicture
+						type="file"
+						id="imageUpload"
+						onChange={changeProfilePictureHandler}
+					/>
+				</UserProfilePictureWrapper>
+				<UserPorfileInfo>
+					<h2>{fullName || 'N/A'}</h2>
+					<span>{`@${username}` || 'N/A'}</span>
+				</UserPorfileInfo>
 
-			{/* FULLNAME */}
-			<UserProfileEditItem
-				id="fullName"
-				value={fullNameValue}
-				labelText="Full Name"
-				changeHandler={fullNameChangeHandler}
-				blurHandler={fullNameBlurHandler}
-				isValid={fullNameIsValid}
-				isTouched={fullNameIsTouched}
-				defaultValue={fullName}
-				errorText={`We have to know who we are talking to, we don't like to call you 'Guest'`}
-				isRequired={true}
-			/>
+				{/* FULLNAME */}
+				<UserProfileEditItem
+					id="fullName"
+					value={fullNameValue}
+					labelText="Full Name"
+					changeHandler={fullNameChangeHandler}
+					blurHandler={fullNameBlurHandler}
+					isValid={fullNameIsValid}
+					isTouched={fullNameIsTouched}
+					defaultValue={fullName}
+					errorText={`We have to know who we are talking to, we don't like to call you 'Guest'`}
+					isRequired={true}
+				/>
 
-			{/* USERNAME */}
-			{/* <UserProfileEditItem
-        id="username"
-        value={usernameValue}
-        labelText="Username"
-        changeHandler={usernameChangeHandler}
-        blurHandler={usernameBlurHandler}
-        isValid={usernameIsValid}
-        isTouched={usernameIsTouched}
-        defaultValue={username}
-        errorText={"Username is required"}
-        isRequired={true}
-      /> */}
+				{/* USERNAME */}
+				{/* <UserProfileEditItem
+			id="username"
+			value={usernameValue}
+			labelText="Username"
+			changeHandler={usernameChangeHandler}
+			blurHandler={usernameBlurHandler}
+			isValid={usernameIsValid}
+			isTouched={usernameIsTouched}
+			defaultValue={username}
+			errorText={"Username is required"}
+			isRequired={true}
+		/> */}
 
-			{/* EMAIL */}
-			<UserProfileEditItem
-				id="email"
-				value={emailValue}
-				labelText="Email"
-				changeHandler={emailChangeHandler}
-				blurHandler={emailBlurHandler}
-				isValid={emailIsValid}
-				isTouched={emailIsTouched}
-				defaultValue={email}
-				errorText="You need an email address to confirm your account"
-				isRequired={true}
-			/>
+				{/* EMAIL */}
+				<UserProfileEditItem
+					id="email"
+					value={emailValue}
+					labelText="Email"
+					changeHandler={emailChangeHandler}
+					blurHandler={emailBlurHandler}
+					isValid={emailIsValid}
+					isTouched={emailIsTouched}
+					defaultValue={email}
+					errorText="You need an email address to confirm your account"
+					isRequired={true}
+				/>
 
-			{/* Fav Driver */}
-			<UserProfileEditItem
-				id="favorite-driver"
-				value={favDriverValue}
-				labelText="Favorite Driver"
-				changeHandler={favDriverChangeHandler}
-				// blurHandler={favDriverBlurHandler}
-				// isValid={favDriverIsValid}
-				// isTouched={favDriverIsTouched}
-				defaultValue={favoriteDriver}
-				isRequired={false}
-			/>
+				{/* Fav Driver */}
+				<UserProfileEditItem
+					id="favorite-driver"
+					value={favDriverValue}
+					labelText="Favorite Driver"
+					changeHandler={favDriverChangeHandler}
+					// blurHandler={favDriverBlurHandler}
+					// isValid={favDriverIsValid}
+					// isTouched={favDriverIsTouched}
+					defaultValue={favoriteDriver}
+					isRequired={false}
+				/>
 
-			{/* Fav Constructor */}
-			<UserProfileEditItem
-				id="favorite-constructor-team"
-				value={favTeamValue}
-				labelText="Favorite Constructor Team"
-				changeHandler={favTeamChangeHandler}
-				// blurHandler={favTeamBlurHandler}
-				// isValid={favTeamIsValid}
-				// isTouched={favTeamIsTouched}
-				defaultValue={favoriteConstructor}
-				isRequired={false}
-			/>
+				{/* Fav Constructor */}
+				<UserProfileEditItem
+					id="favorite-constructor-team"
+					value={favTeamValue}
+					labelText="Favorite Constructor Team"
+					changeHandler={favTeamChangeHandler}
+					// blurHandler={favTeamBlurHandler}
+					// isValid={favTeamIsValid}
+					// isTouched={favTeamIsTouched}
+					defaultValue={favoriteConstructor}
+					isRequired={false}
+				/>
 
-			<SaveChangesBtn disabled={!isFormValid} onClick={submitDataHandler}>
-				{isLoading ? <LoaderIcon hB1={10} hB2={20} hB3={10} barsColor={'#000'} /> : 'Submit'}
-			</SaveChangesBtn>
-		</EditProfileContainer>
+				<SaveChangesBtn disabled={!isFormValid} onClick={submitDataHandler}>
+					{isLoading ? <LoaderIcon hB1={10} hB2={20} hB3={10} barsColor={'#000'} /> : 'Submit'}
+				</SaveChangesBtn>
+			</EditProfileContainer>
+			{!isLoading && <Footer />}
+		</>
 	);
 };
 

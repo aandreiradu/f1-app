@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Loader from '../../components/Loader/Loader';
 import classes from './Teams.module.css';
 import TeamItem from './TeamItem';
 import ErrorModal from '../../components/UI/ErrorModal';
@@ -9,11 +8,11 @@ import {
 	fetchTeamsConstructorSuccess,
 	fetchTeamsDriversSuccess
 } from '../../store/Teams/teams.actions';
-import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 import { useDispatch, useSelector } from 'react-redux';
 import { teamsDriversSelector, constructorsSelector } from '../../store/Teams/teams.selector';
 import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
+import Footer from '../../components/Footer/Footer';
 
 const buildLineUpByConstructorId = (cid, teams, drivers) => {
 	let lineUp = [];
@@ -126,46 +125,49 @@ const Teams = () => {
 	}, [dispatch, sendRequestDrivers, sendRequestConstructor]);
 
 	return (
-		<div className={`${classes.wrapper} defaultTransition`}>
-			<div className={classes['teams-header']}>
-				<h1 className={classes['header-title']}>F1 Teams {new Date().getFullYear()}</h1>
-			</div>
-			{(errorConstructor || errorDrivers) && showModal && (
-				<ErrorModal
-					title="Ooops!"
-					message={
-						errorConstructor?.message ||
-						errorDrivers?.message ||
-						'Something went wrong. Please try again later!'
-					}
-					onConfirm={confirmErrorModal}
-				/>
-			)}
-			{isLoadingConstructors || isLoadingDrivers ? (
-				<LoaderIcon text="Please Wait!⏳" />
-			) : (
-				<div className={classes['teams-results']}>
-					{teams &&
-						teams?.map((team, index) => {
-							const lineup = buildLineUpByConstructorId(
-								team?.Constructor?.constructorId,
-								teams,
-								teamsDrivers
-							);
-							return (
-								<TeamItem
-									key={team?.Constructor?.constructorId}
-									points={team?.points}
-									name={team?.Constructor?.name}
-									currentPosition={team?.position}
-									constructorId={team?.Constructor?.constructorId}
-									drivers={lineup}
-								/>
-							);
-						})}
+		<>
+			<div className={`${classes.wrapper} defaultTransition`}>
+				<div className={classes['teams-header']}>
+					<h1 className={classes['header-title']}>F1 Teams {new Date().getFullYear()}</h1>
 				</div>
-			)}
-		</div>
+				{(errorConstructor || errorDrivers) && showModal && (
+					<ErrorModal
+						title="Ooops!"
+						message={
+							errorConstructor?.message ||
+							errorDrivers?.message ||
+							'Something went wrong. Please try again later!'
+						}
+						onConfirm={confirmErrorModal}
+					/>
+				)}
+				{isLoadingConstructors || isLoadingDrivers ? (
+					<LoaderIcon text="Please Wait!⏳" />
+				) : (
+					<div className={classes['teams-results']}>
+						{teams &&
+							teams?.map((team, index) => {
+								const lineup = buildLineUpByConstructorId(
+									team?.Constructor?.constructorId,
+									teams,
+									teamsDrivers
+								);
+								return (
+									<TeamItem
+										key={team?.Constructor?.constructorId}
+										points={team?.points}
+										name={team?.Constructor?.name}
+										currentPosition={team?.position}
+										constructorId={team?.Constructor?.constructorId}
+										drivers={lineup}
+									/>
+								);
+							})}
+					</div>
+				)}
+			</div>
+			{!isLoadingDrivers && !isLoadingConstructors && <Footer />}
+		</>
 	);
 };
 

@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from './store/Auth/auth.selector';
 import './App.css';
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Users from './components/User/Users';
 import UserInfo from './components/User/UserInfo';
 import Nav from './components/Nav/Nav';
 import Card from './components/UI/Card';
 import LastRaceResults from './pages/Results/LastRaceResults';
-import LastQualyResults from './pages/Results/LastQualyResults';
 import Schedule from './components/Schedule/Schedule';
-import Home from './pages/Home/Home';
 import CircuitSchedule from './components/Circuits/CircuitSchedule';
 import RaceFinished from './pages/Results/RaceFinished';
 import Login from './pages/Auth/Login';
@@ -19,7 +17,6 @@ import Register from './pages/Auth/Register';
 import Standings from './pages/Standings/Standings';
 import Teams from './pages/Teams/Teams';
 import Persist from './components/PersistLogin/PersistLogin';
-import Footer from './components/Footer/Footer';
 import ErrorModal from './components/UI/ErrorModal';
 import UserProfile from './components/UserProfile/UserProfile';
 import UserProfileEdit from './components/UserProfileEdit/UserProfileEdit';
@@ -30,8 +27,6 @@ import Qualyfing from './components/Qualyfing/Qualyfing';
 function App() {
 	const [showModal, setShowModal] = useState(false);
 	const { accessToken, isAuth } = useSelector(selectIsAuth);
-	const navigate = useNavigate();
-	let location = useLocation();
 
 	const confirmErrorModal = () => {
 		setShowModal(false);
@@ -76,7 +71,6 @@ function App() {
 						</Route>
 					</Routes>
 				</Card>
-				{/* <Footer/> */}
 			</>
 		);
 	}
