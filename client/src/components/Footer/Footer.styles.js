@@ -1,69 +1,55 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { ReactComponent as LinkedIn } from '../../assets/SVGs/linkedin.svg';
 
-export const FooterContainer = styled.footer`
-	width: 100%;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	padding: 0.25rem 1rem;
-	margin: 20px 0px 0px 0px;
-	background-color: #000;
+export const FooterContainer = styled.section`
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	background-color: #1f1f1f;
+	color: #fff;
+	padding: 10px;
+	border-radius: 7px;
 `;
 
-export const FooterAppNameWrapper = styled.div`
+export const FooterLogoAndTitle = styled.div`
+	width: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
+	gap: 10px;
+	border-bottom: 1px solid #e10600;
 `;
 
-export const FooterAppName = styled.span`
-	text-align: center;
-	position: relative;
-	font-size: 1.2rem;
-	font-weight: bold;
-	font-family: 'DynaPuff', sans-serif;
-	color: #fff;
-	text-align: center;
-
-	&::before {
-		content: '';
-		position: absolute;
-		bottom: -5px;
-		left: 0;
-		width: 100%;
-		border-bottom: 1px solid #fff;
-		background-color: #fff;
-	}
+export const FooterLogo = styled.img`
+	width: 45px;
+	height: 45px;
 `;
 
-export const FooterLinksContainer = styled.div`
-	width: 100%;
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	margin: 20px 0;
+export const FooterTitle = styled.h2`
+	font-size: 1.1rem;
+	font-weight: 700;
+	text-transform: uppercase;
 `;
 
-export const FooterLinks = styled.div`
+export const SocialMediaContainer = styled.div`
+	margin: 10px 0;
 	display: flex;
 	flex-direction: column;
-	${(props) => props}
+	width: 100%;
+	gap: 10px;
 `;
 
-export const FooterLinksTitle = styled.p`
-	font-weight: bold;
-	color: #fff;
+export const SocialMediaIconsWrapper = styled.div`
+	display: flex;
+	gap: 5px;
 `;
 
 const customItemIcon = css`
-	width: 20px;
-	height: 16px;
+	width: 30px;
+	height: 24px;
 	object-fit: cover;
-	margin-right: 5px;
+	/* margin-right: 5px; */
 `;
 
 export const FooterLinkItemIcon = styled(FontAwesomeIcon)`
@@ -74,16 +60,47 @@ export const FooterLinkItemIconCustom = styled(LinkedIn)`
 	${customItemIcon}
 `;
 
-export const FooterLinkItem = styled.div`
-	color: #fff;
+export const FooterContactSection = styled.section`
+	padding: 10px 0;
 	display: flex;
-	align-items: center;
-	font-size: 16px;
-	margin: 2.5px 0;
+	flex-direction: column;
+	width: 100%;
+	border-bottom: 1px solid #e10600;
 `;
 
-export const FooterLinkItemText = styled.a`
-	font-size: 16px;
+export const FooterContactTitle = styled.h2`
+	font-size: 1.1rem;
+	text-transform: uppercase;
+	font-weight: 700;
+	margin-bottom: 5px;
+`;
+
+export const FooterContactItem = styled.p`
+	font-weight: 700;
 	color: #fff;
-	${(props) => props}
+	font-size: 1rem;
+	text-transform: uppercase;
+	display: flex;
+	align-items: center;
+	padding: 5px 0;
+	gap: 5px;
+
+	& svg {
+		width: 24px;
+	}
+`;
+
+export const ContributorWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	/* align-items: center; */
+	/* justify-content: flex-start; */
+	flex-direction: column;
+`;
+
+export const Copywright = styled.p`
+	text-align: center;
+	padding: 10px;
+	text-transform: uppercase;
+	font-size: 18px;
 `;
