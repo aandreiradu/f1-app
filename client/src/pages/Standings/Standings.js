@@ -7,7 +7,7 @@ import classes from './Standings.module.css';
 
 const Standings = () => {
 	const [yearStanding, setYearStanding] = useState(new Date().getFullYear());
-	const [typeStanding, setTypeStanding] = useState('Driver');
+	const [typeStanding, setTypeStanding] = useState('Drivers');
 
 	const typeSelectHandler = useCallback((type) => {
 		setTypeStanding(type);

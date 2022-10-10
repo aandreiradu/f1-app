@@ -9,8 +9,8 @@ const StandingType = (props) => {
 
 	return (
 		<select className={classes['selectmenu-element']} onChange={typeChangeHandler}>
-			<option value="Driver">Driver</option>
-			<option value="Constructor">Constructor</option>
+			<option value="Drivers">Drivers</option>
+			<option value="Constructors">Constructors</option>
 		</select>
 	);
 };

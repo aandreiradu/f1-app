@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import classes from './StandingsResults.module.css';
 import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
+import ErrorModal from '../../components/UI/ErrorModal';
 
 const buildContentHeadByType = (type) => {
+	console.log('buildContentHeadByType type', type);
 	switch (type) {
-		case 'Driver': {
+		case 'Drivers': {
 			return (
 				<thead>
 					<tr>
@@ -20,7 +22,7 @@ const buildContentHeadByType = (type) => {
 			);
 		}
 
-		case 'Constructor': {
+		case 'Constructors': {
 			return (
 				<thead>
 					<tr>
@@ -34,13 +36,13 @@ const buildContentHeadByType = (type) => {
 		}
 
 		default:
-			throw new Error('default reached');
+			throw new Error(`Default reached. Unhandled error for type ${type}`);
 	}
 };
 
 const buildContentBodyByType = (type, content) => {
 	switch (type) {
-		case 'Driver': {
+		case 'Drivers': {
 			if (content.Driver && content.length > 0) {
 				content.map((item) => (
 					<tr className={classes['standing-result-row']} key={item.Driver.driverId}>
@@ -56,7 +58,7 @@ const buildContentBodyByType = (type, content) => {
 			break;
 		}
 
-		case 'Constructor': {
+		case 'Constructors': {
 			if (content.Constructor && content.length > 0) {
 				content.map((item) => (
 					<tr className={classes['standing-result-row']} key={item.Constructor.constructorId}>
@@ -76,39 +78,47 @@ const buildContentBodyByType = (type, content) => {
 };
 
 const StandingsResults = (props) => {
+	let { type, year } = props;
+	console.log('StandingsResults props', props);
+	const [showErrorModal, setShowErrorModal] = useState(true);
 	const [standingsResultsDriver, setStandingsResultsDriver] = useState([]);
 	const [standingsResultsConstructor, setStandingsResultsConstructor] = useState([]);
 	const [noContent, setNoContent] = useState(false);
-	let { type, year } = props;
 	const { isLoading, error, sendRequest: getStandingsData } = useAxiosInterceptorsPublic();
 
 	let tHead = buildContentHeadByType(type);
 	let tBody = buildContentBodyByType(
 		type,
-		type === 'Driver' ? standingsResultsDriver : standingsResultsConstructor
+		type === 'Drivers' ? standingsResultsDriver : standingsResultsConstructor
 	);
 
 	let URL;
-	if (!year && type === 'Driver') {
+	if (!year && type === 'Drivers') {
 		URL = 'http://ergast.com/api/f1/current/driverStandings.json';
-	} else if (!year && type === 'Constructor') {
+	} else if (!year && type === 'Constructors') {
 		URL = 'http://ergast.com/api/f1/current/constructorStandings.json';
 	}
 
 	if (type && year) {
-		URL = `http://ergast.com/api/f1/${year}/${type}Standings.json`;
+		let urlparams;
+		if (type === 'Drivers') {
+			urlparams = 'driver';
+		} else if (type === 'Constructors') {
+			urlparams = 'constructor';
+		}
+		URL = `http://ergast.com/api/f1/${year}/${urlparams}Standings.json`;
 	}
 
 	let parseResponseData = (stateData) => {
 		console.log('stateData', stateData);
 		if (stateData?.MRData?.StandingsTable?.StandingsLists?.length > 0) {
-			if (type === 'Driver') {
+			if (type === 'Drivers') {
 				if (stateData?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings?.length > 0) {
 					setStandingsResultsDriver(
 						stateData.MRData.StandingsTable.StandingsLists[0].DriverStandings
 					);
 				}
-			} else if (type === 'Constructor') {
+			} else if (type === 'Constructors') {
 				if (
 					stateData?.MRData?.StandingsTable?.StandingsLists[0]?.ConstructorStandings?.length > 0
 				) {
@@ -127,7 +137,8 @@ const StandingsResults = (props) => {
 			{
 				url: URL,
 				method: 'GET',
-				withCredentials: false
+				withCredentials: false,
+				headers: {}
 			},
 			(stateData) => parseResponseData(stateData)
 		);
@@ -136,7 +147,7 @@ const StandingsResults = (props) => {
 		}
 	}, [year, type]);
 
-	if (type === 'Driver') {
+	if (type === 'Drivers') {
 		tBody = (
 			<tbody>
 				{standingsResultsDriver?.length > 0 &&
@@ -168,8 +179,17 @@ const StandingsResults = (props) => {
 		);
 	}
 
+	const confirmErrorModal = () => setShowErrorModal(false);
+
 	return (
 		<>
+			{error && showErrorModal && (
+				<ErrorModal
+					title="Ooops!"
+					message={error?.message || error || 'Something went wrong'}
+					onConfirm={confirmErrorModal}
+				/>
+			)}
 			{isLoading ? (
 				<LoaderIcon text="Please Wait⏳" />
 			) : !noContent ? (

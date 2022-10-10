@@ -7,38 +7,45 @@ const DriversRaceResults = (props) => {
 	const { result, listCategory } = props;
 	console.log('result DriversRaceResults', result);
 
-	let content;
-
 	switch (listCategory) {
 		case 'LeaderBoard':
-			return (content = (
-				<ul className={`${classes.driversResultsList} defaultTransition defaultTransition-5MS`}>
-					{result &&
-						result?.map((driverResult) => (
-							<li key={driverResult?.Driver?.code} className={classes.driverResultItem}>
-								<div>
-									<span className={classes.driverPosition}>#{driverResult?.position}</span>
-									<div
-										className={classes['team-color-bar']}
-										style={{
-											backgroundColor: constructorsColors?.find(
-												(info) => info?.team === driverResult?.Constructor?.name
-											)?.teamColor
-										}}
-									></div>
-									<span>{`${driverResult?.Driver?.givenName} ${driverResult?.Driver?.familyName}`}</span>
-								</div>
-								<span>{driverResult?.Time ? driverResult?.Time?.time : driverResult?.status}</span>
-							</li>
-						))}
-				</ul>
-			));
-
-		case 'Fastest Lap':
-			return (content = (
+			return (
 				<ul className={`${classes.driversResultsList} defaultTransition defaultTransition-5MS`}>
 					{result?.map((driverResult) => (
-						<li key={driverResult?.Driver?.code} className={classes.driverResultItemFS}>
+						<li
+							key={driverResult?.Driver?.code}
+							className={`${classes.driverResultItem} ${
+								+driverResult?.position === 1 ? classes.winnerStickyTop : ''
+							}`}
+						>
+							<div>
+								<span className={classes.driverPosition}>#{driverResult?.position}</span>
+								<div
+									className={classes['team-color-bar']}
+									style={{
+										backgroundColor: constructorsColors?.find(
+											(info) => info?.team === driverResult?.Constructor?.name
+										)?.teamColor
+									}}
+								></div>
+								<span>{`${driverResult?.Driver?.givenName} ${driverResult?.Driver?.familyName}`}</span>
+							</div>
+							<span>{driverResult?.Time ? driverResult?.Time?.time : driverResult?.status}</span>
+						</li>
+					))}
+				</ul>
+			);
+
+		case 'Fastest Lap':
+			return (
+				<ul className={`${classes.driversResultsList} defaultTransition defaultTransition-5MS`}>
+					{result?.map((driverResult) => (
+						<li
+							key={driverResult?.Driver?.code}
+							className={`${classes.driverResultItemFS} ${
+								+driverResult?.position === 1 && classes.winnerStickyTop
+							}`}
+						>
 							<div className={classes.driverCN}>
 								<div
 									className={classes['team-color-bar-fastest']}
@@ -76,7 +83,7 @@ const DriversRaceResults = (props) => {
 						</li>
 					))}
 				</ul>
-			));
+			);
 		default:
 			throw new Error('Default reached');
 	}

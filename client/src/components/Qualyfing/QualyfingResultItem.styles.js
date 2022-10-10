@@ -19,6 +19,11 @@ export const QualyResultsTable = styled.table`
 
 export const TableHeader = styled.thead`
 	color: #fff;
+	background-color: #000;
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
 
 	tr th {
 		padding: 10px 6px 10px;

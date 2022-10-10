@@ -7,17 +7,19 @@ const growingHeightOpen = keyframes`
   }
 
   100%{
-    height: 250px;
+    height: 350px;
+	overflow-y: auto;
   }
 `;
 
 const growingHeightClose = keyframes`
   0%{
-    height: 250px;
+    height: 350px;
   }
 
   100%{
     height: 40px;
+	overflow-y: hidden;
   }
 `;
 
@@ -35,7 +37,7 @@ export const QualyfingResultRow = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: 60px;
+	height: 40px;
 	overflow: hidden;
 	animation: ${(props) =>
 		props.shouldAnimate
@@ -51,13 +53,14 @@ export const QualyfingResultRow = styled.div`
 	border-top: 1px solid red;
 	border-right: 1px solid red;
 	border-color: ${(props) => props.shouldAnimate && '#fff'};
-	overflow-y: auto;
+	overflow: hidden;
 `;
 
 export const QualyfingResultHeader = styled.div`
 	position: relative;
 	width: 100%;
-	padding: 0 5px 0 10px;
+	/* padding: 0 5px 0 10px; */
+	padding: 10px 5px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

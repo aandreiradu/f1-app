@@ -1,5 +1,5 @@
 .driversResultsList {
-    /* max-height: 550px; */
+    max-height: 450px;
     overflow: hidden;
     overflow-y: auto;
     margin: 10px 0;
@@ -37,6 +37,14 @@
     margin: 0 5px;
 }
 
+.winnerStickyTop{
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000;
+}
+
 
 /* fastest lap */
 
@@ -53,6 +61,7 @@
         box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px,
             rgb(0 0 0 / 23%) 0px 3px 6px;
     }
+
     
     .driverResultItemFS .driverCN {
         display: flex;
