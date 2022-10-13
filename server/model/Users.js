@@ -35,15 +35,15 @@ const userSchema = new mongoose.Schema(
     favoriteDriver: String,
     favoriteConstructor: String,
 
-    profileImageName : {
-      type : String
+    profileImageName: {
+      type: String,
     },
     profileImage: {
-      contentType : String,
-      data: Buffer
+      contentType: String,
+      data: Buffer,
     },
 
-    refreshToken: String,
+    refreshToken: [String],
   },
   { timestamps: true }
 );

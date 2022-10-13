@@ -7,10 +7,9 @@ const handleLogout = async (req, res) => {
   const { jwt } = cookies;
   console.log("jwt", jwt);
 
-
   if (!jwt) {
     console.log("n-are jwt setat");
-    return res.status(204).json({statusCode: 204 });
+    return res.status(204).json({ statusCode: 204 });
   }
 
   // find the user based on the refresh token
@@ -23,28 +22,27 @@ const handleLogout = async (req, res) => {
         httpOnly: true,
         sameSite: "None",
         secure: true,
-        maxAge: 24 * 60 * 60 * 1000,
       });
-
-      return res.status(204).json({ message: "Logout successfully", statusCode: 204 });
+      return res
+        .status(204)
+        .json({ message: "Logout successfully", statusCode: 204 });
     }
 
     // clear the refresh token
-    console.log('Logout user found by refresh token',findByRefreshToken);
-    findByRefreshToken.refreshToken = "";
+    console.log("Logout user found by refresh token", findByRefreshToken);
+
+    findByRefreshToken.refreshToken = findByRefreshToken.refreshToken.filter(
+      (rt) => rt !== jwt
+    );
     await findByRefreshToken.save();
+
+    res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
 
     return res
       .status(200)
-      .clearCookie("jwt", {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        maxAge: 24 * 60 * 60 * 1000,
-      })
       .json({ statusCode: 200, message: "Logout completed" });
   } catch (error) {
-    console.error("error logout");
+    console.error("error logout", error);
     return res.status(500).json({ message: error.message });
   }
 };

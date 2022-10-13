@@ -4,16 +4,16 @@ const jwt = require("jsonwebtoken");
 
 const handleLogin = async (req, res) => {
   const { username, password } = req.body;
+  const cookies = req.cookies;
   console.log(username, password);
   console.log(req.headers);
+  console.log("cookies", cookies);
 
   if (!username || !password) {
-    return res
-      .status(400)
-      .json({
-        message: "Username and password are required!",
-        statusCode: 400,
-      });
+    return res.status(400).json({
+      message: "Username and password are required!",
+      statusCode: 400,
+    });
   }
 
   try {
@@ -32,15 +32,15 @@ const handleLogin = async (req, res) => {
     }
 
     // generate access token
-    const roles = Object.values(searchUser?.roles)?.filter(b => Boolean(b));
-    console.log('roles authController', {userRoles : searchUser.roles, roles});
+    const roles = Object.values(searchUser?.roles)?.filter((b) => Boolean(b));
+    console.log("roles authController", { userRoles: searchUser.roles, roles });
     const generateAccessToken = jwt.sign(
       {
         F1_APP_USER: {
           username: searchUser?.username,
           email: searchUser?.email,
           fullName: searchUser?.fullName,
-          roles
+          roles,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -54,8 +54,36 @@ const handleLogin = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    // save refresh token in database;
-    searchUser.refreshToken = generateRefreshToken;
+    // Changed to let keyword
+    let newRefreshTokenArray = !cookies?.jwt
+      ? searchUser.refreshToken
+      : searchUser.refreshToken.filter((rt) => rt !== cookies.jwt);
+
+    if (cookies?.jwt) {
+      /* 
+          Scenario added here: 
+              1) User logs in but never uses RT and does not logout 
+              2) RT is stolen
+              3) If 1 & 2, reuse detection is needed to clear all RTs when user logs in
+          */
+      const refreshToken = cookies.jwt;
+      const foundToken = await User.findOne({ refreshToken }).exec();
+
+      // Detected refresh token reuse!
+      if (!foundToken) {
+        // clear out ALL previous refresh tokens
+        newRefreshTokenArray = [];
+      }
+
+      res.clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+      });
+    }
+
+    // Saving refreshToken with current user
+    searchUser.refreshToken = [...newRefreshTokenArray, generateRefreshToken];
     await searchUser.save();
 
     console.log({
@@ -64,24 +92,24 @@ const handleLogin = async (req, res) => {
     });
 
     // set refresh token at cookie level - httpOnly level
+    res.cookie("jwt", generateRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
-    return res
-      .cookie("jwt", generateRefreshToken, {
-        httpOnly: true,
-        secure: true, //remove when testing with browser / keep it when testing with ThunderClient
-        maxAge: 24 * 60 * 60 * 1000,
-      })
-      .json({
-        statusCode: 201,
-        accessToken: generateAccessToken,
-        fullName: searchUser?.fullName,
-        roles,
-        username,
-        email : searchUser?.email,
-        favoriteConstructor : searchUser?.favoriteConstructor,
-        favoriteDriver : searchUser?.favoriteDriver,
-        profilePicture : searchUser?.profileImage?.data
-      });
+    return res.json({
+      statusCode: 201,
+      accessToken: generateAccessToken,
+      fullName: searchUser?.fullName,
+      roles,
+      username,
+      email: searchUser?.email,
+      favoriteConstructor: searchUser?.favoriteConstructor,
+      favoriteDriver: searchUser?.favoriteDriver,
+      profilePicture: searchUser?.profileImage?.data,
+    });
   } catch (error) {
     console.log("error authController", error);
     return res.status(500).json({ message: error.message });
