@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	fetchQualyfingResultFailure,
@@ -21,6 +21,7 @@ import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 import ErrorModal from '../UI/ErrorModal';
 
 const QualyfingResult = (props) => {
+	const qualyRef = useRef();
 	const [isOpen, setIsOpen] = useState(false);
 	const [showModal, setShowModal] = useState(true);
 	const [disableButton, setDisableButton] = useState(false);
@@ -28,12 +29,21 @@ const QualyfingResult = (props) => {
 	const { countryHost, grandPrixName, roundNo, season } = props;
 	const { isLoading, sendRequest, error } = useAxiosInterceptorsPublic();
 	const cachedQualyResult = useSelector((state) => selectQualyResultByRoundNo(state, roundNo));
-	console.log('cachedQualyResult', cachedQualyResult);
+
+	const scrollToResultSelected = (e) => {
+		console.log('scrollToResultSelected received', e);
+		const headerOffset = 80;
+		const elementPosition = e?.current?.getBoundingClientRect()?.top;
+		const offsetPosition = elementPosition + window?.pageYOffset - headerOffset;
+
+		window.scrollTo({
+			top: offsetPosition,
+			behavior: 'smooth'
+		});
+	};
 
 	const handleSelectSection = () => {
 		setDisableButton(true);
-		console.log('open roundno', roundNo);
-		console.log('cachedQualyResult', cachedQualyResult);
 		if (!isOpen && !cachedQualyResult) {
 			try {
 				dispatch(fetchQualyfingResultStart());
@@ -77,7 +87,7 @@ const QualyfingResult = (props) => {
 	const confirmErrorHandler = () => setShowModal(false);
 
 	return (
-		<QualyfingResultRow shouldAnimate={isOpen}>
+		<QualyfingResultRow shouldAnimate={isOpen} ref={qualyRef}>
 			{error && showModal && (
 				<ErrorModal
 					title="Ooops!"
@@ -92,7 +102,10 @@ const QualyfingResult = (props) => {
 				{!disableButton && (
 					<QualyfingResultHeaderIcon
 						icon={isOpen ? faXmark : faCirclePlus}
-						onClick={handleSelectSection}
+						onClick={() => {
+							handleSelectSection();
+							scrollToResultSelected(qualyRef);
+						}}
 					/>
 				)}
 			</QualyfingResultHeader>

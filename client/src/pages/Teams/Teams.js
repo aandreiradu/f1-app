@@ -63,23 +63,28 @@ const Teams = () => {
 		const controller = new AbortController();
 
 		const getDrivers = async () => {
-			dispatch(fetchTeamsStart());
 			try {
-				sendRequestDrivers(
-					{
-						url: 'http://ergast.com/api/f1/current/driverStandings.json',
-						method: 'GET',
-						withCredentials: false,
-						signal: controller.signal
-					},
-					(driversResponse) => {
-						console.log('driversResponse', driversResponse);
-						const driversStandings =
-							driversResponse?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings;
-						console.log('driversStandings', driversStandings);
-						isMounted && dispatch(fetchTeamsDriversSuccess(driversStandings));
-					}
-				);
+				if (teamsDrivers?.length > 0) {
+					console.error('drivers already in store, dont dispatch', teamsDriversSelector);
+					return;
+				} else {
+					dispatch(fetchTeamsStart());
+					sendRequestDrivers(
+						{
+							url: 'http://ergast.com/api/f1/current/driverStandings.json',
+							method: 'GET',
+							withCredentials: false,
+							signal: controller.signal
+						},
+						(driversResponse) => {
+							console.log('driversResponse', driversResponse);
+							const driversStandings =
+								driversResponse?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings;
+							console.log('driversStandings', driversStandings);
+							isMounted && dispatch(fetchTeamsDriversSuccess(driversStandings));
+						}
+					);
+				}
 			} catch (error) {
 				console.log('error TEAMS getDrivers', error);
 				dispatch(
@@ -89,24 +94,29 @@ const Teams = () => {
 		};
 
 		const getConstructors = async () => {
-			dispatch(fetchTeamsStart());
 			try {
-				sendRequestDrivers(
-					{
-						url: 'http://ergast.com/api/f1/current/constructorStandings.json',
-						method: 'GET',
-						withCredentials: false,
-						signal: controller.signal
-					},
-					(constructorResponse) => {
-						console.log('constructorResponse', constructorResponse);
-						const teamsSorted =
-							constructorResponse?.MRData?.StandingsTable?.StandingsLists[0]?.ConstructorStandings?.sort(
-								(a, b) => b?.points - a?.points
-							);
-						isMounted && dispatch(fetchTeamsConstructorSuccess(teamsSorted));
-					}
-				);
+				if (teams?.length > 0) {
+					console.error('teams already in store, dont request again', teams);
+					return;
+				} else {
+					dispatch(fetchTeamsStart());
+					sendRequestDrivers(
+						{
+							url: 'http://ergast.com/api/f1/current/constructorStandings.json',
+							method: 'GET',
+							withCredentials: false,
+							signal: controller.signal
+						},
+						(constructorResponse) => {
+							console.log('constructorResponse', constructorResponse);
+							const teamsSorted =
+								constructorResponse?.MRData?.StandingsTable?.StandingsLists[0]?.ConstructorStandings?.sort(
+									(a, b) => b?.points - a?.points
+								);
+							isMounted && dispatch(fetchTeamsConstructorSuccess(teamsSorted));
+						}
+					);
+				}
 			} catch (error) {
 				console.log('error TEAMS getDrivers', error);
 				dispatch(

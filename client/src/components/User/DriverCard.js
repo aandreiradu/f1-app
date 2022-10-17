@@ -40,7 +40,7 @@ const DriverCard = (props) => {
 		'';
 
 	return (
-		<Link to={`/${driverId}`}>
+		<Link to={`/driver/${driverId}`}>
 			<DriverCardContainer variants={driverCardsAnimations?.driverCard} teamcolor={teamColor}>
 				<DriverCardHeader>
 					<DriverCardHeaderPosition>{driverRank || 'N/A'}</DriverCardHeaderPosition>

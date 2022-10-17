@@ -18,7 +18,7 @@ const categoryImages = [
 		title: '2022 Qualyfing Results',
 		path: 'qualyfing-results'
 	},
-	{ id: 'circuits', imgSrc: circuits, title: '2022 Circuits', path: 'circuits/last' }
+	{ id: 'circuits', imgSrc: circuits, title: '2022 Teams', path: 'teams' }
 ];
 
 export default categoryImages;

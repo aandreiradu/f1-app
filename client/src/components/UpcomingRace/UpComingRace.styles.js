@@ -134,9 +134,11 @@ export const RaceTimeItemRaceDay = styled.span`
 `;
 
 export const RaceTimeItemRaceTime = styled.span`
+	width: 90px;
 	margin-left: 15px;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	background-color: #38383f;
 	padding: 0 5px;
 	font-size: 14px;

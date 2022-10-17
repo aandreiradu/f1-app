@@ -18,15 +18,16 @@ import { faWrench } from '@fortawesome/free-solid-svg-icons';
 import { faPerson } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from '../../store/Auth/auth.selector';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { arrayBufferToBase64 } from '../../Utils/arrayToBufferB64';
 import Footer from '../Footer/Footer';
 
 const UserProfile = () => {
-	const navigate = useNavigate();
+	const { username: usernameParams } = useParams();
 	const { username, fullName, email, favoriteDriver, favoriteConstructor, profilePicture } =
 		useSelector(selectIsAuth);
 	console.log({ username, fullName, profilePicture });
+	const navigate = useNavigate();
 	const imageStr = profilePicture?.data && arrayBufferToBase64(profilePicture?.data);
 
 	const goToProfileEditHandler = () => {
@@ -47,7 +48,7 @@ const UserProfile = () => {
 				</UserProfilePictureWrapper>
 				<UserPorfileInfo>
 					<h2>{fullName || 'N/A'}</h2>
-					<span>{`@${username}` || 'N/A'}</span>
+					<span>{`@${usernameParams || username}` || 'N/A'}</span>
 				</UserPorfileInfo>
 				<EditProfileBtn onClick={goToProfileEditHandler}>Edit Profile</EditProfileBtn>
 

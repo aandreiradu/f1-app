@@ -23,6 +23,7 @@ import UserProfileEdit from './components/UserProfileEdit/UserProfileEdit';
 import AddDriver from './components/AddDriver/AddDriver';
 import AddTeam from './components/AddTeam/AddTeam';
 import Qualyfing from './components/Qualyfing/Qualyfing';
+import NotFound from './pages/404/NotFound';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -56,7 +57,7 @@ function App() {
 
 						<Route element={<Persist />}>
 							<Route path="/" element={<Users />}></Route>
-							<Route path="/:driverId" element={<UserInfo />}></Route>
+							<Route path="/driver/:driverId" element={<UserInfo />}></Route>
 							<Route path="/standings" element={<Standings />} />
 							<Route path="/teams" element={<Teams />}></Route>
 							<Route path="/race-results/last" element={<LastRaceResults />}></Route>
@@ -68,6 +69,7 @@ function App() {
 							<Route path="/profile/edit/:username" element={<UserProfileEdit />} />
 							<Route path="/profile/:username/insert/driver" element={<AddDriver />} />
 							<Route path="/profile/:username/insert/team" element={<AddTeam />} />
+							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Routes>
 				</Card>

@@ -8,11 +8,12 @@ import { DataNotPublished } from './RaceFinished.styles';
 import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 import Footer from '../../components/Footer/Footer';
+import NotFound from '../404/NotFound';
 
 const RaceFinished = () => {
 	const [showModal, setShowModal] = useState(true);
 	const { round } = useParams();
-	const [lastRaceResults, setLastResults] = useState(null);
+	const [lastRaceResults, setLastResults] = useState([]);
 	const { isLoading, error, sendRequest } = useAxiosInterceptorsPublic();
 	const [listCategory, setListCategory] = useState('LeaderBoard');
 
@@ -58,14 +59,13 @@ const RaceFinished = () => {
 	};
 
 	let content;
+
+	if (!isLoading && !error && lastRaceResults[0]?.Races?.length === 0) {
+		return <NotFound />;
+	}
+
 	if (error && showModal) {
 		content = <ErrorModal onConfirm={confirmErrorModal} />;
-	} else if (lastRaceResults?.length === 0) {
-		content = (
-			<DataNotPublished>
-				<h2>We're still collecting data for the race report. Please come back later!</h2>
-			</DataNotPublished>
-		);
 	} else {
 		content = (
 			<>
