@@ -86,7 +86,7 @@ const Users = () => {
 			isMounted = false;
 			controller.abort();
 		};
-	}, []);
+	}, [dispatch, sendRequest, seasonSchedule]);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -129,7 +129,7 @@ const Users = () => {
 			isMounted = false;
 			controller.abort();
 		};
-	}, []);
+	}, [dispatch, sendRequest, drivers]);
 
 	// useEffect(() => {
 	// 	console.log('effect scroll');

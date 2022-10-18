@@ -3,7 +3,6 @@ import { TEAMS_TYPES } from './teams.types';
 const TEAMS_INITIAL_STATE = {
 	isLoading: false,
 	constructor: [],
-	drivers: [],
 	error: null
 };
 
@@ -22,13 +21,6 @@ export const teamsReducer = (state = TEAMS_INITIAL_STATE, action = {}) => {
 				...state,
 				isLoading: false,
 				constructor: payload
-			};
-
-		case TEAMS_TYPES.FETCH_TEAMS_DRIVERS_SUCCESSS:
-			return {
-				...state,
-				isLoading: false,
-				drivers: payload
 			};
 
 		case TEAMS_TYPES.FETCH_TEAMS_FAILURE:

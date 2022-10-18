@@ -5,14 +5,19 @@ import ErrorModal from '../../components/UI/ErrorModal';
 import {
 	fetchTeamsStart,
 	fetchTeamsFailure,
-	fetchTeamsConstructorSuccess,
-	fetchTeamsDriversSuccess
+	fetchTeamsConstructorSuccess
 } from '../../store/Teams/teams.actions';
+import {
+	fetchDriversStart,
+	fetchDriversSuccess,
+	fetchDriversFailure
+} from '../../store/Drivers/drivers.actions';
 import useAxiosInterceptorsPublic from '../../hooks/useHttpInterceptorsPublic';
 import { useDispatch, useSelector } from 'react-redux';
-import { teamsDriversSelector, constructorsSelector } from '../../store/Teams/teams.selector';
+import { constructorsSelector } from '../../store/Teams/teams.selector';
 import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 import Footer from '../../components/Footer/Footer';
+import { selectDrivers } from '../../store/Drivers/drivers.selector';
 
 const buildLineUpByConstructorId = (cid, teams, drivers) => {
 	let lineUp = [];
@@ -36,9 +41,9 @@ const buildLineUpByConstructorId = (cid, teams, drivers) => {
 };
 
 const Teams = () => {
-	const teamsDrivers = useSelector(teamsDriversSelector);
+	const drivers = useSelector(selectDrivers);
 	const teams = useSelector(constructorsSelector);
-	console.log('teamsDrivers', teamsDrivers);
+	console.log('drivers', drivers);
 	console.log('teams', teams);
 	const dispatch = useDispatch();
 	const {
@@ -64,14 +69,14 @@ const Teams = () => {
 
 		const getDrivers = async () => {
 			try {
-				if (teamsDrivers?.length > 0) {
-					console.error('drivers already in store, dont dispatch', teamsDriversSelector);
+				if (drivers?.length > 0) {
+					console.error('drivers already in store, dont dispatch', drivers);
 					return;
 				} else {
-					dispatch(fetchTeamsStart());
+					dispatch(fetchDriversStart());
 					sendRequestDrivers(
 						{
-							url: 'http://ergast.com/api/f1/current/driverStandings.json',
+							url: 'https://ergast.com/api/f1/current/driverStandings.json',
 							method: 'GET',
 							withCredentials: false,
 							signal: controller.signal
@@ -81,14 +86,14 @@ const Teams = () => {
 							const driversStandings =
 								driversResponse?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings;
 							console.log('driversStandings', driversStandings);
-							isMounted && dispatch(fetchTeamsDriversSuccess(driversStandings));
+							isMounted && dispatch(fetchDriversSuccess(driversStandings));
 						}
 					);
 				}
 			} catch (error) {
 				console.log('error TEAMS getDrivers', error);
 				dispatch(
-					fetchTeamsFailure(error?.message || 'Something went wrong. Please try again later!')
+					fetchDriversFailure(error?.message || 'Something went wrong. Please try again later!')
 				);
 			}
 		};
@@ -102,7 +107,7 @@ const Teams = () => {
 					dispatch(fetchTeamsStart());
 					sendRequestDrivers(
 						{
-							url: 'http://ergast.com/api/f1/current/constructorStandings.json',
+							url: 'https://ergast.com/api/f1/current/constructorStandings.json',
 							method: 'GET',
 							withCredentials: false,
 							signal: controller.signal
@@ -160,7 +165,7 @@ const Teams = () => {
 								const lineup = buildLineUpByConstructorId(
 									team?.Constructor?.constructorId,
 									teams,
-									teamsDrivers
+									drivers
 								);
 								return (
 									<TeamItem
