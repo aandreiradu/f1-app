@@ -33,7 +33,9 @@ const handleRefreshToken = async (req, res) => {
           const hackedUser = await Users.findOne({
             username: decoded?.username,
           }).exec();
-          hackedUser.refreshToken = [];
+          if (hackedUser.refreshToken) {
+            hackedUser.refreshToken = [];
+          }
           await hackedUser.save();
         }
       );

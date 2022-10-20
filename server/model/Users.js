@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const RaceBetsModel = require("./BetRace");
 
 const userSchema = new mongoose.Schema(
   {
@@ -44,6 +45,8 @@ const userSchema = new mongoose.Schema(
     },
 
     refreshToken: [String],
+
+    raceBets: [RaceBetsModel],
   },
   { timestamps: true }
 );
