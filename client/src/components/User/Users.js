@@ -30,6 +30,7 @@ import Footer from '../Footer/Footer';
 const Users = () => {
 	const seasonSchedule = useSelector(selectSchedule);
 	const upcomingRace = useSelector(selectUpcomingEvent);
+	console.error('!!!!!!upcomingRace!!!!', upcomingRace);
 	const drivers = useSelector(selectDrivers);
 	const dispatch = useDispatch();
 	const { isLoading, error, sendRequest } = useAxiosInterceptorsPublic();

@@ -186,3 +186,25 @@ header{
         right: -5px;
     }
 }
+
+/* @media (width >= 500px){
+    .auth-container{
+        margin: 0;
+        width: 400px;
+    }
+} */
+
+/* @keyframes pan {
+    100%{
+        background-position: 15% 50%;
+    }
+}
+
+
+.auth-container{
+    height: 100vh;
+    background: url('../../assets/SVGs/low-poly-grid-haikei.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation: pan 6s infinite alternate linear;
+} */
