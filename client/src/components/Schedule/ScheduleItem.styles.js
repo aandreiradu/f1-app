@@ -210,6 +210,8 @@ export const Position2 = styled.div`
 `;
 
 export const Position1 = styled.div`
+	display: flex;
+	flex-direction: column;
 	order: 2;
 	flex: 0 0 34%;
 

@@ -184,7 +184,7 @@ const Login = () => {
 	};
 
 	return (
-		<section>
+		<section className={classes['auth-container']}>
 			{errorAuth && showModal && (
 				<ErrorModal
 					title="Ooops!"

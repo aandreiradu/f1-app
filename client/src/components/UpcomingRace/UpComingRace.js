@@ -24,8 +24,12 @@ import {
 import hostCountriesFlags from '../../assets/host countries';
 import Counter from '../Counter/Counter';
 import { buildUpcomingEventPerDays } from '../../Utils/buildGPWeekend';
+import AddBetBtn from '../Bet/AddBetBtn';
+import { useState } from 'react';
+import AddBet from '../Bet/AddBet';
 
 const UpComingRace = (props) => {
+	const [placeBet, setPlaceBet] = useState(false);
 	console.log('upcoming race props', props);
 	console.log('UpComingRace render');
 	const { countryHost, raceName, raceDate, eventTime, eventTitle, upcomingRace, onEventFinished } =
@@ -88,22 +92,33 @@ const UpComingRace = (props) => {
 						<RaceTimeItemRaceTime>{fp3Time}</RaceTimeItemRaceTime>
 					</RaceTimeItem>
 
-					{/* <RaceTimeList> */}
 					<RaceTimeItem>
 						<RaceTimeItemRaceType>QUALYFING</RaceTimeItemRaceType>
 						<RaceTimeItemRaceDay>{qualyDay}</RaceTimeItemRaceDay>
 						<RaceTimeItemRaceTime>{qualyTime}</RaceTimeItemRaceTime>
 					</RaceTimeItem>
-					{/* </RaceTimeList> */}
-					{/* <RaceTimeList> */}
+
 					<RaceTimeItem>
 						<RaceTimeItemRaceType>RACE</RaceTimeItemRaceType>
 						<RaceTimeItemRaceDay>{raceDay}</RaceTimeItemRaceDay>
 						<RaceTimeItemRaceTime>{raceTime}</RaceTimeItemRaceTime>
 					</RaceTimeItem>
-					{/* </RaceTimeList> */}
 				</RaceTimeList>
 			</RaceTimeContainer>
+			<AddBetBtn text="Place Bet" placeBet={placeBet} setPlaceBet={setPlaceBet} />
+			{placeBet && (
+				<AddBet
+					placeBet={placeBet}
+					setPlaceBet={setPlaceBet}
+					raceName={upcomingRace?.raceName || 'N/A'}
+					raceDate={
+						new Date(`${upcomingRace?.date} ${upcomingRace?.time}`)?.toLocaleString() || 'N/A'
+					}
+					season={upcomingRace?.season || 'N/A'}
+					roundNo={upcomingRace?.round || 'N/A'}
+					circuitId={upcomingRace?.Circuit?.circuitId || 'N/A'}
+				/>
+			)}
 		</UpComingRaceContainer>
 	);
 };

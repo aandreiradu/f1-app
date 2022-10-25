@@ -1,7 +1,23 @@
+@keyframes pan {
+    100%{
+        background-position: 15% 50%;
+    }
+}
+
 .card {
     padding: 0 7%;
     position: relative;
+   
 }
+
+
+/* .card{
+    height: 100vh;
+    background: url('../../assets/SVGs/low-poly-grid-haikei.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation: pan 6s infinite alternate linear;
+} */
 
 
 @media (max-width: 800px) {

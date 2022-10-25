@@ -6,6 +6,7 @@ import {
 } from '../../animationsPresets/keyframes';
 
 export const UpComingRaceContainer = styled.article`
+	position: relative;
 	margin: 40px 0 20px 0;
 	width: 100%;
 	display: flex;
