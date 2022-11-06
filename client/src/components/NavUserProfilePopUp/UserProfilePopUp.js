@@ -9,7 +9,8 @@ import {
 	ProfilerLinksWrapper,
 	ProfilerLinks,
 	ProfilerUserName,
-	LogoutLink
+	LogoutLink,
+	Cut
 } from './UserProfilePopUp.styles';
 
 const UserProfilePopUp = (props) => {
@@ -26,6 +27,7 @@ const UserProfilePopUp = (props) => {
 	return (
 		<ProfilerWrapper active={active}>
 			<ProfilerTriangle />
+			{/* <Cut /> */}
 			<ProfilerUserName>{`Welcome, ${fullName || 'Guest'}`}</ProfilerUserName>
 			<ProfilerLinksWrapper>
 				<ProfilerLinks to={`/profile/${username}`}>My Profile</ProfilerLinks>
