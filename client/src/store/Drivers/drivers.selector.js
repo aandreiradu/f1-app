@@ -14,6 +14,5 @@ export const selectedDriversBet = createSelector(selectDriversReducer, (state) =
 		};
 	});
 
-	console.log(driversBet, driversBet);
 	return driversBet;
 });

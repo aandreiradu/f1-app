@@ -3,8 +3,9 @@ const Users = require("../model/Users");
 const RaceResults = require("../model/RaceResults");
 
 const addRaceBet = async (req, res) => {
-  console.log("received", req.body);
-  const { year, roundNo, raceName, podium, refreshToken } = req.body;
+  console.log("received", req.body, req.cookies);
+  const { year, roundNo, raceName, podium } = req.body;
+  const { jwt: refreshToken } = req.cookies;
 
   if (!year || !roundNo || !raceName || !podium || !refreshToken) {
     return res.status(400).json({
@@ -23,6 +24,10 @@ const addRaceBet = async (req, res) => {
         statusCode: 401,
       });
     }
+
+    // searchUser.raceBets = [];
+    // await searchUser.save();
+    // return res.status(200).send("Deleted");
 
     // Check if the race is not finsihed
     const racesFinished = await RaceResults?.findOne({ year: year });
@@ -49,19 +54,31 @@ const addRaceBet = async (req, res) => {
 
     // Check for existing bet for this race
     const existingBets = searchUser?.raceBets;
+    console.log("existingBets for user", searchUser.username, existingBets);
     const findBetByRoundNoAndYear = existingBets?.find(
       (bet) => bet?.year === year && bet?.roundNo === roundNo
     );
     console.log("findBetByRoundNoAndYear", findBetByRoundNoAndYear);
     if (findBetByRoundNoAndYear) {
       console.log("found existing bet");
-      return res.status(401).json({
-        message: `
-                There is already an existing bet for year ${year} round number ${roundNo}, 
-                GP ${findBetByRoundNoAndYear?.raceName}.
-                Predicted podium is ${findBetByRoundNoAndYear?.podium}.
-                You placed this bet on ${findBetByRoundNoAndYear?.createdAt}
-            `,
+      const predictedPodium = findBetByRoundNoAndYear?.podium.map(
+        (podium, index) => {
+          return {
+            key: podium.key,
+            name: podium.name,
+            position: index + 1,
+          };
+        }
+      );
+      return res.status(400).send({
+        message: `There is already an existing bet for year ${year} round number ${roundNo}, GP ${
+          findBetByRoundNoAndYear?.raceName
+        }.You placed this bet on ${new Date(
+          findBetByRoundNoAndYear?.createdAt
+        ).toLocaleString()}`,
+        statusCode: 400,
+        existingBet: true,
+        predictedPodium: JSON.stringify(predictedPodium),
       });
     }
 

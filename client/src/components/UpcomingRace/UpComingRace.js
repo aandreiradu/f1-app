@@ -105,7 +105,12 @@ const UpComingRace = (props) => {
 					</RaceTimeItem>
 				</RaceTimeList>
 			</RaceTimeContainer>
-			<AddBetBtn text="Place Bet" placeBet={placeBet} setPlaceBet={setPlaceBet} />
+			<AddBetBtn
+				text="Place Bet"
+				placeBet={placeBet}
+				setPlaceBet={setPlaceBet}
+				disabled={placeBet}
+			/>
 			{placeBet && (
 				<AddBet
 					placeBet={placeBet}

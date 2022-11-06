@@ -5,7 +5,8 @@ import classes from './ErrorModal.module.css';
 
 const ErrorModal = (props) => {
 	console.log('error modal props', props);
-	const { message, title, onConfirm, linkURL, linkText, hideCloseBtn } = props;
+	const { message, title, onConfirm, linkURL, linkText, hideCloseBtn, bettingList, bettingSource } =
+		props;
 
 	const confirmHandler = () => {
 		onConfirm();
@@ -22,11 +23,16 @@ const ErrorModal = (props) => {
 					&times;
 				</span>
 				<h2 className={hideCloseBtn && classes['extra-space']}>{title ? title : 'Ooops!'}</h2>
-				<p>{message ? message : 'Something went wrong, please try again later!'}</p>
+				<div>{message ? message : 'Something went wrong, please try again later!'}</div>
 				{hideCloseBtn && (
 					<div className={classes['modal_redirect']}>
 						<FontAwesomeIcon icon={faCircleInfo} className={classes['modal-info-icon']} />
-						<a className={classes['modal-link']} href={linkURL || ''} target="_blank">
+						<a
+							className={classes['modal-link']}
+							href={linkURL || ''}
+							target="_blank"
+							rel="noopener"
+						>
 							{linkText}
 						</a>
 					</div>
