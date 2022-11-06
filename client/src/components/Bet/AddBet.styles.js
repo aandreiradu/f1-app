@@ -27,11 +27,13 @@ export const Hide = keyframes`
 `;
 
 export const AddBetContainer = styled.section`
+	display: flex;
+	flex-direction: column;
 	position: absolute;
 	top: -10px;
 	left: 0px;
 	width: 101%;
-	height: 80vh;
+	min-height: 60vh;
 	color: #fff;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
@@ -64,7 +66,9 @@ export const CloseBet = styled(FontAwesomeIcon)`
 `;
 
 export const BetResultWrapper = styled(EventResult)`
-	margin: 50px 0;
+	margin: 10px 0;
+	padding: 0 10px;
+	/* align-items: unset; */
 `;
 
 export const AddBetTitle = styled.h2`
@@ -115,3 +119,46 @@ export const CircuitLayout = styled.img`
 	object-fit: contain;
 	width: 40%;
 `;
+
+export const PlaceBetBtnContainer = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: auto;
+	margin-bottom: 40px;
+`;
+export const PlaceBetBtn = styled.button`
+	width: 250px;
+	margin: 0;
+	border: none;
+	padding: 5px 0;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 14px;
+	background-color: #e10600;
+	border-radius: 10px;
+	cursor: pointer;
+	font-weight: 600;
+	transition: background-color, color 0.5s linear;
+
+	&:disabled {
+		background-color: #ccc;
+		color: #000;
+	}
+`;
+
+export const DeleteBetSelection = styled.span`
+	position: absolute;
+	top: -15px;
+	right: -1px;
+	z-index: 1;
+	background: #e10600;
+	padding: 5px 10px;
+	color: #fff;
+	font-size: 1rem;
+	padding: 2px 10px;
+	border-radius: 10px;
+	cursor: pointer;
+`;
+
+export const GenerateBetContainer = styled.div``;

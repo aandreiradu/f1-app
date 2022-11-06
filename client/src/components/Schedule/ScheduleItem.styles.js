@@ -183,6 +183,7 @@ export const DriverInfo = styled.div`
 `;
 
 export const Position3 = styled.div`
+	position: ${(props) => props.betting && 'relative'};
 	order: 3;
 	flex: 0 0 31%;
 
@@ -196,6 +197,7 @@ export const Position3 = styled.div`
 `;
 
 export const Position2 = styled.div`
+	position: ${(props) => props.betting && 'relative'};
 	order: 1;
 	flex: 0 0 33%;
 
@@ -210,6 +212,7 @@ export const Position2 = styled.div`
 `;
 
 export const Position1 = styled.div`
+	position: ${(props) => props.betting && 'relative'};
 	display: flex;
 	flex-direction: column;
 	order: 2;

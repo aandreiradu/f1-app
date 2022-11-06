@@ -7,6 +7,7 @@ import { teamsReducer } from './Teams/teams.reducer';
 import { scheduleReducer } from './Schedule/schedule.reducer';
 import { scheduleDetailsReducer } from './ScheduleDetails/scheduleDetails.reducer';
 import { qualyfingReducer } from './Qualyfing/qualyfing.reducer';
+import { addBetReducer } from './AddBet/addBet.reducer';
 
 const rootReducer = combineReducers({
 	auth: authReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
 	teams: teamsReducer,
 	schedule: scheduleReducer,
 	scheduleDetails: scheduleDetailsReducer,
-	qualyfing: qualyfingReducer
+	qualyfing: qualyfingReducer,
+	addBet: addBetReducer
 });
 
 export default rootReducer;
