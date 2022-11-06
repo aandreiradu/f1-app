@@ -4,14 +4,17 @@ import { useState } from 'react';
 import AddBet from './AddBet';
 import { AddBetButtonContainer, BetButton } from './AddBetBtn.styles';
 
-const AddBetBtn = ({ text, placeBet, setPlaceBet }) => {
+const AddBetBtn = (props) => {
+	const { text, placeBet, setPlaceBet, disabled } = props;
 	const handlePlaceBet = () => {
 		setPlaceBet((prevState) => !prevState);
 	};
 
 	return (
 		<AddBetButtonContainer>
-			<BetButton onClick={handlePlaceBet}>{text || 'Place Bet'}</BetButton>
+			<BetButton onClick={handlePlaceBet} {...props}>
+				{text || 'Place Bet'}
+			</BetButton>
 		</AddBetButtonContainer>
 	);
 };

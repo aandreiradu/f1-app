@@ -23,4 +23,9 @@ export const BetButton = styled.button`
 	&:focus {
 		outline: none;
 	}
+
+	&:disabled {
+		background-color: #ccc;
+		color: #fff;
+	}
 `;

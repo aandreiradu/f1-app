@@ -1,7 +1,15 @@
 const mongoose = require("mongoose");
 
-const DriverOnPodiumSchema = new mongoose.Schema({
-  driverName: {
+const BetResult = new mongoose.Schema({
+  key: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  position: {
     type: String,
     required: true,
   },
@@ -9,8 +17,7 @@ const DriverOnPodiumSchema = new mongoose.Schema({
 
 const BetRaceSchema = new mongoose.Schema(
   {
-    // podium: [DriverOnPodiumSchema],
-    podium: [String],
+    podium: [BetResult],
 
     year: {
       type: String,
@@ -29,13 +36,5 @@ const BetRaceSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// BetRaceSchema.pre("validate", (next) => {
-//   if (this.podium.length > 3) {
-//     throw "Podium exceeds maximum array size (10)!";
-//   }
-
-//   next();
-// });
 
 module.exports = BetRaceSchema;

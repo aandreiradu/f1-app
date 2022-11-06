@@ -9,30 +9,34 @@ import {
 import { BetResultWrapper, DeleteBetSelection } from './AddBet.styles';
 import scheduleImages from '../../constants/scheduleImages';
 import Dropdown from '../Dropdown/Dropdown';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const BetResults = ({ bets, drivers, handleSelectedDriverForBetting, handleRemoveBetSelected }) => {
-	console.log('bets BetResults', bets);
-
+const BetResults = ({
+	bets,
+	drivers,
+	handleSelectedDriverForBetting,
+	handleRemoveBetSelected,
+	isSubmited
+}) => {
 	return (
 		<BetResultWrapper>
 			<Position1 betting={true}>
 				{bets[0]?.key ? (
 					<>
-						<DeleteBetSelection
-							onClick={(e) => {
-								e.stopPropagation();
-								return handleRemoveBetSelected(1, bets[0]?.key);
-							}}
-						>
-							x
-						</DeleteBetSelection>
-						<ImageWrapper>
+						{!isSubmited && (
+							<DeleteBetSelection
+								icon={faXmark}
+								onClick={(e) => {
+									e.stopPropagation();
+									handleRemoveBetSelected(1, bets[0]?.key);
+								}}
+							/>
+						)}
+						<ImageWrapper style={{ borderTopRightRadius: 0 }}>
 							<img
 								src={
 									scheduleImages?.find((item) => {
-										// console.log('key', bets[0].key);
 										const result = item?.driverId?.toUpperCase().includes(bets[0].key);
-										// console.log('result', result);
 										return result;
 									})?.imgSrc
 								}
@@ -40,12 +44,11 @@ const BetResults = ({ bets, drivers, handleSelectedDriverForBetting, handleRemov
 							/>
 						</ImageWrapper>
 						<DriverInfoWrapper>
-							<DriverInfo>Max Verstappen</DriverInfo>
+							<DriverInfo>{bets[0]?.name}</DriverInfo>
 						</DriverInfoWrapper>
 					</>
 				) : (
 					<Dropdown
-						search
 						dataSource={drivers?.filter((driver) => {
 							return (
 								driver?.key !== bets[0]?.key &&
@@ -56,28 +59,26 @@ const BetResults = ({ bets, drivers, handleSelectedDriverForBetting, handleRemov
 						position="Position 1"
 						betsPosition={0}
 						onSelectedDriver={handleSelectedDriverForBetting}
-						onRemoveSelection={handleRemoveBetSelected}
 					/>
 				)}
 			</Position1>
-			<Position2 betting={true} onClick={handleRemoveBetSelected}>
+			<Position2 betting={true}>
 				{bets[1]?.key ? (
 					<>
-						<DeleteBetSelection
-							onClick={(e) => {
-								e.stopPropagation();
-								return handleRemoveBetSelected(2, bets[1]?.key);
-							}}
-						>
-							x
-						</DeleteBetSelection>
-						<ImageWrapper>
+						{!isSubmited && (
+							<DeleteBetSelection
+								icon={faXmark}
+								onClick={(e) => {
+									e.stopPropagation();
+									handleRemoveBetSelected(2, bets[1]?.key);
+								}}
+							/>
+						)}
+						<ImageWrapper style={{ borderTopRightRadius: 0 }}>
 							<img
 								src={
 									scheduleImages?.find((item) => {
-										// console.log('key', bets[0].key);
 										const result = item?.driverId?.toUpperCase().includes(bets[1].key);
-										// console.log('result', result);
 										return result;
 									})?.imgSrc
 								}
@@ -85,12 +86,11 @@ const BetResults = ({ bets, drivers, handleSelectedDriverForBetting, handleRemov
 							/>
 						</ImageWrapper>
 						<DriverInfoWrapper>
-							<DriverInfo>Max Verstappen</DriverInfo>
+							<DriverInfo>{bets[1]?.name}</DriverInfo>
 						</DriverInfoWrapper>
 					</>
 				) : (
 					<Dropdown
-						search
 						dataSource={drivers?.filter((driver) => {
 							return (
 								driver?.key !== bets[0]?.key &&
@@ -104,24 +104,23 @@ const BetResults = ({ bets, drivers, handleSelectedDriverForBetting, handleRemov
 					/>
 				)}
 			</Position2>
-			<Position3 betting={true} onClick={handleRemoveBetSelected}>
+			<Position3 betting={true}>
 				{bets[2]?.key ? (
 					<>
-						<DeleteBetSelection
-							onClick={(e) => {
-								e.stopPropagation();
-								return handleRemoveBetSelected(3, bets[2]?.key);
-							}}
-						>
-							x
-						</DeleteBetSelection>
-						<ImageWrapper>
+						{!isSubmited && (
+							<DeleteBetSelection
+								icon={faXmark}
+								onClick={(e) => {
+									e.stopPropagation();
+									handleRemoveBetSelected(3, bets[2]?.key);
+								}}
+							/>
+						)}
+						<ImageWrapper style={{ borderTopRightRadius: 0 }}>
 							<img
 								src={
 									scheduleImages?.find((item) => {
-										// console.log('key', bets[0].key);
 										const result = item?.driverId?.toUpperCase().includes(bets[2].key);
-										// console.log('result', result);
 										return result;
 									})?.imgSrc
 								}
@@ -129,12 +128,11 @@ const BetResults = ({ bets, drivers, handleSelectedDriverForBetting, handleRemov
 							/>
 						</ImageWrapper>
 						<DriverInfoWrapper>
-							<DriverInfo>Max Verstappen</DriverInfo>
+							<DriverInfo>{bets[2]?.name}</DriverInfo>
 						</DriverInfoWrapper>
 					</>
 				) : (
 					<Dropdown
-						search
 						dataSource={drivers?.filter((driver) => {
 							return (
 								driver?.key !== bets[0]?.key &&

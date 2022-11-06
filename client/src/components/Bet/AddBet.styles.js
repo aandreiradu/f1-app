@@ -126,6 +126,7 @@ export const PlaceBetBtnContainer = styled.div`
 	justify-content: center;
 	margin-top: auto;
 	margin-bottom: 40px;
+	animation: 0.25s ${(props) => (props.show ? Show : Hide)} linear;
 `;
 export const PlaceBetBtn = styled.button`
 	width: 250px;
@@ -147,16 +148,17 @@ export const PlaceBetBtn = styled.button`
 	}
 `;
 
-export const DeleteBetSelection = styled.span`
+export const DeleteBetSelection = styled(FontAwesomeIcon)`
 	position: absolute;
-	top: -15px;
-	right: -1px;
+	width: 10px;
+	height: 25px;
+	top: -12px;
+	right: 0px;
 	z-index: 1;
 	background: #e10600;
-	padding: 5px 10px;
 	color: #fff;
 	font-size: 1rem;
-	padding: 2px 10px;
+	padding: 0px 7px;
 	border-radius: 10px;
 	cursor: pointer;
 `;

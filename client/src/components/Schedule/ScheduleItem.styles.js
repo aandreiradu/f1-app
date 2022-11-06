@@ -180,6 +180,7 @@ export const DriverInfo = styled.div`
 	justify-content: center;
 	padding-bottom: 0;
 	color: #000;
+	font-size: 14px;
 `;
 
 export const Position3 = styled.div`
