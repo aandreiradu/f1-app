@@ -112,8 +112,6 @@ const Login = () => {
 				console.log('last else set auth');
 				setShowModal(true);
 				setErrorAuth(message);
-				// resetPassword();
-				// resetusername();
 			}
 		}
 	};
@@ -256,6 +254,9 @@ const Login = () => {
 							</span>
 						)}
 					</div>
+					<Link className={classes['forgot-password']} to={'/reset'}>
+						Forgot my password
+					</Link>
 				</div>
 				<div className={classes['auth-actions']}>
 					<button disabled={!formIsValid}>
