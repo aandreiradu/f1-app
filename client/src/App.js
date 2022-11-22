@@ -24,6 +24,7 @@ import AddDriver from './components/AddDriver/AddDriver';
 import AddTeam from './components/AddTeam/AddTeam';
 import Qualyfing from './components/Qualyfing/Qualyfing';
 import NotFound from './pages/404/NotFound';
+import ResetPassword from './pages/Auth/ResetPassword';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -54,6 +55,7 @@ function App() {
 					<Routes>
 						<Route path="/login" element={<Login />}></Route>
 						<Route path="/register" element={<Register />}></Route>
+						<Route path="/reset" element={<ResetPassword />} />
 
 						<Route element={<Persist />}>
 							<Route path="/" element={<Users />}></Route>

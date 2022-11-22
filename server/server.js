@@ -43,6 +43,7 @@ app.use("/register", require("./routes/register/register"));
 app.use("/login", require("./routes/auth/auth"));
 app.use("/refresh", require("./routes/refresh/refresh"));
 app.use("/logout", require("./routes/logout/logout"));
+app.use("/reset", require("./routes/reset/reset"));
 
 app.use(verifyJWT);
 app.use("/api/addRaceResult", require("./routes/api/addRaceResult"));
@@ -58,6 +59,18 @@ app.use("/api/accounts/edit", require("./routes/api/updateUserInformations"));
 
 // BETs
 app.use("/api/addRaceBet", require("./routes/api/addRaceBet"));
+
+app.use((error, req, res, next) => {
+  console.log("error middleware", error);
+  const message = error.message;
+  const statusCode = error.statusCode || 500;
+  const data = error.data || [];
+
+  return res.status(statusCode).json({
+    message,
+    data,
+  });
+});
 
 app.all("*", (req, res) => {
   res.status(404);

@@ -46,6 +46,9 @@ const userSchema = new mongoose.Schema(
 
     refreshToken: [String],
 
+    resetToken: String,
+    resetTokenExpiration: Date,
+
     raceBets: [RaceBetsModel],
   },
   { timestamps: true }
