@@ -10,6 +10,7 @@ const credentials = require("./middlewares/credentials");
 const connectDB = require("./config/dbConnection");
 const verifyJWT = require("./middlewares/verifyJWT");
 const bodyParser = require("body-parser");
+const authRoutes = require("./routes/auth/auth");
 
 connectDB();
 
@@ -39,11 +40,13 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 // routes
 app.use("/", require("./routes/root"));
-app.use("/register", require("./routes/register/register"));
-app.use("/login", require("./routes/auth/auth"));
-app.use("/refresh", require("./routes/refresh/refresh"));
-app.use("/logout", require("./routes/logout/logout"));
-app.use("/reset", require("./routes/reset/reset"));
+// app.use("/register", require("./routes/register/register"));
+// app.use("/login", require("./routes/auth/auth"));
+// app.use("/refresh", require("./routes/refresh/refresh"));
+// app.use("/logout", require("./routes/logout/logout"));
+// app.use("/reset", require("./routes/reset/reset"));
+// app.use("/new-password", require("./routes/reset/reset"));
+app.use(authRoutes);
 
 app.use(verifyJWT);
 app.use("/api/addRaceResult", require("./routes/api/addRaceResult"));

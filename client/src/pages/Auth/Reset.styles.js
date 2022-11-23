@@ -89,6 +89,7 @@ export const SubmitBtn = styled.button`
 	&:disabled {
 		background-color: #ccc;
 		color: #000;
+		border-color: #ccc;
 		cursor: not-allowed;
 	}
 `;

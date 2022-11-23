@@ -25,6 +25,7 @@ import AddTeam from './components/AddTeam/AddTeam';
 import Qualyfing from './components/Qualyfing/Qualyfing';
 import NotFound from './pages/404/NotFound';
 import ResetPassword from './pages/Auth/ResetPassword';
+import NewPassword from './pages/Auth/NewPassword';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -53,8 +54,12 @@ function App() {
 				{accessToken && isAuth && <Nav />}
 				<Card className="App">
 					<Routes>
+						{/* Signup & Signin routes */}
 						<Route path="/login" element={<Login />}></Route>
 						<Route path="/register" element={<Register />}></Route>
+
+						{/* Reset & Update password routes */}
+						<Route path="/reset/:token" element={<NewPassword />} />
 						<Route path="/reset" element={<ResetPassword />} />
 
 						<Route element={<Persist />}>
