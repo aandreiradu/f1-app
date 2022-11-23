@@ -168,7 +168,7 @@ const Users = () => {
 						<Loader />
 					) : (
 						<>
-							<UpComingRace
+							{/* <UpComingRace
 								countryHost={upcomingRace?.Circuit?.Location?.country}
 								raceDate={
 									upcomingRace
@@ -183,7 +183,7 @@ const Users = () => {
 								raceName={upcomingRace?.raceName}
 								upcomingRace={upcomingRace}
 								onEventFinished={onEventFinished}
-							/>
+							/> */}
 							<SearchDriver onSearch={handleDriverSearch} />
 							<motion.ul
 								variants={driverCards.containerDriverCards}

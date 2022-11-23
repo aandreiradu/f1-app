@@ -1,4 +1,4 @@
-const { handleRefreshToken } = require("../../controllers/refreshController");
+const handleRefreshToken = require("../../controllers/refreshController");
 const router = require("express").Router();
 
 router.get("/", handleRefreshToken);
