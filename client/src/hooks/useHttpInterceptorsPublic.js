@@ -64,12 +64,31 @@ const useAxiosInterceptorsPublic = () => {
 			});
 			// setTimeout(() => {
 			console.log('response', response);
-			dispatch({ type: 'RESPONSE', payload: response?.data });
-			applyData(response?.data);
+			console.log('responseStatus', response?.status);
+
+			console.log('payload will be', {
+				status: response?.status,
+				...response.data
+			});
+
+			dispatch({
+				type: 'RESPONSE',
+				payload: {
+					status: response?.status,
+					...response.data
+				}
+			});
+			applyData({ ...response?.data, status: response?.status });
 			// }, 6000);
 		} catch (error) {
 			console.error('error useAxiosInterceptors', error);
-			dispatch({ type: 'ERROR', payload: error?.response?.data || error });
+			dispatch({
+				type: 'ERROR',
+				payload: {
+					...(error?.response?.data || error),
+					status: error?.response?.status || error?.status || 500
+				}
+			});
 		}
 	}, []);
 
