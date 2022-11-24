@@ -100,7 +100,7 @@ const getNewPassword = async (req, res, next) => {
 
   if (!token) {
     const error = new Error(
-      "Invalid request params. Missing token from request params"
+      "Invalid request params, missing token from request params"
     );
     error.statusCode = 400;
     return next(error);
@@ -150,7 +150,13 @@ const postNewPassword = async (req, res, next) => {
     console.log("errors is not empty", errors);
     const error = new Error("Invalid Field");
     error.statusCode = 422;
-    error.data = errors.array();
+    error.data = errors.array().map((error) => {
+      return {
+        field: error.param,
+        msg: error.msg,
+        value: error.value,
+      };
+    });
     return next(error);
   }
 
@@ -188,12 +194,9 @@ const postNewPassword = async (req, res, next) => {
     await findUser.save();
 
     console.log("ok updated");
-    return res
-      .status(200)
-      .json({
-        message: "Password updated",
-      })
-      .redirect("/login");
+    return res.status(200).json({
+      message: "Password updated",
+    });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

@@ -21,7 +21,6 @@ const ResetPassword = () => {
 	const [errorModal, setErrorModal] = useState(false);
 	const { isLoading, responseData, sendRequest, error } = useAxiosInterceptorsPublic();
 	const [inputErrors, setInputErros] = useState({});
-	const [isTouched, setIsTouched] = useState(false);
 	const emailRef = useRef();
 	const submitBtn = useRef();
 	const navigate = useNavigate();
@@ -30,7 +29,6 @@ const ResetPassword = () => {
 		setErrorModal(false);
 		submitBtn.current.disabled = false;
 	};
-	const handleBlurInput = (e) => setIsTouched(true);
 
 	const resetErrorState = () => {
 		if (Object.keys(inputErrors).length > 0) {
@@ -40,7 +38,7 @@ const ResetPassword = () => {
 	};
 
 	useEffect(() => {
-		console.log('error', error);
+		console.error('@@@ERROR useEffect!!!', error);
 		if (error) {
 			const { data, message } = error;
 			console.log('data,message', data, message);
@@ -129,7 +127,6 @@ const ResetPassword = () => {
 						name="email"
 						ref={emailRef}
 						spellCheck={false}
-						onBlur={handleBlurInput}
 						onClick={resetErrorState}
 						className={Object.keys(inputErrors).length > 0 && 'invalid-input'}
 					/>

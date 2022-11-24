@@ -22,7 +22,7 @@ const ErrorModal = (props) => {
 				>
 					&times;
 				</span>
-				<h2 className={hideCloseBtn && classes['extra-space']}>{title ? title : 'Ooops!'}</h2>
+				<h2 className={hideCloseBtn && classes['extra-space']}>{title || null}</h2>
 				<div>{message ? message : 'Something went wrong, please try again later!'}</div>
 				{hideCloseBtn && (
 					<div className={classes['modal_redirect']}>
