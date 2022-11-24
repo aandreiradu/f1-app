@@ -36,14 +36,17 @@ const DriversRaceResults = (props) => {
 				</ul>
 			);
 
-		case 'Fastest Lap':
+		case 'Fastest Laps':
+			const resultsSorted = result
+				.slice()
+				.sort((a, b) => +a?.FastestLap?.rank - +b?.FastestLap?.rank);
 			return (
 				<ul className={`${classes.driversResultsList} defaultTransition defaultTransition-5MS`}>
-					{result?.map((driverResult) => (
+					{(resultsSorted?.length > 0 ? resultsSorted : result)?.map((driverResult) => (
 						<li
 							key={driverResult?.Driver?.code}
 							className={`${classes.driverResultItemFS} ${
-								+driverResult?.position === 1 && classes.winnerStickyTop
+								+driverResult?.FastestLap?.rank === 1 && classes.winnerStickyTop
 							}`}
 						>
 							<div className={classes.driverCN}>

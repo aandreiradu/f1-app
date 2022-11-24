@@ -5,6 +5,7 @@
     margin: 10px 0;
 }
 
+
 .driverResultItem {
     margin: 5px 0;
     padding: 0.25rem;
@@ -46,9 +47,15 @@
 }
 
 
+.driverResultItemFS:first-child,
+.driverResultItem:first-child{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
 /* fastest lap */
 
-@media(max-width:768px){
+/* @media(max-width:768px){ */
     .driverResultItemFS {
         display: flex;
         width: 100%;
@@ -61,6 +68,8 @@
         box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px,
             rgb(0 0 0 / 23%) 0px 3px 6px;
     }
+
+   
 
     
     .driverResultItemFS .driverCN {
@@ -124,7 +133,7 @@
     }
 
     /* .driverLap .driverFastestLap */
-}
+/* } */
 
 
 

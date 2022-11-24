@@ -168,22 +168,24 @@ const Users = () => {
 						<Loader />
 					) : (
 						<>
-							{/* <UpComingRace
-								countryHost={upcomingRace?.Circuit?.Location?.country}
-								raceDate={
-									upcomingRace
-										? buildWeekend(
-												new Date(
-													`${upcomingRace.FirstPractice.date} ${upcomingRace.FirstPractice.time}`
-												),
-												new Date(`${upcomingRace?.date} ${upcomingRace?.time}`)
-										  )
-										: ''
-								}
-								raceName={upcomingRace?.raceName}
-								upcomingRace={upcomingRace}
-								onEventFinished={onEventFinished}
-							/> */}
+							{upcomingRace && (
+								<UpComingRace
+									countryHost={upcomingRace?.Circuit?.Location?.country}
+									raceDate={
+										upcomingRace
+											? buildWeekend(
+													new Date(
+														`${upcomingRace.FirstPractice.date} ${upcomingRace.FirstPractice.time}`
+													),
+													new Date(`${upcomingRace?.date} ${upcomingRace?.time}`)
+											  )
+											: ''
+									}
+									raceName={upcomingRace?.raceName}
+									upcomingRace={upcomingRace}
+									onEventFinished={onEventFinished}
+								/>
+							)}
 							<SearchDriver onSearch={handleDriverSearch} />
 							<motion.ul
 								variants={driverCards.containerDriverCards}
