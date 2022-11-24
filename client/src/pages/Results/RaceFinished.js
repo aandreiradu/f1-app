@@ -52,7 +52,7 @@ const RaceFinished = () => {
 	};
 
 	const activeLeaderBoard = listCategory === 'LeaderBoard' ? `${classes.categoryActive}` : '';
-	const activeFastestLap = listCategory === 'Fastest Lap' ? `${classes.categoryActive}` : '';
+	const activeFastestLap = listCategory === 'Fastest Laps' ? `${classes.categoryActive}` : '';
 
 	const confirmErrorModal = () => {
 		setShowModal(false);
@@ -98,7 +98,7 @@ const RaceFinished = () => {
 											LeaderBoard
 										</p>
 										<p onClick={handleCategoryList} className={activeFastestLap}>
-											Fastest Lap
+											Fastest Laps
 										</p>
 									</div>
 									<DriversRaceResults

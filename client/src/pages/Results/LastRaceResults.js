@@ -69,7 +69,7 @@ const LastRaceResults = () => {
 	};
 
 	const activeLeaderBoard = listCategory === 'LeaderBoard' ? `${classes.categoryActive}` : '';
-	const activeFastestLap = listCategory === 'Fastest Lap' ? `${classes.categoryActive}` : '';
+	const activeFastestLap = listCategory === 'Fastest Laps' ? `${classes.categoryActive}` : '';
 
 	let content;
 
@@ -105,7 +105,7 @@ const LastRaceResults = () => {
 											LeaderBoard
 										</p>
 										<p onClick={handleCategoryList} className={activeFastestLap}>
-											Fastest Lap
+											Fastest Laps
 										</p>
 									</div>
 									<DriversRaceResults
