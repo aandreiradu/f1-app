@@ -10,7 +10,9 @@ const credentials = require("./middlewares/credentials");
 const connectDB = require("./config/dbConnection");
 const verifyJWT = require("./middlewares/verifyJWT");
 const bodyParser = require("body-parser");
+const multer = require("multer");
 const authRoutes = require("./routes/auth/auth");
+const userRoutes = require("./routes/user/userRoutes");
 
 connectDB();
 
@@ -21,34 +23,71 @@ app.use(credentials);
 // cross origin resource sharing
 app.use(cors({ corsOptions, credentials: true, origin: true }));
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.set("view engine", "ejs");
+// Configure multer
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname +
+        "-" +
+        new Date().toISOString() +
+        path.extname(file.originalname)
+      // new Date().toISOString() + "-" + file.originalname
+    );
+  },
+});
 
-// built-in middleware to handle urlencoded data ('content-type : application/x-www-form-urlencoded);
-app.use(express.urlencoded({ extended: false }));
+const fileFilter = (req, file, callback) => {
+  const acceptableExtensions = ["png", "jpg", "jpeg", "jpg"];
+  if (
+    !acceptableExtensions.some(
+      (extension) =>
+        path.extname(file.originalname).toLowerCase() === `.${extension}`
+    )
+  ) {
+    return callback(
+      new Error(
+        `Extension not allowed, accepted extensions are ${acceptableExtensions.join(
+          ","
+        )}`
+      )
+    );
+  }
+  callback(null, true);
+};
 
 // built-in middleware for json
 app.use(express.json());
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.json()); // for json
+app.use(bodyParser.urlencoded({ extended: true })); // parsing application/xwww-
 
-// middleware for cookies
+// // middleware for cookies
 app.use(cookieParser());
 
-// built-in middleware for static  files
-app.use(express.static(path.join(__dirname, "../public")));
+// multer init
+app.use(
+  multer({
+    storage: fileStorage,
+    fileFilter,
+  }).single("profilePicture")
+);
+
+app.use("/images", express.static(path.join(__dirname, "images"))); // make images directory accessible
+app.use(express.static(path.join(__dirname, "public"))); //make public directory accessible
 
 // routes
 app.use("/", require("./routes/root"));
-// app.use("/register", require("./routes/register/register"));
-// app.use("/login", require("./routes/auth/auth"));
-// app.use("/refresh", require("./routes/refresh/refresh"));
-// app.use("/logout", require("./routes/logout/logout"));
-// app.use("/reset", require("./routes/reset/reset"));
-// app.use("/new-password", require("./routes/reset/reset"));
+
 app.use(authRoutes);
 
+// Protected Routes below this middleware
 app.use(verifyJWT);
+
+app.use("/api/user", userRoutes);
+
 app.use("/api/addRaceResult", require("./routes/api/addRaceResult"));
 app.use(
   "/api/getRaceResultByYear",

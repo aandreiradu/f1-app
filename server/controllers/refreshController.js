@@ -72,6 +72,7 @@ const handleRefreshToken = async (req, res) => {
         const generateNewAccessToken = JSONWEBTOKEN.sign(
           {
             F1_APP_USER: {
+              userId: findUser._id.toString(),
               username: findUser.username,
               email: findUser.email,
               fullName: findUser.fullName,
@@ -112,7 +113,7 @@ const handleRefreshToken = async (req, res) => {
           email: findUser?.email,
           favoriteDriver: findUser?.favoriteDriver,
           favoriteConstructor: findUser.favoriteConstructor,
-          profilePicture: findUser?.profileImage?.data,
+          imageUrl: findUser.imageUrl,
         });
       }
     );

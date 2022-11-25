@@ -54,14 +54,14 @@ const useAxiosInterceptors = () => {
 		const { method, url, body, headers, withCredentials, others } = requestConfig || {};
 
 		// check for formData payload
-		console.log('body is instance of formdata', body?.formData instanceof FormData);
-		const formData = new FormData();
-		if (body?.formData instanceof FormData) {
-			for (const value of body?.formData?.entries()) {
-				formData.append([value[0]], value[1]);
-			}
-			formDataReceived = true;
-		}
+		// console.log('body is instance of formdata', body?.formData instanceof FormData);
+		// const formData = new FormData();
+		// if (body?.formData instanceof FormData) {
+		// 	for (const value of body?.formData?.entries()) {
+		// 		formData.append([value[0]], value[1]);
+		// 	}
+		// 	formDataReceived = true;
+		// }
 
 		dispatch({ type: 'SEND' });
 
@@ -70,7 +70,7 @@ const useAxiosInterceptors = () => {
 			const response = await axiosPrivate({
 				method,
 				url,
-				data: !formDataReceived ? body : formData,
+				data: body,
 				headers,
 				withCredentials,
 				...others
@@ -78,12 +78,27 @@ const useAxiosInterceptors = () => {
 			console.log('response', response);
 
 			// setTimeout(() => {
-			dispatch({ type: 'RESPONSE', payload: response?.data });
-			applyData(response?.data);
+			dispatch({
+				type: 'RESPONSE',
+				payload: {
+					...response?.data,
+					status: response?.status
+				}
+			});
+			applyData({
+				...response?.data,
+				status: response?.status
+			});
 			// }, 10000);
 		} catch (error) {
 			console.error('error useAxiosInterceptors', error);
-			dispatch({ type: 'ERROR', payload: error?.response?.data || error });
+			dispatch({
+				type: 'ERROR',
+				payload: {
+					...(error?.response?.data || error),
+					status: error?.response?.status || error?.status || 500
+				}
+			});
 		}
 	}, []);
 

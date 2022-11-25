@@ -37,6 +37,7 @@ const handleLogin = async (req, res) => {
     const generateAccessToken = jwt.sign(
       {
         F1_APP_USER: {
+          userId: searchUser?._id.toString(),
           username: searchUser?.username,
           email: searchUser?.email,
           fullName: searchUser?.fullName,
@@ -108,7 +109,7 @@ const handleLogin = async (req, res) => {
       email: searchUser?.email,
       favoriteConstructor: searchUser?.favoriteConstructor,
       favoriteDriver: searchUser?.favoriteDriver,
-      profilePicture: searchUser?.profileImage?.data,
+      imageUrl: searchUser?.imageUrl,
     });
   } catch (error) {
     console.log("error authController", error);

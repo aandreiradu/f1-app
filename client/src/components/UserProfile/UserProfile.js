@@ -19,16 +19,15 @@ import { faPerson } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from '../../store/Auth/auth.selector';
 import { useNavigate, useParams } from 'react-router-dom';
-import { arrayBufferToBase64 } from '../../Utils/arrayToBufferB64';
+import apiConfig from '../../constants/apiConfig';
 import Footer from '../Footer/Footer';
 
 const UserProfile = () => {
 	const { username: usernameParams } = useParams();
-	const { username, fullName, email, favoriteDriver, favoriteConstructor, profilePicture } =
+	const { username, fullName, email, favoriteDriver, favoriteConstructor, imageUrl } =
 		useSelector(selectIsAuth);
-	console.log({ username, fullName, profilePicture });
+	console.log({ username, fullName, imageUrl });
 	const navigate = useNavigate();
-	const imageStr = profilePicture?.data && arrayBufferToBase64(profilePicture?.data);
 
 	const goToProfileEditHandler = () => {
 		navigate(`/profile/edit/${username}`);
@@ -40,8 +39,8 @@ const UserProfile = () => {
 				<UserProfilePictureWrapper>
 					<UserProfilePicture
 						src={
-							profilePicture
-								? `data:image/png;base64,${imageStr}`
+							imageUrl
+								? `${apiConfig.baseURL}/${imageUrl}`
 								: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/240px-F1.svg.png'
 						}
 					/>

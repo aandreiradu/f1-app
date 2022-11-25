@@ -74,7 +74,7 @@ const Login = () => {
 			email,
 			favoriteConstructor,
 			favoriteDriver,
-			profilePicture
+			imageUrl
 		} = stateData || null;
 
 		// happy path, redirect to homepage;
@@ -88,7 +88,7 @@ const Login = () => {
 					email,
 					favoriteConstructor,
 					favoriteDriver,
-					profilePicture
+					imageUrl
 				)
 			);
 			resetPassword();
@@ -128,7 +128,7 @@ const Login = () => {
 			email,
 			favoriteConstructor,
 			favoriteDriver,
-			profilePicture
+			imageUrl
 		} = responseLogin || null;
 		if (responseLogin) {
 			setAuth({
@@ -141,7 +141,7 @@ const Login = () => {
 				email,
 				favoriteConstructor,
 				favoriteDriver,
-				profilePicture
+				imageUrl
 			});
 		}
 	};

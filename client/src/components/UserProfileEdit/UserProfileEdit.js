@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { updateProfileInfo } from '../../store/Auth/auth.actions';
 import LoaderIcon from '../LoaderReusable/LoaderIcon';
 import { updateProfilePicture } from '../../store/Auth/auth.actions';
+import apiConfig from '../../constants/apiConfig';
 import ErrorModal from '../../components/UI/ErrorModal';
 import { acceptedExtensions } from '../../Utils/acceptedProfilePictureExtensions';
 import { selectIsAuth } from '../../store/Auth/auth.selector';
@@ -30,7 +31,6 @@ import { constructorsSelector } from '../../store/Teams/teams.selector';
 import { buildTeams } from '../../Utils/buildTeams';
 import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { useDispatch } from 'react-redux';
-import { arrayBufferToBase64 } from '../../Utils/arrayToBufferB64';
 import Footer from '../Footer/Footer';
 
 const UserProfileEdit = () => {
@@ -38,8 +38,10 @@ const UserProfileEdit = () => {
 	const dispatch = useDispatch();
 	const { sendRequest, isLoading, error, responseData } = useAxiosInterceptors();
 	const location = useLocation();
-	const { fullName, username, email, favoriteConstructor, favoriteDriver, profilePicture } =
+	const { fullName, username, email, favoriteConstructor, favoriteDriver, imageUrl } =
 		useSelector(selectIsAuth);
+
+	console.log('imageUrl din store', imageUrl);
 
 	useEffect(() => {
 		console.log('ERROR SENDREQUEST', error);
@@ -53,19 +55,17 @@ const UserProfileEdit = () => {
 		}
 	}, [error]);
 
-	console.log('profilePicture', profilePicture);
-	const imageStr = profilePicture?.data && arrayBufferToBase64(profilePicture?.data);
 	// profile picture area end
 
-	// profile picture area start;
-	const selectTeams = useSelector(constructorsSelector);
-	console.log('selectTeams', selectTeams);
-	let teamsNames;
-	if (selectTeams?.length > 0) {
-		teamsNames = buildTeams(selectTeams);
-	}
-	console.log('teamsNames', teamsNames);
-	// profile picture area end;
+	// // profile picture area start;
+	// const selectTeams = useSelector(constructorsSelector);
+	// console.log('selectTeams', selectTeams);
+	// let teamsNames;
+	// if (selectTeams?.length > 0) {
+	// 	teamsNames = buildTeams(selectTeams);
+	// }
+	// console.log('teamsNames', teamsNames);
+	// // profile picture area end;
 
 	let {
 		value: fullNameValue,
@@ -273,25 +273,19 @@ const UserProfileEdit = () => {
 
 				sendRequest(
 					{
-						url: 'api/accounts/updateProfilePicture',
+						url: '/api/user/updateProfilePicture',
 						method: 'POST',
-						body: {
-							formData
-						},
-						headers: {},
+						body: formData,
 						withCredentials: true,
 						signal: controller.signal
 					},
 					(apiResponse) => {
 						console.log('apiResponse', apiResponse);
-						const { message, statusCode, data } = apiResponse;
-						if (message === 'Profile picture uploaded successfully' && statusCode === 200) {
-							console.log(
-								'image uploaded successfully, dispatch and change the profile picture',
-								apiResponse
-							);
+						const { message, status, imageUrl } = apiResponse;
+						if (message === 'Image uploaded successfully' && status === 200) {
+							console.log('Image uploaded successfully', apiResponse);
 							// setTimeout(() => {
-							dispatch(updateProfilePicture({ profilePicture: data }));
+							dispatch(updateProfilePicture({ imageUrl: imageUrl }));
 							// },[5000]);
 						}
 					}
@@ -330,10 +324,11 @@ const UserProfileEdit = () => {
 					{!isLoading ? (
 						<UserProfilePicture
 							src={
-								profilePicture
-									? `data:image/png;base64,${imageStr}`
+								imageUrl
+									? `${apiConfig.baseURL}/${imageUrl}`
 									: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/240px-F1.svg.png'
 							}
+							alt="User profile image"
 						/>
 					) : (
 						<LoaderIcon hB1={20} hB2={40} hB3={20} barsColor={'#000'} heightContainer="100%" />

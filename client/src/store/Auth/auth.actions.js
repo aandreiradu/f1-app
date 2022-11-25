@@ -9,7 +9,7 @@ export const setAccessToken = (
 	email,
 	favoriteConstructor,
 	favoriteDriver,
-	profilePicture
+	imageUrl
 ) => {
 	return createAction(AUTH_TYPES.AUTH_SET_ACCESS_TOKEN, {
 		accessToken: token,
@@ -19,7 +19,7 @@ export const setAccessToken = (
 		email,
 		favoriteConstructor,
 		favoriteDriver,
-		profilePicture
+		imageUrl
 	});
 };
 
@@ -31,7 +31,7 @@ export const refreshToken = (
 	email,
 	favoriteConstructor,
 	favoriteDriver,
-	profilePicture
+	imageUrl
 ) => {
 	return createAction(AUTH_TYPES.AUTH_REFRESH_TOKEN, {
 		accessToken: token,
@@ -41,7 +41,7 @@ export const refreshToken = (
 		email,
 		favoriteConstructor,
 		favoriteDriver,
-		profilePicture
+		imageUrl
 	});
 };
 
@@ -51,8 +51,8 @@ export const logout = () => {
 	return createAction(AUTH_TYPES.AUTH_LOGOUT);
 };
 
-export const updateProfilePicture = (profilePicture) =>
-	createAction(AUTH_TYPES['PROFILE/UPDATE_PROFILE_PICTURE'], profilePicture);
+export const updateProfilePicture = (imageUrl) =>
+	createAction(AUTH_TYPES['PROFILE/UPDATE_PROFILE_PICTURE'], imageUrl);
 
 export const updateProfileInfo = (profileInfo) =>
 	createAction(AUTH_TYPES['PROFILE/UPDATE_PROFILE_INFO'], profileInfo);

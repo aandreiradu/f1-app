@@ -36,13 +36,7 @@ const userSchema = new mongoose.Schema(
     favoriteDriver: String,
     favoriteConstructor: String,
 
-    profileImageName: {
-      type: String,
-    },
-    profileImage: {
-      contentType: String,
-      data: Buffer,
-    },
+    imageUrl: String,
 
     refreshToken: [String],
 

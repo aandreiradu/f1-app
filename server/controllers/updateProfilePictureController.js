@@ -1,87 +1,50 @@
-const Users = require('../model/Users');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const Users = require("../model/Users");
+const { default: mongoose } = require("mongoose");
+const path = require("path");
+const { removeFile } = require("../utils/files");
 
-// Set Storage Engine
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, path.join(__dirname,'../uploads'));
-    },
-    filename: function (req, file, cb) {
-      cb(
-        null,
-        file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-      );
-    },
-  });
+const updateProfilePicture = async (req, res, next) => {
+  const { username } = req.body;
 
-  
-const upload = multer({
-    storage,
-    // limits : {fileSize : 1 * 1024 * 1024} //limit to 1mb
-    fileFilter: (req, file, callback) => {
-        const acceptableExtensions = ['png', 'jpg', 'jpeg', 'jpg'];
-        if (!(acceptableExtensions.some(extension => 
-            path.extname(file.originalname).toLowerCase() === `.${extension}`)
-        )) {
-            return callback(new Error(`Extension not allowed, accepted extensions are ${acceptableExtensions.join(',')}`))
-        }
-        callback(null, true)
-    }
-})
+  if (!username || !req.file || !req.userId) {
+    const error = new Error("Invalid request params");
+    error.statusCode = 400;
+    return next(error);
+  }
 
-
-const updateProfilePicture = async (req, res) => {
-  console.log("req.file", req.file);
-  const { username, imageName } = req.body;
-  console.log("req.body", username, imageName);
-
-  
   try {
-    const findUserByUsername = await Users.findOne({ username }).exec();
+    const imageUrl = req?.file?.path;
+    const findUserByUsername = await Users.findOne({
+      username: username,
+      _id: mongoose.Types.ObjectId(req.userId),
+    }).exec();
 
+    console.log("findUserByUsername", findUserByUsername);
     if (!findUserByUsername) {
-      console.log('NU AM GASIT DATE IN DB PENTRU USERUL PRIMIT', username);
-      return res.status(400).json({
-        message: `Couldnt find any data in database for user ${username}`,
-        statusCode: 400,
-      });
+      console.log("No user found for provided params", username, req.userId);
+      const error = new Error("No account found for given username");
+      error.statusCode = 401;
+      return next(error);
     }
 
-    
-    if(!req.file) {
-      return res.status(400).json({
-        message : `No file provided`,
-        statusCode : 400
-      })
-    };
+    // delete the old profile picture from images if the current files.path is different from the one saved in the database;
+    if (imageUrl !== findUserByUsername.imageUrl) {
+      console.log("different path, delelete the old photo");
+      removeFile(path.join(__dirname, "..", findUserByUsername.imageUrl));
+    }
 
-    const newImg = fs.readFileSync(req.file.path);
-    const encodedImg = newImg.toString('base64');
-    const bufferImg = Buffer.from(encodedImg,'base64');
-
-    findUserByUsername.profileImageName = imageName;
-    findUserByUsername.profileImage = {
-      data: bufferImg,
-      contentType: "image/png",
-    };
+    findUserByUsername.imageUrl = imageUrl;
 
     await findUserByUsername.save();
-    
+
     console.log(`Image uploaded successfully for username ${username}`);
-    return res
-      .status(200)
-      .json({ message: "Image uploaded successfully", statusCode: 200, message: 'Profile picture uploaded successfully',data : bufferImg });
+    return res.status(200).json({
+      message: "Image uploaded successfully",
+      imageUrl,
+    });
   } catch (error) {
     console.log("error catch block", error);
   }
 };
 
-
-module.exports = {updateProfilePicture,upload};
-
-
-// TODO for tomorrow : handle unaccepted extensions. 
-// Make request using sendRequest
-// Loading state while the image is processed
+module.exports = { updateProfilePicture };

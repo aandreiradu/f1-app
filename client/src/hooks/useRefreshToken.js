@@ -18,7 +18,7 @@ const useRefreshToken = () => {
 			email,
 			favoriteConstructor,
 			favoriteDriver,
-			profilePicture
+			imageUrl
 		} = response.data || null;
 		if (accessToken) {
 			console.log(
@@ -31,7 +31,7 @@ const useRefreshToken = () => {
 					email,
 					favoriteConstructor,
 					favoriteDriver,
-					profilePicture
+					imageUrl
 				})
 			);
 			dispatch(
@@ -43,7 +43,7 @@ const useRefreshToken = () => {
 					email,
 					favoriteConstructor,
 					favoriteDriver,
-					profilePicture
+					imageUrl
 				)
 			);
 		}
