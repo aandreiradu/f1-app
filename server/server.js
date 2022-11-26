@@ -13,6 +13,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const authRoutes = require("./routes/auth/auth");
 const userRoutes = require("./routes/user/userRoutes");
+const storeRoutes = require("./routes/store/store");
 
 connectDB();
 
@@ -26,6 +27,7 @@ app.use(cors({ corsOptions, credentials: true, origin: true }));
 // Configure multer
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log("destination req", req);
     cb(null, "images");
   },
   filename: (req, file, cb) => {
@@ -72,9 +74,12 @@ app.use(
   multer({
     storage: fileStorage,
     fileFilter,
-  }).single("profilePicture")
+  }).fields([
+    { name: "profilePicture", maxCount: 1 },
+    { name: "productPicture", maxCount: 1 },
+  ])
+  // single("profilePicture")
 );
-
 app.use("/images", express.static(path.join(__dirname, "images"))); // make images directory accessible
 app.use(express.static(path.join(__dirname, "public"))); //make public directory accessible
 
@@ -85,6 +90,9 @@ app.use(authRoutes);
 
 // Protected Routes below this middleware
 app.use(verifyJWT);
+
+// Store routes
+app.use(storeRoutes);
 
 app.use("/api/user", userRoutes);
 

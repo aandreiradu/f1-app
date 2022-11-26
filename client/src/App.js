@@ -26,6 +26,7 @@ import Qualyfing from './components/Qualyfing/Qualyfing';
 import NotFound from './pages/404/NotFound';
 import ResetPassword from './pages/Auth/ResetPassword';
 import NewPassword from './pages/Auth/NewPassword';
+import Store from './pages/Store/Store';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -76,6 +77,10 @@ function App() {
 							<Route path="/profile/edit/:username" element={<UserProfileEdit />} />
 							<Route path="/profile/:username/insert/driver" element={<AddDriver />} />
 							<Route path="/profile/:username/insert/team" element={<AddTeam />} />
+
+							{/* Store */}
+							<Route path="/store" element={<Store />} />
+
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Routes>

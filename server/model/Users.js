@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const RaceBetsModel = require("./BetRace");
+const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema(
   {
@@ -44,6 +45,22 @@ const userSchema = new mongoose.Schema(
     resetTokenExpiration: Date,
 
     raceBets: [RaceBetsModel],
+
+    cart: {
+      items: [
+        {
+          productId: {
+            type: Schema.Types.ObjectId,
+            ref: "Product",
+            required: true,
+          },
+          quantity: {
+            type: Number,
+            required: true,
+          },
+        },
+      ],
+    },
   },
   { timestamps: true }
 );
