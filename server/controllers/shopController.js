@@ -3,7 +3,7 @@ const Product = require("../model/StoreProducts");
 const { validationResult } = require("express-validator");
 
 const createProduct = async (req, res, next) => {
-  const { title, description, price, details } = req.body;
+  const { title, description, price, details, teamId } = req.body;
   console.log("req.file", req.file);
 
   if (!title || !description || !price) {
@@ -43,6 +43,7 @@ const createProduct = async (req, res, next) => {
       imageUrl,
       price,
       creator: req.userId,
+      teamId: teamId,
     });
 
     await product.save();
@@ -99,15 +100,17 @@ const getProductById = async (req, res, next) => {
   console.log(`@@@getProductById for productId ${productId} `, product);
 
   if (!product) {
+    console.log("a intrat aici??");
     const error = new Error("No product found for provided productId");
     error.statusCode = 400;
-    next(error);
+    return next(error);
   }
 
+  console.log("a ajuns aici");
   return res.status(200).json({
     message: "Product found",
     product: {
-      id: product._id.toString(),
+      id: product._id,
       title: product?.title,
       price: product?.price,
       description: product?.description,
@@ -117,8 +120,41 @@ const getProductById = async (req, res, next) => {
   });
 };
 
+const getProductsByTeamId = async (req, res, next) => {
+  const { teamId } = req.params;
+
+  if (!teamId) {
+    const error = new Error("Invalid request params. Missing productId");
+    error.statusCode = 400;
+    return next(error);
+  }
+
+  try {
+    const products = await Product.find({ teamId }).populate("teamId");
+
+    console.log("products", products);
+
+    if (!products) {
+      const error = new Error("No products found");
+      error.statusCode = 204;
+      return next(error);
+    }
+
+    return res.status(200).json({
+      message: "Products fetched successfully",
+      products,
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+      return next(error);
+    }
+  }
+};
+
 module.exports = {
   createProduct,
   getProducts,
   getProductById,
+  getProductsByTeamId,
 };

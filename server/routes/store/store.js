@@ -5,7 +5,9 @@ const {
   createProduct,
   getProducts,
   getProductById,
+  getProductsByTeamId,
 } = require("../../controllers/shopController");
+const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -49,14 +51,19 @@ router.get("/shop/products", getProducts);
 // Create product
 router.post(
   "/shop/createProduct",
-  multer({
-    storage: fileStorage,
-    fileFilter,
-  }).single("productPicture"),
+  [
+    multer({
+      storage: fileStorage,
+      fileFilter,
+    }).single("productPicture"),
+    verifyExistingTeamById,
+  ],
   createProduct
 );
 
 // Return product by id
 router.get("/shop/product/:productId", getProductById);
+
+router.get("/shop/team/:teamId", getProductsByTeamId);
 
 module.exports = router;

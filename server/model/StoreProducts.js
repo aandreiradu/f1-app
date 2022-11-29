@@ -32,6 +32,12 @@ const productSchema = new Schema(
       ref: "F1_User",
       required: true,
     },
+
+    teamId: {
+      type: Schema.Types.ObjectId,
+      ref: "f1_teams",
+      required: true,
+    },
   },
   { timestamps: true }
 );

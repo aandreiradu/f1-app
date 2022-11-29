@@ -10,10 +10,10 @@ const credentials = require("./middlewares/credentials");
 const connectDB = require("./config/dbConnection");
 const verifyJWT = require("./middlewares/verifyJWT");
 const bodyParser = require("body-parser");
-const multer = require("multer");
 const authRoutes = require("./routes/auth/auth");
 const userRoutes = require("./routes/user/userRoutes");
 const storeRoutes = require("./routes/store/store");
+const teamsRoutes = require("./routes/teams/teams");
 
 connectDB();
 
@@ -24,43 +24,6 @@ app.use(credentials);
 // cross origin resource sharing
 app.use(cors({ corsOptions, credentials: true, origin: true }));
 
-// Configure multer
-// const fileStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     console.log("destination req", req);
-//     cb(null, "images");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(
-//       null,
-//       file.fieldname +
-//         "-" +
-//         new Date().toISOString() +
-//         path.extname(file.originalname)
-//       // new Date().toISOString() + "-" + file.originalname
-//     );
-//   },
-// });
-
-// const fileFilter = (req, file, callback) => {
-//   const acceptableExtensions = ["png", "jpg", "jpeg", "jpg"];
-//   if (
-//     !acceptableExtensions.some(
-//       (extension) =>
-//         path.extname(file.originalname).toLowerCase() === `.${extension}`
-//     )
-//   ) {
-//     return callback(
-//       new Error(
-//         `Extension not allowed, accepted extensions are ${acceptableExtensions.join(
-//           ","
-//         )}`
-//       )
-//     );
-//   }
-//   callback(null, true);
-// };
-
 // built-in middleware for json
 app.use(express.json());
 app.use(bodyParser.json()); // for json
@@ -69,27 +32,18 @@ app.use(bodyParser.urlencoded({ extended: true })); // parsing application/xwww-
 // // middleware for cookies
 app.use(cookieParser());
 
-// multer init
-// app.use(
-//   multer({
-//     storage: fileStorage,
-//     fileFilter,
-//   }).fields([
-//     { name: "profilePicture", maxCount: 1 },
-//     { name: "productPicture", maxCount: 1 },
-//   ])
-//   // single("profilePicture")
-// );
 app.use("/images", express.static(path.join(__dirname, "images"))); // make images directory accessible
 app.use(
   "/productImages",
   express.static(path.join(__dirname, "productImages"))
 ); // make productImages directory accessible in order to get the imageUrl for store products
+app.use("/teamsLogos", express.static(path.join(__dirname, "teamsLogos"))); // make teamsLogos directory accessible in order to get the imageUrl for teams logos
 app.use(express.static(path.join(__dirname, "public"))); //make public directory accessible
 
 // routes
 app.use("/", require("./routes/root"));
 
+// SignIn/SignUp routes
 app.use(authRoutes);
 
 // Protected Routes below this middleware
@@ -97,6 +51,9 @@ app.use(verifyJWT);
 
 // Store routes
 app.use(storeRoutes);
+
+// Teams routes
+app.use(teamsRoutes);
 
 app.use("/api/user", userRoutes);
 
