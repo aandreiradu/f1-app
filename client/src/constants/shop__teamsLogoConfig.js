@@ -12,12 +12,20 @@ import F1Logo from '../assets/teams__logos/F1.svg';
 
 const ShopByTeams_Config = [
 	{
-		key: 'AlfaRomeo',
-		logo: AlfaLogo
+		key: 'RedBull',
+		logo: RedBullLogo
 	},
 	{
-		key: 'AlphaTauri',
-		logo: AlphaTauriLogo
+		key: 'Mercedes',
+		logo: MercedesLogo
+	},
+	{
+		key: 'Ferrari',
+		logo: FerrariLogo
+	},
+	{
+		key: 'Mclaren',
+		logo: MclarenLogo
 	},
 	{
 		key: 'Alpine',
@@ -27,26 +35,20 @@ const ShopByTeams_Config = [
 		key: 'AstonMartin',
 		logo: AstonMartinLogo
 	},
-	{
-		key: 'Ferrari',
-		logo: FerrariLogo
-	},
+
 	{
 		key: 'Haas',
 		logo: HaasLogo
 	},
 	{
-		key: 'Mclaren',
-		logo: MclarenLogo
+		key: 'AlfaRomeo',
+		logo: AlfaLogo
 	},
 	{
-		key: 'Mercedes',
-		logo: MercedesLogo
+		key: 'AlphaTauri',
+		logo: AlphaTauriLogo
 	},
-	{
-		key: 'RedBull',
-		logo: RedBullLogo
-	},
+
 	{
 		key: 'Williams',
 		logo: WilliamsLogo

@@ -51,7 +51,7 @@ export const Bar = styled.span`
 
 export const LoaderText = styled.p`
 	margin-top: 10px;
-	color: #fff;
+	color: ${(props) => (props.color ? props.color : '#fff')};
 	font-size: 1.1rem;
 	text-transform: capitalize;
 	font-weight: 800;

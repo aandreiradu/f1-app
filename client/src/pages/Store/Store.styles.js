@@ -4,12 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const StoreGlobalSettings = createGlobalStyle`
     body {
-        
         background: radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%);
-
         background-color: ${(props) => props.backgroundColor};
         /* background: linear-gradient(to right, #eef2f3, #8e9eab); */
     }
+
+	#appCard{
+		padding: 0 !important;
+	}
 `;
 
 export const StoreMainContainer = styled.div`
@@ -17,7 +19,7 @@ export const StoreMainContainer = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 0.5rem 1.25rem;
+	padding: 1rem;
 `;
 
 export const StoreHeaderContainer = styled.div`
@@ -34,4 +36,15 @@ export const StoreHeader = styled.h2`
 
 export const StoreSubHeader = styled.p`
 	font-size: 1rem;
+`;
+
+export const StoreProductsContainer = styled.div`
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: 30px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	padding: 1rem 0;
+	margin-bottom: 40px;
 `;
