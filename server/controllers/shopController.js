@@ -3,7 +3,8 @@ const Product = require("../model/StoreProducts");
 const { validationResult } = require("express-validator");
 
 const createProduct = async (req, res, next) => {
-  const { title, description, price } = req.body;
+  const { title, description, price, details } = req.body;
+  console.log("req.file", req.file);
 
   if (!title || !description || !price) {
     const error = new Error("Invalid request params on Create Product");
@@ -38,6 +39,7 @@ const createProduct = async (req, res, next) => {
     const product = new Product({
       title,
       description,
+      details,
       imageUrl,
       price,
       creator: req.userId,
@@ -57,6 +59,66 @@ const createProduct = async (req, res, next) => {
   }
 };
 
+const getProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find().populate({
+      path: "creator",
+      select: "fullName",
+    });
+
+    console.log("@@getProducts result", products);
+
+    if (!products) {
+      return res.status(204).json({
+        message: "No products found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Fetched products successfully",
+      products,
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statuCode = 500;
+      return next(error);
+    }
+  }
+};
+
+const getProductById = async (req, res, next) => {
+  const { productId } = req.params;
+
+  if (!productId) {
+    const error = new Error("Invalid request params. Missing productId");
+    error.statusCode = 400;
+    next(error);
+  }
+
+  const product = await Product.findById(productId);
+  console.log(`@@@getProductById for productId ${productId} `, product);
+
+  if (!product) {
+    const error = new Error("No product found for provided productId");
+    error.statusCode = 400;
+    next(error);
+  }
+
+  return res.status(200).json({
+    message: "Product found",
+    product: {
+      id: product._id.toString(),
+      title: product?.title,
+      price: product?.price,
+      description: product?.description,
+      details: product?.details,
+      imageUrl: product?.imageUrl,
+    },
+  });
+};
+
 module.exports = {
   createProduct,
+  getProducts,
+  getProductById,
 };

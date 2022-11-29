@@ -25,41 +25,41 @@ app.use(credentials);
 app.use(cors({ corsOptions, credentials: true, origin: true }));
 
 // Configure multer
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    console.log("destination req", req);
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname +
-        "-" +
-        new Date().toISOString() +
-        path.extname(file.originalname)
-      // new Date().toISOString() + "-" + file.originalname
-    );
-  },
-});
+// const fileStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     console.log("destination req", req);
+//     cb(null, "images");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(
+//       null,
+//       file.fieldname +
+//         "-" +
+//         new Date().toISOString() +
+//         path.extname(file.originalname)
+//       // new Date().toISOString() + "-" + file.originalname
+//     );
+//   },
+// });
 
-const fileFilter = (req, file, callback) => {
-  const acceptableExtensions = ["png", "jpg", "jpeg", "jpg"];
-  if (
-    !acceptableExtensions.some(
-      (extension) =>
-        path.extname(file.originalname).toLowerCase() === `.${extension}`
-    )
-  ) {
-    return callback(
-      new Error(
-        `Extension not allowed, accepted extensions are ${acceptableExtensions.join(
-          ","
-        )}`
-      )
-    );
-  }
-  callback(null, true);
-};
+// const fileFilter = (req, file, callback) => {
+//   const acceptableExtensions = ["png", "jpg", "jpeg", "jpg"];
+//   if (
+//     !acceptableExtensions.some(
+//       (extension) =>
+//         path.extname(file.originalname).toLowerCase() === `.${extension}`
+//     )
+//   ) {
+//     return callback(
+//       new Error(
+//         `Extension not allowed, accepted extensions are ${acceptableExtensions.join(
+//           ","
+//         )}`
+//       )
+//     );
+//   }
+//   callback(null, true);
+// };
 
 // built-in middleware for json
 app.use(express.json());
@@ -70,17 +70,21 @@ app.use(bodyParser.urlencoded({ extended: true })); // parsing application/xwww-
 app.use(cookieParser());
 
 // multer init
-app.use(
-  multer({
-    storage: fileStorage,
-    fileFilter,
-  }).fields([
-    { name: "profilePicture", maxCount: 1 },
-    { name: "productPicture", maxCount: 1 },
-  ])
-  // single("profilePicture")
-);
+// app.use(
+//   multer({
+//     storage: fileStorage,
+//     fileFilter,
+//   }).fields([
+//     { name: "profilePicture", maxCount: 1 },
+//     { name: "productPicture", maxCount: 1 },
+//   ])
+//   // single("profilePicture")
+// );
 app.use("/images", express.static(path.join(__dirname, "images"))); // make images directory accessible
+app.use(
+  "/productImages",
+  express.static(path.join(__dirname, "productImages"))
+); // make productImages directory accessible in order to get the imageUrl for store products
 app.use(express.static(path.join(__dirname, "public"))); //make public directory accessible
 
 // routes
