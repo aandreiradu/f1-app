@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
-
+import { FooterContainer } from '../../components/Footer/Footer.styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const StoreGlobalSettings = createGlobalStyle`
@@ -11,6 +11,10 @@ export const StoreGlobalSettings = createGlobalStyle`
 
 	#appCard{
 		padding: 0 !important;
+	}
+
+	${FooterContainer} {
+		border-radius: 0;
 	}
 `;
 

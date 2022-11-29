@@ -7,15 +7,15 @@ import {
 	StoreProductsContainer
 } from './Store.styles';
 import StoreSearch__Filter from '../../components/Store/StoreSearch__Filter/StoreSearch__Filter';
-import ShopByTeam from '../../components/Store/Store__ShopByTeam/ShopByTeam';
+import ShopByTeamLogo from '../../components/Store/Store__ShopByTeam/ShopByTeamLogos';
 import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { useEffect, useState } from 'react';
 import Footer from '../../components/Footer/Footer';
 import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 
 const Store = () => {
-	const { isLoading, sendRequest, error, responseData } = useAxiosInterceptors();
 	const [products, setProducts] = useState([]);
+	const { isLoading, sendRequest, error, responseData } = useAxiosInterceptors();
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -56,7 +56,7 @@ const Store = () => {
 
 				{/* Shop By Team */}
 				<StoreSubHeader>Shop by Team</StoreSubHeader>
-				<ShopByTeam />
+				<ShopByTeamLogo />
 
 				{isLoading ? (
 					<LoaderIcon text={'Loading products'} barsColor={'#1f1f1f'} textColor={'#1f1f1f'} />

@@ -27,6 +27,7 @@ import NotFound from './pages/404/NotFound';
 import ResetPassword from './pages/Auth/ResetPassword';
 import NewPassword from './pages/Auth/NewPassword';
 import Store from './pages/Store/Store';
+import ShopByTeam from './components/Store/Store__ShopByTeam/ShopByTeam';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -78,8 +79,11 @@ function App() {
 							<Route path="/profile/:username/insert/driver" element={<AddDriver />} />
 							<Route path="/profile/:username/insert/team" element={<AddTeam />} />
 
-							{/* Store */}
+							{/* Store - All products */}
 							<Route path="/store" element={<Store />} />
+
+							{/* Store - Shop By Team - Products filtered by team */}
+							<Route path="/store/team/:teamId" element={<ShopByTeam />} />
 
 							<Route path="*" element={<NotFound />} />
 						</Route>
