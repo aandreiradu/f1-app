@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ShopByTeamConfig from '../../../constants/shop__teamsLogoConfig';
 import LoaderIcon from '../../LoaderReusable/LoaderIcon';
@@ -12,9 +12,10 @@ import {
 	fetchShopTeamsStart,
 	fetchShopTeamsSuccess
 } from '../../../store/Shop__Teams/shopTeams.actions';
+import ErrorModal from '../../../components/UI/ErrorModal';
 
 const ShopByTeamLogo = () => {
-	console.log('shopbyteamlogos render');
+	const [showModal, setShowModal] = useState(false);
 	const dispatch = useDispatch();
 	const {
 		isLoading: isLoadingStore,
@@ -22,18 +23,20 @@ const ShopByTeamLogo = () => {
 		error: errorStore
 	} = useSelector(shopTeamsSelector);
 	const { isLoading, sendRequest, error, responseData } = useAxiosInterceptors();
-	console.log({
-		isLoadingStore,
-		shopTeams,
-		errorStore
-	});
+
+	useEffect(() => {
+		if (error || errorStore) {
+			setShowModal(true);
+		}
+	}, [error, errorStore]);
+
+	const closeModalConfirm = () => setShowModal(false);
 
 	useEffect(() => {
 		const controller = new AbortController();
 
 		try {
 			if (shopTeams?.length === 0) {
-				console.log('@@@@@are length 0 aici maaaa@@@@@@@');
 				dispatch(fetchShopTeamsStart());
 				sendRequest(
 					{
@@ -55,10 +58,10 @@ const ShopByTeamLogo = () => {
 				console.log('@@@ NO REQUEST, ALREADY HAVE ITEMS IN STORE');
 			}
 		} catch (error) {
-			console.error('@@@ERROR shop by team useeffect', error);
 			dispatch(
 				fetchShopTeamsFailure(error?.message || error || 'Something went wrong! Try again later.')
 			);
+			console.error('@@@ERROR shop by team useeffect', error);
 		}
 
 		return () => {
@@ -68,16 +71,19 @@ const ShopByTeamLogo = () => {
 
 	return (
 		<ShopByTeamContainer>
-			{isLoading || isLoadingStore ? (
+			{showModal && error && (
+				<ErrorModal
+					title="Ooops!"
+					message={error?.message || errorStore?.message || 'Something went wrong'}
+					onConfirm={closeModalConfirm}
+				/>
+			)}
+
+			{isLoading && isLoadingStore ? (
 				<LoaderIcon />
 			) : (
 				shopTeams?.map((team, index) => (
-					<Link
-						// to={{ pathname: '/store', search: `?team=${team?._id}` }}
-						to={`/store/team/${team?._id}`}
-						key={team?._id || index}
-						replace="true"
-					>
+					<Link to={`/shop/team/${team?._id}`} key={team?._id || index} replace="true">
 						<ShopByTeamLogoImg
 							src={team?.logoUrl ? `${apiConfig.baseURL}/${team?.logoUrl}` : ''}
 							alt={`${team?.name} Logo` || 'Team Logo'}

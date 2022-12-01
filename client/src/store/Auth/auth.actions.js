@@ -9,7 +9,8 @@ export const setAccessToken = (
 	email,
 	favoriteConstructor,
 	favoriteDriver,
-	imageUrl
+	imageUrl,
+	isAdmin
 ) => {
 	return createAction(AUTH_TYPES.AUTH_SET_ACCESS_TOKEN, {
 		accessToken: token,
@@ -19,7 +20,8 @@ export const setAccessToken = (
 		email,
 		favoriteConstructor,
 		favoriteDriver,
-		imageUrl
+		imageUrl,
+		isAdmin
 	});
 };
 
@@ -31,7 +33,8 @@ export const refreshToken = (
 	email,
 	favoriteConstructor,
 	favoriteDriver,
-	imageUrl
+	imageUrl,
+	isAdmin
 ) => {
 	return createAction(AUTH_TYPES.AUTH_REFRESH_TOKEN, {
 		accessToken: token,
@@ -41,7 +44,8 @@ export const refreshToken = (
 		email,
 		favoriteConstructor,
 		favoriteDriver,
-		imageUrl
+		imageUrl,
+		isAdmin
 	});
 };
 

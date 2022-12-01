@@ -5,7 +5,7 @@ import {
 	StoreHeader,
 	StoreSubHeader,
 	StoreProductsContainer
-} from './Store.styles';
+} from './Shop.styles';
 import StoreSearch__Filter from '../../components/Store/StoreSearch__Filter/StoreSearch__Filter';
 import ShopByTeamLogo from '../../components/Store/Store__ShopByTeam/ShopByTeamLogos';
 import useAxiosInterceptors from '../../hooks/useHttpInterceptors';

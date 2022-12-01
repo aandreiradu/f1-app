@@ -1,6 +1,7 @@
 const User = require("../model/Users");
 const bcrpy = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const SECURITY_ROLES = require("../config/securityRolesList");
 
 const handleLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -32,8 +33,19 @@ const handleLogin = async (req, res) => {
     }
 
     // generate access token
-    const roles = Object.values(searchUser?.roles)?.filter((b) => Boolean(b));
-    console.log("roles authController", { userRoles: searchUser.roles, roles });
+    const rolesIds = Object.values(searchUser?.roles)?.filter((b) =>
+      Boolean(b)
+    );
+    console.log("roles authController", {
+      userRoles: searchUser.roles,
+      rolesIds,
+    });
+
+    const isAdmin = rolesIds?.some(
+      (role) => +role === SECURITY_ROLES.Admin || +role === SECURITY_ROLES.Host
+    );
+    console.log("@@@isAdmin", isAdmin);
+
     const generateAccessToken = jwt.sign(
       {
         F1_APP_USER: {
@@ -41,7 +53,7 @@ const handleLogin = async (req, res) => {
           username: searchUser?.username,
           email: searchUser?.email,
           fullName: searchUser?.fullName,
-          roles,
+          roles: rolesIds,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -104,7 +116,8 @@ const handleLogin = async (req, res) => {
       statusCode: 201,
       accessToken: generateAccessToken,
       fullName: searchUser?.fullName,
-      roles,
+      roles: rolesIds,
+      isAdmin,
       username,
       email: searchUser?.email,
       favoriteConstructor: searchUser?.favoriteConstructor,

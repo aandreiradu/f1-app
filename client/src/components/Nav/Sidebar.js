@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { RiCloseFill, RiUser3Fill } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from '../../store/Auth/auth.selector';
+import { selectIsAuthenticated, selectIsAdmin } from '../../store/Auth/auth.selector';
 import classes from './Sidebar.module.css';
 import { motion } from 'framer-motion';
 import { driverCards } from '../../animationsPresets/animationsPresets';
@@ -13,7 +13,9 @@ const Sidebar = (props) => {
 	const [showModal, setShowModal] = useState(true);
 	const { errorLogin, logoutHandler } = useLogout();
 	const isAuthenticted = useSelector(selectIsAuthenticated);
+	const isAdmin = useSelector(selectIsAdmin);
 	console.log('sidebar isAuthenticted', isAuthenticted);
+	console.log('isAdmin', isAdmin);
 
 	const confirmErrorModal = () => {
 		setShowModal(false);
@@ -70,6 +72,14 @@ const Sidebar = (props) => {
 			)}
 			<ul className={`${classes['sidebar-links']} defaultTransition .defaultTransition-M1`}>
 				<li className={`${classes['sidebar-link-item']}`}>
+					<Link onClick={() => props.onClose()} to="/shop">
+						Shop
+					</Link>
+					<Link onClick={() => props.onClose()} to="/shop">
+						<i className="fa-solid fa-chevron-right"></i>
+					</Link>
+				</li>
+				<li className={`${classes['sidebar-link-item']}`}>
 					<Link onClick={() => props.onClose()} to="race-results/last">
 						Latest
 					</Link>
@@ -101,6 +111,16 @@ const Sidebar = (props) => {
 						<i className="fa-solid fa-chevron-right"></i>
 					</Link>
 				</li>
+				{isAdmin && (
+					<li className={`${classes['sidebar-link-item']}`}>
+						<Link onClick={() => props.onClose()} to="admin">
+							Admin
+						</Link>
+						<Link onClick={() => props.onClose()} to="admin">
+							<i className="fa-solid fa-chevron-right"></i>
+						</Link>
+					</li>
+				)}
 			</ul>
 			<div className={`${classes['sidebar-login']} defaultTransition defaultTransition-P1`}>
 				<div className={classes['sidebar-log']}>

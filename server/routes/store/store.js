@@ -8,6 +8,7 @@ const {
   getProductsByTeamId,
 } = require("../../controllers/shopController");
 const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
+const populateTeamInfo = require("../../middlewares/populateTeamInfoById");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -64,6 +65,7 @@ router.post(
 // Return product by id
 router.get("/shop/product/:productId", getProductById);
 
-router.get("/shop/team/:teamId", getProductsByTeamId);
+// Return all the products by teamId
+router.get("/shop/team/:teamId", populateTeamInfo, getProductsByTeamId);
 
 module.exports = router;

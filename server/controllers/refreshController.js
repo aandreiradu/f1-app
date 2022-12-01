@@ -1,5 +1,6 @@
 const Users = require("../model/Users");
 const JSONWEBTOKEN = require("jsonwebtoken");
+const SECURITY_ROLES = require("../config/securityRolesList");
 
 const handleRefreshToken = async (req, res) => {
   console.log("START REFRESH TOKEN");
@@ -68,7 +69,16 @@ const handleRefreshToken = async (req, res) => {
         }
 
         // refresh token valid here
-        const roles = Object.values(findUser?.roles)?.filter((b) => Boolean(b));
+        const rolesIds = Object.values(findUser?.roles)?.filter((b) =>
+          Boolean(b)
+        );
+
+        const isAdmin = rolesIds.some(
+          (role) =>
+            +role === +SECURITY_ROLES.Admin || +role === +SECURITY_ROLES.Host
+        );
+        console.log("isAdmin refresh token", isAdmin);
+
         const generateNewAccessToken = JSONWEBTOKEN.sign(
           {
             F1_APP_USER: {
@@ -76,7 +86,7 @@ const handleRefreshToken = async (req, res) => {
               username: findUser.username,
               email: findUser.email,
               fullName: findUser.fullName,
-              roles,
+              roles: rolesIds,
             },
           },
           process.env.ACCESS_TOKEN_SECRET,
@@ -107,7 +117,8 @@ const handleRefreshToken = async (req, res) => {
 
         return res.status(201).json({
           accessToken: generateNewAccessToken,
-          roles,
+          roles: rolesIds,
+          isAdmin,
           fullName: findUser?.fullName,
           username: findUser?.username,
           email: findUser?.email,

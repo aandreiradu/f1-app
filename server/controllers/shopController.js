@@ -123,26 +123,44 @@ const getProductById = async (req, res, next) => {
 const getProductsByTeamId = async (req, res, next) => {
   const { teamId } = req.params;
 
+  console.log("req.team", req.team);
+
   if (!teamId) {
-    const error = new Error("Invalid request params. Missing productId");
+    const error = new Error("Invalid request params. Missing teamId");
     error.statusCode = 400;
     return next(error);
   }
 
   try {
-    const products = await Product.find({ teamId }).populate("teamId");
+    const products = await Product.find({ teamId });
 
     console.log("products", products);
 
-    if (!products) {
-      const error = new Error("No products found");
-      error.statusCode = 204;
-      return next(error);
-    }
+    // Not throwing error here because i need info about the requested team
+    // if (!products || products.length === 0) {
+    //   const error = new Error("No products found");
+    //   error.statusCode = 204;
+    //   return next(error);
+    // }
+
+    const { name, logoUrl: teamLogoUrl, teamFullName } = req?.team;
+    console.log({
+      name,
+      teamFullName,
+      teamLogoUrl,
+    });
 
     return res.status(200).json({
-      message: "Products fetched successfully",
+      message:
+        products?.length > 0
+          ? "Products fetched successfully"
+          : "No products found",
       products,
+      team: {
+        constructorName: name,
+        teamName: teamFullName,
+        logoUrl: teamLogoUrl,
+      },
     });
   } catch (error) {
     if (!error.statusCode) {
