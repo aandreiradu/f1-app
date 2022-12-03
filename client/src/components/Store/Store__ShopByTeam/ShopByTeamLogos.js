@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ShopByTeamConfig from '../../../constants/shop__teamsLogoConfig';
 import LoaderIcon from '../../LoaderReusable/LoaderIcon';
 import useAxiosInterceptors from '../../../hooks/useHttpInterceptors';
 import { ShopByTeamContainer, ShopByTeamLogoImg } from './ShopByTeamLogos.styles';

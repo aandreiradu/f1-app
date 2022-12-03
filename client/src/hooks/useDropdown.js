@@ -5,6 +5,8 @@ const useDropdown = () => {
 	const [query, setQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 
+	useEffect(() => {}, [isOpen]);
+
 	const handleQuerySearch = (e) => {
 		!isOpen && setIsOpen(true);
 		if (e.target.value !== selectedValue?.name) {
@@ -18,7 +20,7 @@ const useDropdown = () => {
 	const handleTeamSelection = (e) => {
 		console.log('@@@handleTeamSelection HOOK', e);
 		setSelectedValue({
-			teamId: e?.id,
+			teamId: e?.teamId,
 			name: e?.value
 		});
 		setQuery(e?.value);
@@ -35,6 +37,7 @@ const useDropdown = () => {
 		onSelectedItem: handleTeamSelection,
 		onOpen: handleOpenDropdownOpen,
 		isOpen,
+		setIsOpen,
 		query
 	};
 };

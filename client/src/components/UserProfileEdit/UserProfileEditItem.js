@@ -62,6 +62,3 @@ const UserProfileEditItem = (props) => {
 };
 
 export default UserProfileEditItem;
-
-// DESIGN LINK https://dribbble.com/shots/16367037-User-Profile-Concept/attachments/9192915?mode=media
-// IMAGE UPLOAD https://codepen.io/master/pen/pMgXqO

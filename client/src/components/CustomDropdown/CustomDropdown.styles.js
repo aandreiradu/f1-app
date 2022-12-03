@@ -42,6 +42,10 @@ export const CustomDropdownInput = styled.input`
 	&:active {
 		outline: none;
 	}
+
+	&:disabled {
+		cursor: not-allowed;
+	}
 `;
 
 export const CustomDropdownIcon = styled(FontAwesomeIcon)`
@@ -58,7 +62,7 @@ export const CustomDropdownResults = styled.ul`
 	width: 100%;
 	background-color: #ccc;
 	z-index: 3;
-	max-height: 150px;
+	max-height: 200px;
 	overflow: hidden;
 	overflow-y: auto;
 	animation: ${(props) =>
@@ -70,6 +74,10 @@ export const CustomDropdownResults = styled.ul`
 `;
 
 export const CustomDropdownResultItem = styled.li`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 10px;
 	cursor: pointer;
 	width: 100%;
 	border-bottom: 1px solid #1f1f1f;
@@ -84,4 +92,16 @@ export const CustomDropdownResultItem = styled.li`
 		margin-bottom: 0;
 		border-bottom: none;
 	}
+`;
+
+export const CustomDropdownResultItemLogo = styled.img`
+	width: 30px;
+	object-fit: cover;
+	height: 100%;
+`;
+
+export const CustomDropdownResultItemName = styled.p`
+	font-size: 15px;
+	font-weight: 600;
+	text-transform: uppercase;
 `;

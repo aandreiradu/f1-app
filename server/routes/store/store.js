@@ -9,6 +9,7 @@ const {
 } = require("../../controllers/shopController");
 const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
 const populateTeamInfo = require("../../middlewares/populateTeamInfoById");
+const { body } = require("express-validator");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -58,6 +59,8 @@ router.post(
       fileFilter,
     }).single("productPicture"),
     verifyExistingTeamById,
+    body("title").trim().isLength({ min: 3 }),
+    body("description").isLength({ min: 3 }),
   ],
   createProduct
 );

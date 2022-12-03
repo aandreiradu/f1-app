@@ -1,106 +1,157 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import useDropdown from '../../hooks/useDropdown';
+import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
+import { selectShopTeams } from '../../store/Shop__Teams/shopTeams.selector';
+import {
+	fetchShopTeamsFailure,
+	fetchShopTeamsStart,
+	fetchShopTeamsSuccess
+} from '../../store/Shop__Teams/shopTeams.actions';
 import {
 	CustomDropdownContainer,
 	CustomDropdownIcon,
 	CustomDropdownInput,
 	CustomDropdownResultItem,
 	CustomDropdownResults,
-	CustomDropdownSearchWrapper
+	CustomDropdownSearchWrapper,
+	CustomDropdownResultItemLogo,
+	CustomDropdownResultItemName
 } from './CustomDropdown.styles';
+import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
+import apiConfig from '../../constants/apiConfig';
+import ErrorModal from '../UI/ErrorModal';
 
-const CustomDropdown = () => {
+const CustomDropdown = ({ onTeamSelected }) => {
+	const dispatch = useDispatch();
+	const cachedTeams = useSelector(selectShopTeams);
+	console.log('cachedTeams', cachedTeams);
+	const { isLoading, sendRequest, error } = useAxiosInterceptors();
+	const [showErrorModal, setShowErrorModal] = useState(false);
+	const dropdownRef = useRef();
 	const { value, onChangeHandler, onSelectedItem, onOpen, isOpen, query } = useDropdown();
-	/*  
-	// const [selectedValue, setSelectedValue] = useState({});
-	// const [query, setQuery] = useState('');
-	// const [isOpen, setIsOpen] = useState(false);
 
-	// const handleQuerySearch = (e) => {
-	// 	!isOpen && setIsOpen(true);
-	// 	if (e.target.value !== selectedValue?.name) {
-	// 		setSelectedValue({});
-	// 	}
-	// 	setQuery(e.target.value);
-	// };
+	useEffect(() => {
+		console.log('cachedTeams', cachedTeams);
+		if (cachedTeams && Array.isArray(cachedTeams) && cachedTeams?.length === 0) {
+			console.log('no teams in redux-store, request from backend and store it');
+			const controller = new AbortController();
 
-	// const handleOpenDropdownOpen = () => setIsOpen((prev) => !prev);
+			try {
+				dispatch(fetchShopTeamsStart());
+				sendRequest(
+					{
+						url: '/teams',
+						withCredentials: true,
+						controller: controller.signal
+					},
+					(responseData) => {
+						console.log('@@@ get teams response', responseData);
+						const { message, teams, status } = responseData;
 
-	// const handleTeamSelection = (e) => {
-	// 	console.log('e', e);
-	// 	setSelectedValue({
-	// 		teamId: e?.id,
-	// 		name: e?.name
-	// 	});
-	// 	setQuery(e?.name);
-	// 	setIsOpen(false);
-	// };
-    */
+						if (status === 200 && message === 'Teams fetched successfully') {
+							console.log('ok to update the state');
+							dispatch(fetchShopTeamsSuccess(teams));
+						}
+					}
+				);
+			} catch (error) {
+				dispatch(
+					fetchShopTeamsFailure(error?.message || error || 'Something went wrong! Try again later.')
+				);
+				console.error('@@@ERROR CustomDropdown when fetching teams', error);
+			}
 
-	let dataSource = [
-		{
-			name: 'RedBull'
-		},
-		{
-			name: 'Ferrari'
-		},
-		{
-			name: 'Mercedes'
-		},
-		{
-			name: 'RedBull'
-		},
-		{
-			name: 'Ferrari'
-		},
-		{
-			name: 'Mercedes'
-		},
-		{
-			name: 'RedBull'
-		},
-		{
-			name: 'Ferrari'
-		},
-		{
-			name: 'Mercedes'
+			return () => {
+				controller.abort();
+			};
+		} else {
+			console.log('teams already in redux-store, no need for new request');
 		}
-	];
+	}, [cachedTeams, dispatch, sendRequest]);
 
 	const filteredTeams = !query
-		? dataSource
-		: dataSource?.filter((team) => team?.name?.toLowerCase()?.includes(query?.toLowerCase()));
+		? cachedTeams
+		: cachedTeams?.filter((team) => team?.name?.toLowerCase()?.includes(query?.toLowerCase()));
 
 	console.log('filteredTeams', filteredTeams);
 
 	useEffect(() => {
-		console.log('query', query);
-		console.log('selectedValue', value);
-	}, [query, value]);
+		console.log('@@@CustomDropdown ERROR ', error);
+		setShowErrorModal(true);
+	}, [error]);
+
+	const closeModalConfirm = () => setShowErrorModal(false);
+
+	// useEffect(() => {
+	// 	const checkIfClickOutside = (e) => {
+	// 		console.log('checkIfClickOutside e', e);
+	// 		console.log('trigered');
+	// 		if (
+	// 			isOpen &&
+	// 			dropdownRef.current &&
+	// 			!dropdownRef.current.contains(e.target) &&
+	// 			e.target.details !== 'details'
+	// 		) {
+	// 			setIsOpen(false);
+	// 			console.log('should close');
+	// 		} else {
+	// 			console.log('should not close');
+	// 		}
+	// 	};
+
+	// 	document.addEventListener('mousedown', checkIfClickOutside);
+
+	// 	return () => {
+	// 		document.removeEventListener('mousedown', checkIfClickOutside);
+	// 	};
+	// }, [isOpen]);
 
 	return (
 		<CustomDropdownContainer>
-			<CustomDropdownSearchWrapper>
-				<CustomDropdownInput
-					onClick={onOpen}
-					onChange={onChangeHandler}
-					name="teamSearch"
-					spellCheck="false"
-					type="text"
-					placeholder="Search Team"
-					value={query === value?.name ? value?.name : query}
+			{showErrorModal && error && (
+				<ErrorModal
+					title="Ooops!"
+					message={error?.message || 'Something went wrong'}
+					onConfirm={closeModalConfirm}
 				/>
-				<CustomDropdownIcon icon={faSearch} />
+			)}
+
+			<CustomDropdownSearchWrapper>
+				{isLoading ? (
+					<LoaderIcon text="Loading teams" textColor="#1f1f1f" barsColor="#1f1f1f" />
+				) : (
+					<>
+						<CustomDropdownInput
+							ref={dropdownRef}
+							onClick={onOpen}
+							onChange={onChangeHandler}
+							name="teamSearch"
+							spellCheck="false"
+							autoComplete="false"
+							type="text"
+							placeholder="Search Team"
+							value={query === value?.name ? value?.name : query}
+							disabled={isLoading || error}
+						/>
+						<CustomDropdownIcon icon={faSearch} />
+					</>
+				)}
 			</CustomDropdownSearchWrapper>
 			<CustomDropdownResults isOpen={isOpen} resultsNo={filteredTeams?.length}>
 				{filteredTeams?.map((result, index) => (
 					<CustomDropdownResultItem
-						onClick={onSelectedItem.bind(this, { id: index, value: result?.name })}
-						key={index}
+						onClick={() => {
+							onSelectedItem.call(this, { teamId: result?._id, value: result?.name });
+							onTeamSelected.call(this, { teamId: result?._id, value: result?.name });
+						}}
+						key={result?._id}
 					>
-						{result?.name}
+						<CustomDropdownResultItemLogo
+							src={result?.logoUrl ? `${apiConfig.baseURL}/${result?.logoUrl}` : ''}
+						/>
+						<CustomDropdownResultItemName>{result?.name}</CustomDropdownResultItemName>
 					</CustomDropdownResultItem>
 				))}
 			</CustomDropdownResults>
