@@ -18,6 +18,17 @@ import CustomDropdown from '../../components/CustomDropdown/CustomDropdown';
 
 const AdminAddProducts = () => {
 	const [selectedTeam, setSelectedTeam] = useState({});
+	const [productImage, setProductImage] = useState({
+		file: null,
+		isValid: false,
+		errorDescription: null,
+		isTouched: false
+	});
+
+	useEffect(() => {
+		console.log('productImage', productImage);
+	}, [productImage]);
+
 	/* Title */
 	const {
 		value: valueTitle,
@@ -49,30 +60,86 @@ const AdminAddProducts = () => {
 	/* Details */
 	const { value: valueDetails, changeHandler: changeHandlerDetails } = useInput(() => {});
 
-	/* Image */
-	const {
-		value: valueImage,
-		isValid: isValidImage,
-		hasError: hasErrorImage,
-		changeHandler: changeHandlerImage,
-		blurHandler: blurHandlerImage,
-		isTouched: isTouchedImage
-	} = useInput((inputToValidate) => {
-		console.log('inputToValidate', inputToValidate);
-		if (inputToValidate && inputToValidate?.target?.files[0]) {
-			const uploadedPicture = inputToValidate?.target?.files[0];
-			const fileExtension = uploadedPicture && uploadedPicture?.name?.split('.').pop();
-			const fileSize = uploadedPicture && uploadedPicture?.size?.toString();
+	const insertImageHandler = (e) => {
+		console.log('file', e.target.files[0]);
+		const uploadedPicture = e?.target?.files[0];
+		const fileExtension = uploadedPicture && uploadedPicture?.name?.split('.').pop();
+		const fileSize = uploadedPicture && uploadedPicture?.size?.toString();
+		console.log('fileExtension', fileExtension);
 
-			return true;
+		// check for accepted extensions;
+		if (!acceptedExtensions?.some((ext) => fileExtension?.toLowerCase() === ext)) {
+			// setImageErrorModal({
+			// 	show: true,
+			// 	title: 'Ooops!',
+			// 	message: `We only accept the following file extensions ${[...acceptedExtensions]}`
+			// });
+			setProductImage((prev) => {
+				return {
+					...prev,
+					isValid: false,
+					file: null,
+					isTouched: true,
+					errorDescription: addProductsValidations['image'].errorExtension
+				};
+			});
+			e.target.value = null;
+			return;
 		}
-	}, 'image');
 
-	console.log('@@@Image', {
-		valueImage,
-		isValidImage,
-		hasErrorImage
-	});
+		if (fileSize.length < 7) {
+			const fileSizeKB = Math.round(+fileSize / 1024).toFixed(2);
+			console.log('fileSizeKB', fileSizeKB);
+			if (fileSizeKB > 2000) {
+				// setImageErrorModal({
+				// 	show: true,
+				// 	title: 'Ooops!',
+				// 	message: "You can't upload images larger than 2MB"
+				// });
+				setProductImage((prev) => {
+					return {
+						...prev,
+						isValid: false,
+						file: null,
+						isTouched: true,
+						errorDescription: addProductsValidations['image'].errorFileSize
+					};
+				});
+				e.target.value = null;
+				return;
+			}
+		} else {
+			const fileSizeMB = (Math.round(+fileSize / 1024) / 1000).toFixed(2);
+			console.log('fileSizeMB', fileSizeMB);
+			if (fileSizeMB > 2)
+				// setImageErrorModal({
+				// 	show: true,
+				// 	title: 'Ooops!',
+				// 	message: "You can't upload images larger than 2MB"
+				// });
+				setProductImage((prev) => {
+					return {
+						...prev,
+						isValid: false,
+						file: null,
+						isTouched: true,
+						errorDescription: addProductsValidations['image'].errorFileSize
+					};
+				});
+			e.target.value = null;
+			return;
+		}
+
+		setProductImage((prev) => {
+			return {
+				...prev,
+				isValid: true,
+				file: uploadedPicture,
+				isTouched: true,
+				errorDescription: null
+			};
+		});
+	};
 
 	useEffect(() => {
 		console.log('selectedTeam AdminAddProducts', selectedTeam);
@@ -88,6 +155,15 @@ const AdminAddProducts = () => {
 	return (
 		<>
 			<StoreGlobalSettings />
+
+			{/* {imageErroModal?.show && (
+				<ErrorModal
+					title={imageErroModal?.title}
+					message={imageErroModal?.message}
+					onConfirm={closeModal}
+				/>
+			)} */}
+
 			<AddProductForm onSubmit={addProductHandler}>
 				<AddProductActionGroup>
 					<AddProductActionLabel htmlFor="title">
@@ -183,17 +259,19 @@ const AdminAddProducts = () => {
 						Image <span style={{ color: 'red' }}>*</span>
 					</AddProductActionLabel>
 					<AddProductActionInput
-						// value={valueImage}
 						id="image"
 						name="image"
 						type="file"
 						required
-						onChange={changeHandlerImage}
-						onBlur={blurHandlerImage}
-						isValid={isValidImage}
-						hasError={hasErrorImage}
-						isTouched={isTouchedImage}
+						onChange={insertImageHandler}
+						hasError={!productImage?.isValid}
+						isTouched={productImage?.isTouched}
 					/>
+					{!productImage?.isValid && productImage?.isTouched && (
+						<AddProductsErrorFallback>
+							{productImage?.errorDescription || 'Something went wrong, please try again later'}
+						</AddProductsErrorFallback>
+					)}
 				</AddProductActionGroup>
 				{/* </fieldset> */}
 				<AddProductButton type="submit" disabled={!canSubmit}>

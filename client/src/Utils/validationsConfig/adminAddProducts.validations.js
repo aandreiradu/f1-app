@@ -22,7 +22,8 @@ const addProductsValidations = {
 
 	image: {
 		errorDescription: 'Product image is mandatory',
-		errorExtension: 'Invalid image format. Accepted formats : .jpg,.jpeg,.png'
+		errorExtension: 'Invalid image format. Accepted formats : .jpg,.jpeg,.png',
+		errorFileSize: "Can't upload files larget than 2mb "
 	}
 };
 
