@@ -24,7 +24,7 @@ export const AddProductActionInput = styled.input`
 	display: block;
 	background-color: transparent;
 	border: none;
-	border-bottom: 2px solid #1f1f1f;
+	border-bottom: 1.2px solid #1f1f1f;
 	color: #1f1f1f;
 	padding: 3px;
 	outline: none;
@@ -38,10 +38,10 @@ export const AddProductActionInput = styled.input`
 	border-color: ${(props) => {
 		// console.log('@@@ PROPS STYLED', props);
 		if (props.isTouched && props.hasError) {
-			console.log('return red');
+			// console.log('return red');
 			return '#e10600';
 		} else if (props.isTouched && !props.hasError) {
-			console.log('return green');
+			// console.log('return green');
 			return 'green';
 		}
 	}};
@@ -71,9 +71,8 @@ export const AddProductButton = styled.button`
 		cursor: not-allowed;
 		color: #1f1f1f;
 		background-color: #fff;
-
-		transition: all 0.5s ease-in;
 	}
+	transition: all 0.5s ease-in;
 `;
 
 export const AddProductsErrorFallback = styled.span`

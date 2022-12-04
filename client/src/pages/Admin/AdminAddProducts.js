@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import ErrorModal from '../../components/UI/ErrorModal';
 import { acceptedExtensions } from '../../Utils/acceptedProfilePictureExtensions';
 import isLength from 'validator/lib/isLength';
 import trim from 'validator/lib/trim';
@@ -15,8 +16,15 @@ import {
 } from './AdminAddProducts.styles';
 import useInput from '../../hooks/useInput';
 import CustomDropdown from '../../components/CustomDropdown/CustomDropdown';
+import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 
 const AdminAddProducts = () => {
+	const [showModal, setShowModal] = useState({
+		show: false,
+		title: null,
+		message: null
+	});
+	const { sendRequest, error, responseData } = useAxiosInterceptors();
 	const [selectedTeam, setSelectedTeam] = useState({});
 	const [productImage, setProductImage] = useState({
 		file: null,
@@ -25,9 +33,12 @@ const AdminAddProducts = () => {
 		isTouched: false
 	});
 
-	useEffect(() => {
-		console.log('productImage', productImage);
-	}, [productImage]);
+	const closeModal = () =>
+		setShowModal({
+			show: false,
+			title: null,
+			message: null
+		});
 
 	/* Title */
 	const {
@@ -69,11 +80,6 @@ const AdminAddProducts = () => {
 
 		// check for accepted extensions;
 		if (!acceptedExtensions?.some((ext) => fileExtension?.toLowerCase() === ext)) {
-			// setImageErrorModal({
-			// 	show: true,
-			// 	title: 'Ooops!',
-			// 	message: `We only accept the following file extensions ${[...acceptedExtensions]}`
-			// });
 			setProductImage((prev) => {
 				return {
 					...prev,
@@ -89,13 +95,7 @@ const AdminAddProducts = () => {
 
 		if (fileSize.length < 7) {
 			const fileSizeKB = Math.round(+fileSize / 1024).toFixed(2);
-			console.log('fileSizeKB', fileSizeKB);
 			if (fileSizeKB > 2000) {
-				// setImageErrorModal({
-				// 	show: true,
-				// 	title: 'Ooops!',
-				// 	message: "You can't upload images larger than 2MB"
-				// });
 				setProductImage((prev) => {
 					return {
 						...prev,
@@ -112,11 +112,6 @@ const AdminAddProducts = () => {
 			const fileSizeMB = (Math.round(+fileSize / 1024) / 1000).toFixed(2);
 			console.log('fileSizeMB', fileSizeMB);
 			if (fileSizeMB > 2)
-				// setImageErrorModal({
-				// 	show: true,
-				// 	title: 'Ooops!',
-				// 	message: "You can't upload images larger than 2MB"
-				// });
 				setProductImage((prev) => {
 					return {
 						...prev,
@@ -141,28 +136,69 @@ const AdminAddProducts = () => {
 		});
 	};
 
-	useEffect(() => {
-		console.log('selectedTeam AdminAddProducts', selectedTeam);
-	}, [selectedTeam]);
-
 	let canSubmit = false;
+
+	// Check if the user cand submit the form (all required fields should be completed & valid)
+	if (
+		Object.keys(selectedTeam).length > 0 &&
+		selectedTeam?.teamId &&
+		productImage?.file &&
+		isValidTitle &&
+		isValidPrice &&
+		isValidDescription
+	) {
+		canSubmit = true;
+	}
 
 	const addProductHandler = (e) => {
 		e.preventDefault();
 		console.log('triggered form submit');
+
+		// if (canSubmit) {
+		console.log('can submit', canSubmit);
+
+		const controller = new AbortController();
+		const formData = new FormData();
+		formData.append('title', valueTitle);
+		formData.append('description', valueDescription);
+		formData.append('price', valuePrice);
+		formData.append('details', valueDetails);
+		formData.append('teamId', selectedTeam?.teamId);
+		formData.append('productPicture', productImage?.file);
+		console.log('makeRequest with this', JSON.stringify(formData));
+		console.log('makeRequest with this', formData);
+
+		sendRequest(
+			{
+				url: '/shop/createProduct',
+				method: 'POST',
+				body: formData,
+				withCredentials: true,
+				signal: controller.signal
+			},
+			(responseData) => {
+				console.log('responseData', responseData);
+				const { message, status } = responseData;
+
+				if (status === 200 && message === 'Product created successfully') {
+					setShowModal({
+						show: true,
+						title: '',
+						message: 'Product created successfully'
+					});
+				}
+			}
+		);
+		// }
 	};
 
 	return (
 		<>
 			<StoreGlobalSettings />
 
-			{/* {imageErroModal?.show && (
-				<ErrorModal
-					title={imageErroModal?.title}
-					message={imageErroModal?.message}
-					onConfirm={closeModal}
-				/>
-			)} */}
+			{showModal?.show && (
+				<ErrorModal title={showModal?.title} message={showModal?.message} onConfirm={closeModal} />
+			)}
 
 			<AddProductForm onSubmit={addProductHandler}>
 				<AddProductActionGroup>
@@ -212,6 +248,7 @@ const AdminAddProducts = () => {
 						isTouched={isTouchedPrice}
 						min="0"
 						required
+						step="any"
 					/>
 					{hasErrorPrice && (
 						<AddProductsErrorFallback>
@@ -252,6 +289,7 @@ const AdminAddProducts = () => {
 						type="text"
 						spellCheck="false"
 						onChange={changeHandlerDetails}
+						placeholder="Insert multiple product details and separate with commas"
 					/>
 				</AddProductActionGroup>
 				<AddProductActionGroup>
@@ -273,7 +311,6 @@ const AdminAddProducts = () => {
 						</AddProductsErrorFallback>
 					)}
 				</AddProductActionGroup>
-				{/* </fieldset> */}
 				<AddProductButton type="submit" disabled={!canSubmit}>
 					Add Product
 				</AddProductButton>

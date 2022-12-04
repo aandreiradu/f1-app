@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import useDropdown from '../../hooks/useDropdown';
 import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 import { selectShopTeams } from '../../store/Shop__Teams/shopTeams.selector';
+import { AddProductsErrorFallback } from '../../pages/Admin/AdminAddProducts.styles';
+import addProductsValidations from '../../Utils/validationsConfig/adminAddProducts.validations';
 import {
 	fetchShopTeamsFailure,
 	fetchShopTeamsStart,
@@ -30,7 +32,17 @@ const CustomDropdown = ({ onTeamSelected }) => {
 	const { isLoading, sendRequest, error } = useAxiosInterceptors();
 	const [showErrorModal, setShowErrorModal] = useState(false);
 	const dropdownRef = useRef();
-	const { value, onChangeHandler, onSelectedItem, onOpen, isOpen, query } = useDropdown();
+	const {
+		value,
+		onChangeHandler,
+		onSelectedItem,
+		onOpen,
+		isOpen,
+		query,
+		hasError,
+		isTouched,
+		inputBlurHandler
+	} = useDropdown();
 
 	useEffect(() => {
 		console.log('cachedTeams', cachedTeams);
@@ -134,11 +146,19 @@ const CustomDropdown = ({ onTeamSelected }) => {
 							placeholder="Search Team"
 							value={query === value?.name ? value?.name : query}
 							disabled={isLoading || error}
+							onBlur={inputBlurHandler}
+							isTouched={isTouched}
+							hasError={hasError}
 						/>
 						<CustomDropdownIcon icon={faSearch} />
 					</>
 				)}
 			</CustomDropdownSearchWrapper>
+			{/* {hasError && (
+				<AddProductsErrorFallback>
+					{addProductsValidations['team'].errorDescription}
+				</AddProductsErrorFallback>
+			)} */}
 			<CustomDropdownResults isOpen={isOpen} resultsNo={filteredTeams?.length}>
 				{filteredTeams?.map((result, index) => (
 					<CustomDropdownResultItem

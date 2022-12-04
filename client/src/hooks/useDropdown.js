@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
 const useDropdown = () => {
-	const [selectedValue, setSelectedValue] = useState({});
+	const [isTouched, setIsTouched] = useState(false);
+	const [selectedValue, setSelectedValue] = useState({
+		teamId: null,
+		name: null
+	});
 	const [query, setQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
-
-	useEffect(() => {}, [isOpen]);
 
 	const handleQuerySearch = (e) => {
 		!isOpen && setIsOpen(true);
@@ -15,7 +17,9 @@ const useDropdown = () => {
 		setQuery(e.target.value);
 	};
 
-	const handleOpenDropdownOpen = () => setIsOpen((prev) => !prev);
+	const handleOpenDropdownOpen = () => {
+		setIsOpen((prev) => !prev);
+	};
 
 	const handleTeamSelection = (e) => {
 		console.log('@@@handleTeamSelection HOOK', e);
@@ -27,9 +31,22 @@ const useDropdown = () => {
 		setIsOpen(false);
 	};
 
+	const inputBlurHandler = () => setIsTouched(true);
+
 	useEffect(() => {
 		console.log('@@@selectedValue hook', selectedValue);
 	}, [selectedValue]);
+
+	console.log('@@@selectedValue', selectedValue);
+	const hasError = !selectedValue?.teamId && isTouched;
+
+	console.log('useDropdown will return', {
+		selectedValue,
+		isOpen,
+		query,
+		hasError,
+		isTouched
+	});
 
 	return {
 		value: selectedValue,
@@ -38,7 +55,10 @@ const useDropdown = () => {
 		onOpen: handleOpenDropdownOpen,
 		isOpen,
 		setIsOpen,
-		query
+		query,
+		hasError,
+		isTouched,
+		inputBlurHandler
 	};
 };
 

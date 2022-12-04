@@ -26,6 +26,17 @@ export const CustomDropdownSearchWrapper = styled.div`
 	justify-content: space-between;
 	padding: 5px 0;
 	border-bottom: 1px solid #1f1f1f;
+
+	border-color: ${(props) => {
+		// console.log('@@@ PROPS STYLED', props);
+		if (props.isTouched && props.hasError) {
+			// console.log('return red');
+			return '#e10600';
+		} else if (props.isTouched && !props.hasError) {
+			// console.log('return green');
+			return 'green';
+		}
+	}};
 `;
 
 export const CustomDropdownInput = styled.input`
