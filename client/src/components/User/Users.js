@@ -96,6 +96,7 @@ const Users = () => {
 		const getDrivers = async () => {
 			try {
 				if (!drivers?.length) {
+					console.log('DRIVERS NOT IN STORE => REQUEST THEM');
 					dispatch(fetchDriversStart());
 					sendRequest(
 						{

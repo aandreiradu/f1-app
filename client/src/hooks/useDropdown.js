@@ -40,16 +40,17 @@ const useDropdown = () => {
 		console.log('@@@selectedValue hook', selectedValue);
 	}, [selectedValue]);
 
-	// console.log('@@@selectedValue', selectedValue);
 	const hasError = !selectedValue?.teamId && isTouched;
 
-	// console.log('useDropdown will return', {
-	// 	selectedValue,
-	// 	isOpen,
-	// 	query,
-	// 	hasError,
-	// 	isTouched
-	// });
+	const reset = useCallback(() => {
+		setSelectedValue({
+			teamId: null,
+			name: null
+		});
+		setIsOpen(false);
+		setQuery('');
+		setIsTouched(false);
+	});
 
 	return {
 		value: selectedValue,
@@ -61,7 +62,8 @@ const useDropdown = () => {
 		query,
 		hasError,
 		isTouched,
-		inputBlurHandler
+		inputBlurHandler,
+		reset
 	};
 };
 

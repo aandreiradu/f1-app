@@ -127,7 +127,8 @@ const AdminAddProducts = () => {
 		hasError: hasErrorTitle,
 		changeHandler: changeHandlerTitle,
 		blurHandler: blurHandlerTitle,
-		isTouched: isTouchedTitle
+		isTouched: isTouchedTitle,
+		reset: resetTitle
 	} = useInput((inputValue) => trim(inputValue) && isLength(inputValue, { min: 3 }));
 	/* Price*/
 	const {
@@ -136,7 +137,8 @@ const AdminAddProducts = () => {
 		hasError: hasErrorPrice,
 		changeHandler: changeHandlerPrice,
 		blurHandler: blurHandlerPrice,
-		isTouched: isTouchedPrice
+		isTouched: isTouchedPrice,
+		reset: resetPrice
 	} = useInput((inputValue) => trim(inputValue) && inputValue >= 0);
 	/* Description */
 	const {
@@ -145,11 +147,16 @@ const AdminAddProducts = () => {
 		hasError: hasErrorDescription,
 		changeHandler: changeHandlerDescription,
 		blurHandler: blurHandlerDescription,
-		isTouched: isTouchedDescription
+		isTouched: isTouchedDescription,
+		reset: resetDescription
 	} = useInput((inputValue) => trim(inputValue) && isLength(inputValue, { min: 3 }));
 
 	/* Details */
-	const { value: valueDetails, changeHandler: changeHandlerDetails } = useInput(() => {});
+	const {
+		value: valueDetails,
+		changeHandler: changeHandlerDetails,
+		reset: resetDetails
+	} = useInput(() => {});
 
 	const insertImageHandler = (e) => {
 		console.log('file', e.target.files[0]);
@@ -245,7 +252,6 @@ const AdminAddProducts = () => {
 		formData.append('details', valueDetails);
 		formData.append('teamId', selectedTeam?.teamId);
 		formData.append('productPicture', productImage?.file);
-		console.log('makeRequest with this', JSON.stringify(formData));
 		console.log('makeRequest with this', formData);
 
 		sendRequest(
@@ -266,6 +272,12 @@ const AdminAddProducts = () => {
 						title: '',
 						message: 'Product created successfully'
 					});
+
+					/* Rest Form Inputs after the product was created */
+					resetTitle();
+					resetDetails();
+					resetPrice();
+					resetDescription();
 				}
 			}
 		);

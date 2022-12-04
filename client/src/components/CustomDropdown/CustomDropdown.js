@@ -40,7 +40,8 @@ const CustomDropdown = ({ onTeamSelected }) => {
 		query,
 		hasError,
 		isTouched,
-		inputBlurHandler
+		inputBlurHandler,
+		reset
 	} = useDropdown();
 
 	useEffect(() => {

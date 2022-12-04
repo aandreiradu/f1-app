@@ -31,7 +31,7 @@ const fileStorage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, callback) => {
-  const acceptableExtensions = ["png", "jpg", "jpeg", "jpg"];
+  const acceptableExtensions = ["png", "jpg", "jpeg", "jpg", "webp"];
   if (
     !acceptableExtensions.some(
       (extension) =>
