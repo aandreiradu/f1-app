@@ -11,6 +11,7 @@ const {
 const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
 const populateTeamInfo = require("../../middlewares/populateTeamInfoById");
 const { body } = require("express-validator");
+const itsAuthorized = require("../../middlewares/shop/itsAuthorized.middleware");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -55,6 +56,7 @@ router.get("/shop/products", getProducts);
 router.post(
   "/shop/createProduct",
   [
+    itsAuthorized,
     multer({
       storage: fileStorage,
       fileFilter,
