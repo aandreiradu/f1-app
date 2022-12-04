@@ -1,14 +1,25 @@
 const User = require("../model/Users");
 const Product = require("../model/StoreProducts");
 const { validationResult } = require("express-validator");
+const { removeFile } = require("../utils/files");
+const path = require("path");
 
 const createProduct = async (req, res, next) => {
   const { title, description, price, details, teamId } = req.body;
   console.log("req.file", req.file);
 
-  if (!title || !description || !price) {
+  if (!title || !description || !price || !teamId) {
     const error = new Error("Invalid request params on Create Product");
     error.statusCode = 400;
+
+    // remove file in case of error
+    const fileToRemove = req?.file?.path || null;
+    console.log("fileToRemove", fileToRemove);
+    if (fileToRemove) {
+      console.log("path to remove", path.join(__dirname, "..", fileToRemove));
+      removeFile(path.join(__dirname, "..", fileToRemove));
+    }
+
     return next(error);
   }
 
@@ -20,11 +31,20 @@ const createProduct = async (req, res, next) => {
     error.statusCode = 422;
     console.log("errors.array", errors.array());
     error.data = errors.array()[0];
+
+    // remove file in case of error
+    const fileToRemove = req?.file?.path || null;
+    console.log("fileToRemove", fileToRemove);
+    if (fileToRemove) {
+      console.log("path to remove", path.join(__dirname, "..", fileToRemove));
+      removeFile(path.join(__dirname, "..", fileToRemove));
+    }
+
     return next(error);
   }
 
   try {
-    const imageUrl = req.file.path;
+    const imageUrl = req?.file?.path || null;
     console.log("imageUrl", imageUrl);
     if (!imageUrl) {
       const error = new Error(
@@ -32,7 +52,7 @@ const createProduct = async (req, res, next) => {
       );
       error.statusCode = 422;
       console.log("errors.array", errors.array());
-      error.data = errors.array()[0];
+      error.data = errors.array()[0] || "Didn't received product image";
       return next(error);
     }
 

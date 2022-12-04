@@ -1,3 +1,4 @@
+const Teams = require("../../model/Teams");
 const multer = require("multer");
 const path = require("path");
 const router = require("express").Router();
@@ -61,6 +62,29 @@ router.post(
     verifyExistingTeamById,
     body("title").trim().isLength({ min: 3 }),
     body("description").isLength({ min: 3 }),
+    body("price").custom((value) => {
+      if (value < 0) {
+        console.log("@@@VALIDATOR createProduct price is negative", value);
+        return Promise.reject("Price parameter should be a positive number");
+      }
+
+      return true;
+    }),
+    body("teamId").custom(async (teamId) => {
+      console.log("teamId received for validation", teamId);
+
+      const isExistingTeam = await Teams.findById(teamId);
+      console.log("isExistingTeam", isExistingTeam);
+
+      if (
+        !isExistingTeam ||
+        (Array.isArray(isExistingTeam) && isExistingTeam?.length === 0)
+      ) {
+        return Promise.reject("No teamId asociated with provided teamId");
+      }
+
+      return true;
+    }),
   ],
   createProduct
 );
