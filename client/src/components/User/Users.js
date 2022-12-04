@@ -120,10 +120,10 @@ const Users = () => {
 		};
 
 		if (!drivers?.length) {
-			console.log('drivers este => req', drivers);
+			console.log('drivers not in store => req', drivers);
 			getDrivers();
 		} else {
-			console.log('drivers este no req', drivers);
+			console.log('drivers in store => no req', drivers);
 		}
 
 		return () => {
