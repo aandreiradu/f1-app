@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 const useDropdown = () => {
 	const [isTouched, setIsTouched] = useState(false);
@@ -9,19 +9,22 @@ const useDropdown = () => {
 	const [query, setQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 
-	const handleQuerySearch = (e) => {
-		!isOpen && setIsOpen(true);
-		if (e.target.value !== selectedValue?.name) {
-			setSelectedValue({});
-		}
-		setQuery(e.target.value);
-	};
+	const handleQuerySearch = useCallback(
+		(e) => {
+			!isOpen && setIsOpen(true);
+			if (e.target.value !== selectedValue?.name) {
+				setSelectedValue({});
+			}
+			setQuery(e.target.value);
+		},
+		[isOpen, selectedValue]
+	);
 
-	const handleOpenDropdownOpen = () => {
+	const handleOpenDropdownOpen = useCallback(() => {
 		setIsOpen((prev) => !prev);
-	};
+	}, []);
 
-	const handleTeamSelection = (e) => {
+	const handleTeamSelection = useCallback((e) => {
 		console.log('@@@handleTeamSelection HOOK', e);
 		setSelectedValue({
 			teamId: e?.teamId,
@@ -29,7 +32,7 @@ const useDropdown = () => {
 		});
 		setQuery(e?.value);
 		setIsOpen(false);
-	};
+	}, []);
 
 	const inputBlurHandler = () => setIsTouched(true);
 
@@ -37,16 +40,16 @@ const useDropdown = () => {
 		console.log('@@@selectedValue hook', selectedValue);
 	}, [selectedValue]);
 
-	console.log('@@@selectedValue', selectedValue);
+	// console.log('@@@selectedValue', selectedValue);
 	const hasError = !selectedValue?.teamId && isTouched;
 
-	console.log('useDropdown will return', {
-		selectedValue,
-		isOpen,
-		query,
-		hasError,
-		isTouched
-	});
+	// console.log('useDropdown will return', {
+	// 	selectedValue,
+	// 	isOpen,
+	// 	query,
+	// 	hasError,
+	// 	isTouched
+	// });
 
 	return {
 		value: selectedValue,

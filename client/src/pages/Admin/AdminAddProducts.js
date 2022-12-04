@@ -17,6 +17,7 @@ import {
 import useInput from '../../hooks/useInput';
 import CustomDropdown from '../../components/CustomDropdown/CustomDropdown';
 import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
+import { useNavigate } from 'react-router-dom';
 
 const AdminAddProducts = () => {
 	const [showModal, setShowModal] = useState({
@@ -24,7 +25,7 @@ const AdminAddProducts = () => {
 		title: null,
 		message: null
 	});
-	const { sendRequest, error, responseData } = useAxiosInterceptors();
+	const { sendRequest, error } = useAxiosInterceptors();
 	const [selectedTeam, setSelectedTeam] = useState({});
 	const [productImage, setProductImage] = useState({
 		file: null,
@@ -32,6 +33,7 @@ const AdminAddProducts = () => {
 		errorDescription: null,
 		isTouched: false
 	});
+	const navigate = useNavigate();
 
 	const closeModal = () =>
 		setShowModal({
@@ -39,6 +41,84 @@ const AdminAddProducts = () => {
 			title: null,
 			message: null
 		});
+
+	useEffect(() => {
+		const { message, status, data } = error || {};
+
+		switch (status) {
+			case 403:
+				console.log('switch case 403');
+				console.log({ message, status, data });
+				if (message === 'This account is not authorized to add products to the shop') {
+					console.log('@@@if This account is not authorized to add products to the shop');
+					setShowModal({
+						show: true,
+						title: 'Unauthorized',
+						message: message
+					});
+					setTimeout(() => {
+						navigate('/');
+					}, 2000);
+					break;
+				}
+				break;
+
+			case 401:
+				console.log('switch case 401');
+				console.log({ message, status, data });
+				if (message === 'No account asociated with the requested userId') {
+					console.log('@@@if No account asociated with the requested userId');
+					setShowModal({
+						show: true,
+						title: 'Unauthorized',
+						message: message
+					});
+					setTimeout(() => {
+						navigate('/');
+					}, 2000);
+					break;
+				}
+				break;
+
+			case 400:
+				console.log('switch case 400');
+				console.log({ message, status, data });
+				if (
+					message === 'Invalid request params. TeamId not found' ||
+					message === 'No team found for provided teamId' ||
+					message === 'Invalid request params on Create Product'
+				) {
+					console.log('@@@if Invalid request params. TeamId not found');
+					setShowModal({
+						show: true,
+						title: 'Ooops',
+						message: message
+					});
+					setTimeout(() => {
+						navigate('/');
+					}, 2000);
+					break;
+				}
+				break;
+
+			case 422:
+				console.log('switch case 422');
+				console.log({ message, status, data });
+				if (message === 'Validation failed. Entered data is not in correct format') {
+					console.log('@@@if Validation failed. Entered data is not in correct format');
+					setShowModal({
+						show: true,
+						title: 'Something went wrong',
+						message: message
+					});
+					break;
+				}
+				break;
+
+			default:
+				return;
+		}
+	}, [error, navigate]);
 
 	/* Title */
 	const {

@@ -28,7 +28,6 @@ import ErrorModal from '../UI/ErrorModal';
 const CustomDropdown = ({ onTeamSelected }) => {
 	const dispatch = useDispatch();
 	const cachedTeams = useSelector(selectShopTeams);
-	console.log('cachedTeams', cachedTeams);
 	const { isLoading, sendRequest, error } = useAxiosInterceptors();
 	const [showErrorModal, setShowErrorModal] = useState(false);
 	const dropdownRef = useRef();
@@ -45,7 +44,6 @@ const CustomDropdown = ({ onTeamSelected }) => {
 	} = useDropdown();
 
 	useEffect(() => {
-		console.log('cachedTeams', cachedTeams);
 		if (cachedTeams && Array.isArray(cachedTeams) && cachedTeams?.length === 0) {
 			console.log('no teams in redux-store, request from backend and store it');
 			const controller = new AbortController();
@@ -86,8 +84,6 @@ const CustomDropdown = ({ onTeamSelected }) => {
 	const filteredTeams = !query
 		? cachedTeams
 		: cachedTeams?.filter((team) => team?.name?.toLowerCase()?.includes(query?.toLowerCase()));
-
-	console.log('filteredTeams', filteredTeams);
 
 	useEffect(() => {
 		console.log('@@@CustomDropdown ERROR ', error);
