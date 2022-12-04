@@ -14,8 +14,13 @@ import Footer from '../../components/Footer/Footer';
 import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 
 const Store = () => {
+	const [searchedProduct, setSearchedProduct] = useState('');
 	const [products, setProducts] = useState([]);
-	const { isLoading, sendRequest, error, responseData } = useAxiosInterceptors();
+	const { isLoading, sendRequest, error } = useAxiosInterceptors();
+
+	const handleProductSearch = (searchQuery) => {
+		setSearchedProduct(searchQuery);
+	};
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -43,6 +48,14 @@ const Store = () => {
 		console.log('products useEffect', products);
 	}, [products]);
 
+	const filteredProducts = !searchedProduct
+		? products
+		: products?.filter((product) =>
+				product?.title?.toLowerCase()?.includes(searchedProduct?.toLowerCase())
+		  );
+
+	console.log('filteredProducts', filteredProducts);
+
 	return (
 		<>
 			<StoreGlobalSettings />
@@ -52,7 +65,7 @@ const Store = () => {
 				<StoreSubHeader>Support your favorite team</StoreSubHeader>
 
 				{/* Search and Filter */}
-				<StoreSearch__Filter />
+				<StoreSearch__Filter onProductSearched={handleProductSearch} />
 
 				{/* Shop By Team */}
 				<StoreSubHeader>Shop by Team</StoreSubHeader>
@@ -62,7 +75,7 @@ const Store = () => {
 					<LoaderIcon text={'Loading products'} barsColor={'#1f1f1f'} textColor={'#1f1f1f'} />
 				) : (
 					<StoreProductsContainer>
-						{products?.map((product, index) => (
+						{filteredProducts?.map((product, index) => (
 							<StoreItem
 								key={product?._id || index}
 								productId={product?._id}
