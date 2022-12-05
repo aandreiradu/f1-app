@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 export const StoreItemContainer = styled(Link)`
 	position: relative;
 	height: 300px;
+	max-width: 200px;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -30,6 +32,7 @@ export const StoreItemImage = styled.img`
 
 export const StoreItemInformationWrapper = styled.div`
 	padding: 10px;
+	width: 100%;
 `;
 
 export const StoreItemTitle = styled.p`

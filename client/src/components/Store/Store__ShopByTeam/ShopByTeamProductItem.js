@@ -1,33 +1,58 @@
-import React from 'react';
+import { useState } from 'react';
 import {
 	SBTProductImage,
 	SBTProductItem,
-	ShopByTeamProductItemWrapper,
 	SBTProductInfo,
 	SBTProductPrice,
 	SBTProductTitle,
-	SBTProductDescription
+	SBTProductDescription,
+	AddToCartButton,
+	SBTDescriptionContainer,
+	SBTDescriptionContent,
+	SBTDescriptionIcon,
+	BottomAddToCart,
+	SBTProductImageWrapper
 } from './ShopByTeamProductItem.styles';
 import apiConfig from '../../../constants/apiConfig';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-const ShopByTeamProductItem = ({ products }) => {
-	console.log('products props', products);
+const ShopByTeamProductItem = ({ product, team }) => {
+	const [isOpenDescription, setIsOpenDescription] = useState(false);
+
+	const handleOpenDescription = (e) => {
+		e.stopPropagation();
+		setIsOpenDescription((prev) => !prev);
+	};
+
 	return (
-		<ShopByTeamProductItemWrapper>
-			{products?.map((product, index) => (
-				<SBTProductItem key={product?._id || index}>
+		<>
+			<SBTProductItem key={product?._id}>
+				<SBTProductImageWrapper>
 					<SBTProductImage
 						src={product?.imageUrl ? `${apiConfig.baseURL}/${product?.imageUrl}` : ''}
 						alt={`${product?.title} Product Image` || 'Product Image'}
 					/>
-					<SBTProductInfo>
-						<SBTProductPrice>Price {product?.price || 'N/A'} €</SBTProductPrice>
-						<SBTProductTitle>{product?.title || 'N/A'}</SBTProductTitle>
-						{/* <SBTProductDescription>{product?.description || 'N/A'}</SBTProductDescription> */}
-					</SBTProductInfo>
-				</SBTProductItem>
-			))}
-		</ShopByTeamProductItemWrapper>
+				</SBTProductImageWrapper>
+				<SBTProductInfo>
+					<SBTProductPrice>Price {product?.price || 'N/A'} €</SBTProductPrice>
+					<SBTProductTitle>{product?.title || 'N/A'}</SBTProductTitle>
+					{product?.description && (
+						<SBTDescriptionContainer onClick={handleOpenDescription} isOpen={isOpenDescription}>
+							<SBTDescriptionContent>
+								<p>Description</p>
+								<SBTDescriptionIcon icon={isOpenDescription ? faMinus : faPlus} />
+							</SBTDescriptionContent>
+							{isOpenDescription && (
+								<SBTProductDescription>{product?.description || 'N/A'}</SBTProductDescription>
+							)}
+						</SBTDescriptionContainer>
+					)}
+					<BottomAddToCart>
+						<AddToCartButton>Add To Cart</AddToCartButton>
+					</BottomAddToCart>
+				</SBTProductInfo>
+			</SBTProductItem>
+		</>
 	);
 };
 

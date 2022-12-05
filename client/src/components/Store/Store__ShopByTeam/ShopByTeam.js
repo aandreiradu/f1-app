@@ -10,6 +10,7 @@ import StoreItem from '../StoreItem/StoreItem';
 import { ShopByTeamHeader, ShopByTeamHeaderLogo, ShopByTeamHeaderName } from './ShopByTeam.styles';
 import LoaderIcon from '../../LoaderReusable/LoaderIcon';
 import ShopByTeamProductItem from './ShopByTeamProductItem';
+import { ShopByTeamProductItemWrapper } from './ShopByTeamProductItem.styles';
 
 const ShopByTeam = () => {
 	const [shopByTeamData, setShopByTeamData] = useState([]);
@@ -17,6 +18,8 @@ const ShopByTeam = () => {
 	const location = useLocation();
 	const { teamId } = useParams();
 	console.log('teamId', teamId);
+
+	console.log('@@shopByTeamData', shopByTeamData);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -85,11 +88,23 @@ const ShopByTeam = () => {
 					/>
 				) : (
 					<StoreProductsContainer>
-						{shopByTeamData?.products?.length === 0 ? (
-							<h2 style={{ textAlign: 'center' }}>Currently there are no products for this team</h2>
-						) : (
+						{
+							shopByTeamData?.products?.length === 0 ? (
+								<h2 style={{ textAlign: 'center' }}>
+									Currently there are no products for this team
+								</h2>
+							) : (
+								<ShopByTeamProductItemWrapper>
+									{shopByTeamData?.products?.map((product, index) => (
+										<ShopByTeamProductItem key={product?._id || index} product={product || {}} />
+									))}
+								</ShopByTeamProductItemWrapper>
+							)
+							/*(
 							<ShopByTeamProductItem products={shopByTeamData?.products || []} />
-						)}
+						
+						)*/
+						}
 					</StoreProductsContainer>
 				)}
 			</StoreMainContainer>
