@@ -32,7 +32,6 @@ export const shopTeamsReducer = (state = shopTeamsInitialState, action = {}) => 
 			};
 
 		default:
-			console.log(`@@@shopTeamsReducer Unhandled action type`, type);
 			return state;
 	}
 };

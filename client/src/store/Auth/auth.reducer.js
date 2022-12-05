@@ -13,7 +13,6 @@ const initialState = {
 };
 
 export const authReducer = (state = initialState, action = {}) => {
-	console.log('authReducer received', state, action);
 	const { type, payload } = action;
 
 	switch (type) {
