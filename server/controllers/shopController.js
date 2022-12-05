@@ -81,11 +81,22 @@ const createProduct = async (req, res, next) => {
 };
 
 const getProducts = async (req, res, next) => {
+  const currentPage = req.query.page || 1;
+  const perPage = process.env.SHOP_PRODUCTS_PER_PAGE || 6;
+
+  console.log({ currentPage, perPage });
+
   try {
-    const products = await Product.find().populate({
-      path: "creator",
-      select: "fullName",
-    });
+    const productsCount = await Product.countDocuments();
+
+    const products = await Product.find()
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage)
+      .populate({
+        path: "creator",
+        select: "fullName",
+      })
+      .exec();
 
     console.log("@@getProducts result", products);
 
@@ -98,6 +109,7 @@ const getProducts = async (req, res, next) => {
     return res.status(200).json({
       message: "Fetched products successfully",
       products,
+      totalProducts: productsCount,
     });
   } catch (error) {
     if (!error.statusCode) {
