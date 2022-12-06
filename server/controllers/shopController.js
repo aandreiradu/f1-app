@@ -130,7 +130,7 @@ const getProductById = async (req, res, next) => {
 
   const product = await Product.findById(productId).populate({
     path: "teamId",
-    select: ["name", "logoUrl", "_id"],
+    select: ["name", "logoUrl", "_id", "teamFullName"],
   });
   console.log(`@@@getProductById for productId ${productId} `, product);
 
@@ -149,6 +149,7 @@ const getProductById = async (req, res, next) => {
       description: product?.description,
       details: product?.details,
       imageUrl: product?.imageUrl,
+      sizeAndAvailableQuantity: product?.sizeAndAvailableQuantity,
     },
     team: {
       ...product?.teamId.toJSON(), // to avoid _doc

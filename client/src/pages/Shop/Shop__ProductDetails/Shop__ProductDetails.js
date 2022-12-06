@@ -12,8 +12,10 @@ const ShopProductDeatils = () => {
 	const { productId } = useParams();
 
 	useEffect(() => {
-		console.log('productDetails state', productDetails);
-	}, [productDetails]);
+		console.log('@@@ShopProductDeatils useEffect error');
+		if (error) {
+		}
+	}, [error]);
 
 	useEffect(() => {
 		console.log('fetching details for productId', productId);

@@ -33,6 +33,19 @@ const productSchema = new Schema(
       required: true,
     },
 
+    sizeAndAvailableQuantity: [
+      {
+        size: {
+          type: String,
+          required: true,
+        },
+        availableQuantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+
     teamId: {
       type: Schema.Types.ObjectId,
       ref: "f1_teams",

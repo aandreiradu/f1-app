@@ -6,7 +6,6 @@ import { StoreGlobalSettings, StoreMainContainer } from '../../../pages/Shop/Sho
 import Footer from '../../Footer/Footer';
 import apiConfig from '../../../constants/apiConfig';
 import { StoreProductsContainer } from '../../../pages/Shop/Shop.styles';
-import StoreItem from '../StoreItem/StoreItem';
 import { ShopByTeamHeader, ShopByTeamHeaderLogo, ShopByTeamHeaderName } from './ShopByTeam.styles';
 import LoaderIcon from '../../LoaderReusable/LoaderIcon';
 import ShopByTeamProductItem from './ShopByTeamProductItem';
