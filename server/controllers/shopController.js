@@ -128,19 +128,20 @@ const getProductById = async (req, res, next) => {
     next(error);
   }
 
-  const product = await Product.findById(productId);
+  const product = await Product.findById(productId).populate({
+    path: "teamId",
+    select: ["name", "logoUrl", "_id"],
+  });
   console.log(`@@@getProductById for productId ${productId} `, product);
 
   if (!product) {
-    console.log("a intrat aici??");
     const error = new Error("No product found for provided productId");
     error.statusCode = 400;
     return next(error);
   }
 
-  console.log("a ajuns aici");
   return res.status(200).json({
-    message: "Product found",
+    message: "Product fetched successfully",
     product: {
       id: product._id,
       title: product?.title,
@@ -148,6 +149,9 @@ const getProductById = async (req, res, next) => {
       description: product?.description,
       details: product?.details,
       imageUrl: product?.imageUrl,
+    },
+    team: {
+      ...product?.teamId.toJSON(), // to avoid _doc
     },
   });
 };
