@@ -50,6 +50,7 @@ export const StoreItemPrice = styled.p`
 
 export const StoreItemAddToFavorite = styled(FontAwesomeIcon)`
 	width: 30px;
+	height: 20px;
 	position: absolute;
 	right: 5px;
 	top: 10px;

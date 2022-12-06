@@ -8,7 +8,8 @@ import {
 	StoreItemAddToFavorite
 } from './StoreItem.styles';
 import apiConfig from '../../../constants/apiConfig';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as FullHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as EmptyHeart } from '@fortawesome/free-regular-svg-icons';
 
 const StoreItem = ({ productId, description, imageUrl, title, price, details }) => {
 	const addToFavorite = (e) => {
@@ -17,7 +18,7 @@ const StoreItem = ({ productId, description, imageUrl, title, price, details }) 
 
 	return (
 		<StoreItemContainer to={`/shop/product/${productId}`} replace="true">
-			<StoreItemAddToFavorite icon={faHeart} onClick={addToFavorite} />
+			<StoreItemAddToFavorite icon={EmptyHeart} onClick={addToFavorite} />
 			<StoreItemImageWrapper>
 				<StoreItemImage
 					src={imageUrl ? `${apiConfig.baseURL}/${imageUrl}` : ''}
