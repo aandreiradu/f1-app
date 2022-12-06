@@ -6,7 +6,7 @@ import {
 import apiConfig from '../../../constants/apiConfig';
 
 const ProductDetailsHeader = ({ team }) => {
-	const { name, logoUrl, _id } = team;
+	const { name, logoUrl, _id, teamFullName } = team;
 
 	return (
 		<ProductDetailsHeaderContainer _id={_id}>
@@ -14,7 +14,7 @@ const ProductDetailsHeader = ({ team }) => {
 				src={logoUrl ? `${apiConfig.baseURL}/${logoUrl}` : ''}
 				alt={`${name} Logo` || 'Team Logo'}
 			/>
-			<ProductDetailsHeaderTeamName>{name || 'N/A'}</ProductDetailsHeaderTeamName>
+			<ProductDetailsHeaderTeamName>{teamFullName || name || 'N/A'}</ProductDetailsHeaderTeamName>
 		</ProductDetailsHeaderContainer>
 	);
 };

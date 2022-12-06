@@ -39,12 +39,13 @@ const ShopByTeam = () => {
 					status === 200 &&
 					(message === 'No products found' || message === 'Products fetched successfully')
 				) {
-					setShopByTeamData({
-						products: [...products],
-						team: {
-							...team
-						}
-					});
+					isMounted &&
+						setShopByTeamData({
+							products: [...products],
+							team: {
+								...team
+							}
+						});
 				}
 			}
 		);

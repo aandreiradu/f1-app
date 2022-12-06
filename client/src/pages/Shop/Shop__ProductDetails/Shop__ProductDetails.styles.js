@@ -6,4 +6,5 @@ export const ProductDetailsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	padding: 1rem 2rem;
+	margin-bottom: 20px;
 `;
