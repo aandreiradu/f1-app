@@ -8,6 +8,8 @@ import { scheduleReducer } from './Schedule/schedule.reducer';
 import { scheduleDetailsReducer } from './ScheduleDetails/scheduleDetails.reducer';
 import { qualyfingReducer } from './Qualyfing/qualyfing.reducer';
 import { addBetReducer } from './AddBet/addBet.reducer';
+import { shopTeamsReducer } from './Shop__Teams/shopTeams.reducer';
+import { shopProductsReducer } from './Shop__Products/shopProducts.reducer';
 
 const rootReducer = combineReducers({
 	auth: authReducer,
@@ -18,7 +20,9 @@ const rootReducer = combineReducers({
 	schedule: scheduleReducer,
 	scheduleDetails: scheduleDetailsReducer,
 	qualyfing: qualyfingReducer,
-	addBet: addBetReducer
+	addBet: addBetReducer,
+	shopTeams: shopTeamsReducer,
+	shopProducts: shopProductsReducer
 });
 
 export default rootReducer;

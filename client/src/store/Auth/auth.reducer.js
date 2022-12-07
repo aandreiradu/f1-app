@@ -13,7 +13,6 @@ const initialState = {
 };
 
 export const authReducer = (state = initialState, action = {}) => {
-	console.log('authReducer received', state, action);
 	const { type, payload } = action;
 
 	switch (type) {
@@ -28,7 +27,8 @@ export const authReducer = (state = initialState, action = {}) => {
 				email: payload.email,
 				favoriteDriver: payload.favoriteDriver,
 				favoriteConstructor: payload.favoriteConstructor,
-				imageUrl: payload.imageUrl
+				imageUrl: payload.imageUrl,
+				isAdmin: payload.isAdmin
 			};
 
 		case AUTH_TYPES.AUTH_REFRESH_TOKEN:
@@ -42,7 +42,8 @@ export const authReducer = (state = initialState, action = {}) => {
 				email: payload.email,
 				favoriteDriver: payload.favoriteDriver,
 				favoriteConstructor: payload.favoriteConstructor,
-				imageUrl: payload.imageUrl
+				imageUrl: payload.imageUrl,
+				isAdmin: payload.isAdmin
 			};
 
 		case AUTH_TYPES['AUTH/GET_USER_INFO']:
@@ -78,7 +79,8 @@ export const authReducer = (state = initialState, action = {}) => {
 				email: null,
 				favoriteDriver: null,
 				favoriteConstructor: null,
-				imageUrl: null
+				imageUrl: null,
+				isAdmin: null
 			};
 
 		default:

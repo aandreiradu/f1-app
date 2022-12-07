@@ -14,9 +14,6 @@ const verifyJWT = (req, res, next) => {
   console.log("token header", token);
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-    console.log("err", err);
-    // console.log('decoded',decoded);
-
     if (err) {
       console.log("error on verifying the access token => return 403");
       return res.status(403).json({ message: "Forbidden" });
@@ -25,7 +22,6 @@ const verifyJWT = (req, res, next) => {
     (req.user = decoded?.F1_APP_USER?.fullName),
       (req.roles = decoded?.F1_APP_USER?.roles);
     req.userId = decoded?.F1_APP_USER?.userId;
-
     next();
   });
 

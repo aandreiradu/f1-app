@@ -125,7 +125,8 @@ const useAxiosPrivate = () => {
 					};
 					return axiosPrivate(prevRequest);
 				} else if (error?.response?.status === 404 && !prevRequest?.sent) {
-					return error;
+					throw error;
+					// return error;
 				}
 
 				return Promise.reject(error);

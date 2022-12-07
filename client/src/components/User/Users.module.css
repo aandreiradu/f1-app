@@ -1,3 +1,7 @@
+body{
+    background-color: #000;
+}
+
 .usersList {
     margin: 20px 0 40px 0;
     width: 100%;

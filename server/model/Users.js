@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const RaceBetsModel = require("./BetRace");
+const Schema = mongoose.Schema;
+const SECURITY_ROLES = require("../config/securityRolesList");
 
 const userSchema = new mongoose.Schema(
   {
@@ -21,7 +23,7 @@ const userSchema = new mongoose.Schema(
     roles: {
       User: {
         type: Number,
-        default: 971206,
+        default: SECURITY_ROLES.User,
       },
 
       Admin: {
@@ -44,6 +46,22 @@ const userSchema = new mongoose.Schema(
     resetTokenExpiration: Date,
 
     raceBets: [RaceBetsModel],
+
+    cart: {
+      items: [
+        {
+          productId: {
+            type: Schema.Types.ObjectId,
+            ref: "Product",
+            required: true,
+          },
+          quantity: {
+            type: Number,
+            required: true,
+          },
+        },
+      ],
+    },
   },
   { timestamps: true }
 );

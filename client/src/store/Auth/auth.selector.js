@@ -16,3 +16,11 @@ export const selectProfilePicture = createSelector(
 	selectAuthReducer,
 	(auth) => auth?.profilePicture
 );
+
+export const selectIsAdmin = createSelector(selectAuthReducer, (auth) => {
+	console.log('auth', auth);
+	const { isAdmin, isAuth } = auth;
+
+	console.log('isAdmin && isAuth', isAdmin && isAuth);
+	return isAdmin && isAuth;
+});

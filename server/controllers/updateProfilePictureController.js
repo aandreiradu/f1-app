@@ -7,6 +7,11 @@ const updateProfilePicture = async (req, res, next) => {
   const { username } = req.body;
 
   if (!username || !req.file || !req.userId) {
+    console.log({
+      username,
+      file: req.file,
+      uid: req.userId,
+    });
     const error = new Error("Invalid request params");
     error.statusCode = 400;
     return next(error);

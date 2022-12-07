@@ -1,1 +1,1 @@
-export const acceptedExtensions = ['png', 'jpg', 'jpeg', 'jpg'];
+export const acceptedExtensions = ['png', 'jpg', 'jpeg', 'jpg', 'webp'];

@@ -50,18 +50,7 @@ const useAxiosInterceptors = () => {
 
 	const sendRequest = useCallback(async (requestConfig, applyData) => {
 		console.log('sendRequest RECEIVED', requestConfig);
-		let formDataReceived = false;
 		const { method, url, body, headers, withCredentials, others } = requestConfig || {};
-
-		// check for formData payload
-		// console.log('body is instance of formdata', body?.formData instanceof FormData);
-		// const formData = new FormData();
-		// if (body?.formData instanceof FormData) {
-		// 	for (const value of body?.formData?.entries()) {
-		// 		formData.append([value[0]], value[1]);
-		// 	}
-		// 	formDataReceived = true;
-		// }
 
 		dispatch({ type: 'SEND' });
 
@@ -101,6 +90,14 @@ const useAxiosInterceptors = () => {
 			});
 		}
 	}, []);
+
+	// console.log('error interceptors public', httpState.error);
+
+	// console.log('interceptors will return', {
+	// 	isLoading: httpState.isLoading,
+	// 	responseData: httpState.data,
+	// 	error: httpState.error
+	// });
 
 	return {
 		isLoading: httpState.isLoading,
