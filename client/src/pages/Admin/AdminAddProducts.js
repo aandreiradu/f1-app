@@ -18,14 +18,23 @@ import useInput from '../../hooks/useInput';
 import CustomDropdown from '../../components/CustomDropdown/CustomDropdown';
 import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { useNavigate } from 'react-router-dom';
+import SizeAvailability from '../../components/AdminAddProducts__Size&Availability/SizeAvailability';
+import SizeAvailabilityItem from '../../components/AdminAddProducts__Size&Availability/SizeAvailabilityItem';
 
 const AdminAddProducts = () => {
+	const { sendRequest, error } = useAxiosInterceptors();
+	const [sizeSelected, setSizeSelected] = useState('');
+	const [productsAvailability, setProductsAvailability] = useState(0);
+
+	useEffect(() => {
+		console.log('productsAvailability parent', productsAvailability);
+	}, [productsAvailability]);
+
 	const [showModal, setShowModal] = useState({
 		show: false,
 		title: null,
 		message: null
 	});
-	const { sendRequest, error } = useAxiosInterceptors();
 	const [selectedTeam, setSelectedTeam] = useState({});
 	const [productImage, setProductImage] = useState({
 		file: null,
@@ -232,10 +241,33 @@ const AdminAddProducts = () => {
 		productImage?.file &&
 		isValidTitle &&
 		isValidPrice &&
-		isValidDescription
+		isValidDescription &&
+		sizeSelected &&
+		productsAvailability
 	) {
+		console.log('submit', {
+			selectedteam: Object.keys(selectedTeam).length > 0,
+			team: selectedTeam?.teamId,
+
+			image: productImage?.file,
+
+			isValidTitle,
+
+			isValidPrice,
+
+			isValidDescription,
+
+			sizeSelected,
+
+			productsAvailability
+		});
 		canSubmit = true;
 	}
+
+	const handleSizeSelection = (size) => {
+		console.log('set state in parent to this', size);
+		setSizeSelected(size);
+	};
 
 	const addProductHandler = (e) => {
 		e.preventDefault();
@@ -403,6 +435,36 @@ const AdminAddProducts = () => {
 						</AddProductsErrorFallback>
 					)}
 				</AddProductActionGroup>
+				<SizeAvailability canSubmit={sizeSelected && productsAvailability}>
+					<SizeAvailabilityItem
+						configLeft={{
+							text: 'Size'
+						}}
+						configRight={{
+							dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
+							dataOption: 'selector'
+						}}
+						onSizeSelected={handleSizeSelection}
+					/>
+					<SizeAvailabilityItem
+						configLeft={{
+							text: 'Product Availability'
+						}}
+						configRight={{
+							dataOption: 'input',
+							dataType: 'number',
+							dataTypeConfig: {
+								min: 1,
+								max: 1000,
+								value: productsAvailability
+							},
+							stateController: {
+								state: productsAvailability,
+								setter: setProductsAvailability
+							}
+						}}
+					/>
+				</SizeAvailability>
 				<AddProductButton type="submit" disabled={!canSubmit}>
 					Add Product
 				</AddProductButton>

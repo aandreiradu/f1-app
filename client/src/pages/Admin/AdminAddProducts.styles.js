@@ -71,6 +71,7 @@ export const AddProductButton = styled.button`
 		cursor: not-allowed;
 		color: #1f1f1f;
 		background-color: #fff;
+		border-color: #1f1f1f;
 	}
 	transition: all 0.5s ease-in;
 `;
