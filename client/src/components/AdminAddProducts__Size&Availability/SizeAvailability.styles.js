@@ -35,7 +35,7 @@ export const SizeAvailabilityContainer = styled.div`
 	flex-direction: column;
 	border-bottom: 1px solid #1f1f1f;
 	border-radius: 0;
-	height: 40px;
+	/* height: 40px; */
 	min-height: ${(props) => (props.isOpen ? '250px' : '40px')};
 	/* overflow-y: auto; */
 	overflow: hidden;

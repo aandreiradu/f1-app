@@ -5,18 +5,26 @@ export const SAIContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border: 1px solid #1f1f1f;
+	margin: 10px 0;
+	height: 40px;
+	border-radius: 10px;
 `;
 
-export const SAILeftSide = styled.p`
-	flex: 0.75;
+export const SAILeftSide = styled.div`
+	/* flex: 0.75;
 	padding: 2.5px 5px;
-	color: #1f1f1f;
+	color: #1f1f1f; */
+	color: #fff;
+	flex: 1;
+	padding: 2.5px 5px;
 `;
 
 export const SAIMiddleBar = styled.div`
 	width: 2px;
 	height: 100%;
-	background-color: #fff;
+	color: #1f1f1f;
+	background-color: #1f1f1f;
 `;
 
 export const SAIRightSide = styled.div`
@@ -26,7 +34,9 @@ export const SAIRightSide = styled.div`
 `;
 
 export const SAISelect = styled.select`
-	border: 1px solid #1f1f1f;
+	background-color: transparent;
+	/* border: 1px solid #1f1f1f; */
+	border: none;
 	border-radius: 5px;
 	color: #1f1f1f;
 	height: 40px;
@@ -48,10 +58,12 @@ export const SAISelectOption = styled.option`
 `;
 
 export const SAIInput = styled.input`
-	margin: 10px 0;
+	background-color: transparent;
+	/* margin: 10px 0; */
 	width: 100%;
 	border: none;
-	border: 1px solid #1f1f1f;
+	/* border: 1px solid #1f1f1f; */
+	border: none;
 	border-radius: 5px;
 	color: #1f1f1f;
 	height: 40px;

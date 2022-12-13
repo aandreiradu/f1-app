@@ -25,6 +25,13 @@ const AdminAddProducts = () => {
 	const { sendRequest, error } = useAxiosInterceptors();
 	const [sizeSelected, setSizeSelected] = useState('');
 	const [productsAvailability, setProductsAvailability] = useState(0);
+	const [activities, setActivities] = useState([
+		{
+			order: 1,
+			size: null,
+			availability: null
+		}
+	]);
 
 	useEffect(() => {
 		console.log('productsAvailability parent', productsAvailability);
@@ -438,18 +445,29 @@ const AdminAddProducts = () => {
 				<SizeAvailability canSubmit={sizeSelected && productsAvailability}>
 					<SizeAvailabilityItem
 						configLeft={{
-							text: 'Size'
+							dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
+							dataOption: 'selector',
+							onSizeSelected: handleSizeSelection
 						}}
 						configRight={{
-							dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
-							dataOption: 'selector'
+							dataOption: 'input',
+							dataType: 'number',
+							dataTypeConfig: {
+								min: 1,
+								max: 1000,
+								value: productsAvailability ?? '',
+								placeholder: 'Insert Product Availability'
+							},
+							stateController: {
+								state: productsAvailability,
+								setter: setProductsAvailability
+							}
 						}}
-						onSizeSelected={handleSizeSelection}
 					/>
-					<SizeAvailabilityItem
-						configLeft={{
-							text: 'Product Availability'
-						}}
+					{/* <SizeAvailabilityItem
+						// configLeft={{
+						// 	text: 'Product Availability'
+						// }}
 						configRight={{
 							dataOption: 'input',
 							dataType: 'number',
@@ -463,7 +481,7 @@ const AdminAddProducts = () => {
 								setter: setProductsAvailability
 							}
 						}}
-					/>
+					/> */}
 				</SizeAvailability>
 				<AddProductButton type="submit" disabled={!canSubmit}>
 					Add Product

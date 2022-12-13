@@ -8,8 +8,8 @@ import {
 	SAIInput
 } from './SizeAvailabilityItem.styles';
 
-const SizeAvailabilityItem = ({ configLeft, configRight, onSizeSelected }) => {
-	const { dataSource, dataOption, dataType, dataTypeConfig, stateController } = configRight;
+const buildFunctionality = (config) => {
+	const { dataOption, stateController, onSizeSelected } = config;
 
 	let handleOptionSelection;
 	if (dataOption === 'selector') {
@@ -34,24 +34,79 @@ const SizeAvailabilityItem = ({ configLeft, configRight, onSizeSelected }) => {
 		};
 	}
 
+	return {
+		handleOptionSelection,
+		handleInputChange
+	};
+};
+
+const SizeAvailabilityItem = ({ configLeft, configRight }) => {
+	console.log('configRightconfigRight', configRight);
+	const {
+		dataSource: dataSourceLeft,
+		dataOption: dataOptionLeft,
+		dataType: dataTypeLeft,
+		dataTypeConfig: dataTypeConfigLeft,
+		stateController: stateControllerLeft,
+		onSizeSelected
+	} = configLeft;
+	const {
+		dataSource: dataSourceRight,
+		dataOption: dataOptionRight,
+		dataType: dataTypeRight,
+		dataTypeConfig: dataTypeConfigRight,
+		stateController: stateControllerRight,
+		onSizeSelected: onSizeSelectedRight
+	} = configRight;
+
+	const {
+		handleOptionSelection: handleOptionSelectionLeft,
+		handleInputChange: handleInputChangeLeft
+	} = buildFunctionality(configLeft);
+	const {
+		handleOptionSelection: handleOptionSelectionRight,
+		handleInputChange: handleInputChangeRight
+	} = buildFunctionality(configRight);
+
 	return (
 		<SAIContainer>
-			<SAILeftSide>{configLeft?.text || `Size`}</SAILeftSide>
-			{/* <SAIMiddleBar /> */}
-			<SAIRightSide>
-				{dataOption === 'selector' && (
-					<SAISelect onChange={handleOptionSelection} {...dataTypeConfig}>
-						{/* <SAISelectOption disabled>Select size</SAISelectOption> */}---
+			<SAILeftSide>
+				{dataOptionLeft === 'selector' && (
+					<SAISelect onChange={handleOptionSelectionLeft} {...dataTypeConfigLeft}>
 						<SAISelectOption disabled defaultValue="Select size">
 							Select size
 						</SAISelectOption>
-						{dataSource?.map((option, index) => (
+						{dataSourceLeft?.map((option, index) => (
 							<SAISelectOption key={index}>{option}</SAISelectOption>
 						))}
 					</SAISelect>
 				)}
-				{dataOption === 'input' && (
-					<SAIInput onChange={handleInputChange} type={dataType || 'text'} {...dataTypeConfig} />
+				{dataOptionLeft === 'input' && (
+					<SAIInput
+						onChange={handleInputChangeLeft}
+						type={dataTypeLeft || 'text'}
+						{...dataTypeConfigLeft}
+					/>
+				)}
+			</SAILeftSide>
+			<SAIMiddleBar />
+			<SAIRightSide>
+				{dataOptionRight === 'selector' && (
+					<SAISelect onChange={handleOptionSelectionRight} {...dataTypeConfigRight}>
+						<SAISelectOption disabled defaultValue="Select size">
+							Select size
+						</SAISelectOption>
+						{dataSourceLeft?.map((option, index) => (
+							<SAISelectOption key={index}>{option}</SAISelectOption>
+						))}
+					</SAISelect>
+				)}
+				{dataOptionRight === 'input' && (
+					<SAIInput
+						onChange={handleInputChangeRight}
+						type={dataTypeRight || 'text'}
+						{...dataTypeConfigRight}
+					/>
 				)}
 			</SAIRightSide>
 		</SAIContainer>
