@@ -1,6 +1,14 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
 export const SAIContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+`;
+
+export const SAIGroup = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -12,12 +20,9 @@ export const SAIContainer = styled.div`
 `;
 
 export const SAILeftSide = styled.div`
-	/* flex: 0.75;
-	padding: 2.5px 5px;
-	color: #1f1f1f; */
 	color: #fff;
 	flex: 1;
-	padding: 2.5px 5px;
+	/* padding: 2.5px 5px; */
 `;
 
 export const SAIMiddleBar = styled.div`
@@ -30,7 +35,7 @@ export const SAIMiddleBar = styled.div`
 export const SAIRightSide = styled.div`
 	color: #fff;
 	flex: 1;
-	padding: 2.5px 5px;
+	/* padding: 2.5px 5px; */
 `;
 
 export const SAISelect = styled.select`
@@ -75,4 +80,18 @@ export const SAIInput = styled.input`
 	&:focus {
 		outline: none;
 	}
+`;
+
+export const SAIAddActionBtn = styled(FontAwesomeIcon)`
+	cursor: pointer;
+	width: 15px;
+	height: 20px;
+	background-color: #1f1f1f;
+	color: #fff;
+	border-radius: 50%;
+	padding: 5px 6px;
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 `;

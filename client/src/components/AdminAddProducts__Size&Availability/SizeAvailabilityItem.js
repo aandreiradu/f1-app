@@ -1,3 +1,4 @@
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
 	SAIContainer,
 	SAILeftSide,
@@ -5,11 +6,14 @@ import {
 	SAIRightSide,
 	SAISelect,
 	SAISelectOption,
-	SAIInput
+	SAIInput,
+	SAIAddActionBtn,
+	SAIGroup
 } from './SizeAvailabilityItem.styles';
 
 const buildFunctionality = (config) => {
-	const { dataOption, stateController, onSizeSelected } = config;
+	console.log('buildFunctionality cfg', config);
+	const { dataOption, stateController, onSizeSelected, index } = config;
 
 	let handleOptionSelection;
 	if (dataOption === 'selector') {
@@ -19,7 +23,16 @@ const buildFunctionality = (config) => {
 				e.stopPropagation();
 			}
 			console.log('selected value', e.target.value);
-			onSizeSelected(e.target.value);
+			onSizeSelected((prev) => {
+				const updatedItemIndex = prev?.findIndex((item) => +item.index === index);
+				const updatedItem = {
+					...prev[updatedItemIndex],
+					size: e.target.value
+				};
+				const updatedState = [...prev];
+				updatedState[updatedItemIndex] = updatedItem;
+				return updatedState;
+			});
 		};
 	}
 
@@ -29,8 +42,17 @@ const buildFunctionality = (config) => {
 			if (e && e.stopPropagation) {
 				e.stopPropagation();
 			}
-			console.log('input target', e.target.value);
-			stateController?.setter(e.target.value);
+			stateController?.setter((prev) => {
+				const updatedItemIndex = prev?.findIndex((item) => +item.index === index);
+				console.log('input updatedItemIndex', updatedItemIndex);
+				const updatedItem = {
+					...prev[updatedItemIndex],
+					availability: +e.target.value
+				};
+				const updatedState = [...prev];
+				updatedState[updatedItemIndex] = updatedItem;
+				return updatedState;
+			});
 		};
 	}
 
@@ -40,75 +62,82 @@ const buildFunctionality = (config) => {
 	};
 };
 
-const SizeAvailabilityItem = ({ configLeft, configRight }) => {
+const SizeAvailabilityItem = ({ configLeft, configRight, onActivityAdded }) => {
 	console.log('configRightconfigRight', configRight);
 	const {
 		dataSource: dataSourceLeft,
 		dataOption: dataOptionLeft,
 		dataType: dataTypeLeft,
 		dataTypeConfig: dataTypeConfigLeft,
-		stateController: stateControllerLeft,
-		onSizeSelected
+		value
 	} = configLeft;
 	const {
-		dataSource: dataSourceRight,
 		dataOption: dataOptionRight,
 		dataType: dataTypeRight,
-		dataTypeConfig: dataTypeConfigRight,
-		stateController: stateControllerRight,
-		onSizeSelected: onSizeSelectedRight
+		dataTypeConfig: dataTypeConfigRight
 	} = configRight;
 
 	const {
 		handleOptionSelection: handleOptionSelectionLeft,
-		handleInputChange: handleInputChangeLeft
+		handleInputChange: handleInputChangeLeft,
+		index: indexLeft
 	} = buildFunctionality(configLeft);
 	const {
 		handleOptionSelection: handleOptionSelectionRight,
-		handleInputChange: handleInputChangeRight
+		handleInputChange: handleInputChangeRight,
+		index: indexRight
 	} = buildFunctionality(configRight);
+
+	const addActivityHandler = () => {
+		onActivityAdded();
+	};
 
 	return (
 		<SAIContainer>
-			<SAILeftSide>
-				{dataOptionLeft === 'selector' && (
-					<SAISelect onChange={handleOptionSelectionLeft} {...dataTypeConfigLeft}>
-						<SAISelectOption disabled defaultValue="Select size">
-							Select size
-						</SAISelectOption>
-						{dataSourceLeft?.map((option, index) => (
-							<SAISelectOption key={index}>{option}</SAISelectOption>
-						))}
-					</SAISelect>
-				)}
-				{dataOptionLeft === 'input' && (
-					<SAIInput
-						onChange={handleInputChangeLeft}
-						type={dataTypeLeft || 'text'}
-						{...dataTypeConfigLeft}
-					/>
-				)}
-			</SAILeftSide>
-			<SAIMiddleBar />
-			<SAIRightSide>
-				{dataOptionRight === 'selector' && (
-					<SAISelect onChange={handleOptionSelectionRight} {...dataTypeConfigRight}>
-						<SAISelectOption disabled defaultValue="Select size">
-							Select size
-						</SAISelectOption>
-						{dataSourceLeft?.map((option, index) => (
-							<SAISelectOption key={index}>{option}</SAISelectOption>
-						))}
-					</SAISelect>
-				)}
-				{dataOptionRight === 'input' && (
-					<SAIInput
-						onChange={handleInputChangeRight}
-						type={dataTypeRight || 'text'}
-						{...dataTypeConfigRight}
-					/>
-				)}
-			</SAIRightSide>
+			<SAIGroup>
+				<SAILeftSide>
+					{dataOptionLeft === 'selector' && (
+						<SAISelect onChange={handleOptionSelectionLeft} {...dataTypeConfigLeft} value={value}>
+							<SAISelectOption disabled defaultValue="Select size">
+								Select size
+							</SAISelectOption>
+							{dataSourceLeft?.map((option, index) => (
+								<SAISelectOption key={index}>{option}</SAISelectOption>
+							))}
+						</SAISelect>
+					)}
+					{dataOptionLeft === 'input' && (
+						<SAIInput
+							onChange={handleInputChangeLeft}
+							type={dataTypeLeft || 'text'}
+							{...dataTypeConfigLeft}
+						/>
+					)}
+				</SAILeftSide>
+				<SAIMiddleBar />
+				<SAIRightSide>
+					{dataOptionRight === 'selector' && (
+						<SAISelect onChange={handleOptionSelectionRight} {...dataTypeConfigRight}>
+							<SAISelectOption disabled selected value="Select size">
+								Select size
+							</SAISelectOption>
+							{dataSourceLeft?.map((option, index) => (
+								<SAISelectOption key={index}>{option}</SAISelectOption>
+							))}
+						</SAISelect>
+					)}
+					{dataOptionRight === 'input' && (
+						<SAIInput
+							onChange={handleInputChangeRight}
+							type={dataTypeRight || 'text'}
+							{...dataTypeConfigRight}
+						/>
+					)}
+				</SAIRightSide>
+			</SAIGroup>
+			<SAIAddActionBtn icon={faPlus} onClick={addActivityHandler}>
+				+
+			</SAIAddActionBtn>
 		</SAIContainer>
 	);
 };

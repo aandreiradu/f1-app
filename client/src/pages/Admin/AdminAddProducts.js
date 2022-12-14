@@ -27,15 +27,15 @@ const AdminAddProducts = () => {
 	const [productsAvailability, setProductsAvailability] = useState(0);
 	const [activities, setActivities] = useState([
 		{
-			order: 1,
+			index: 0,
 			size: null,
 			availability: null
 		}
 	]);
 
 	useEffect(() => {
-		console.log('productsAvailability parent', productsAvailability);
-	}, [productsAvailability]);
+		console.log('activities', activities);
+	}, [activities]);
 
 	const [showModal, setShowModal] = useState({
 		show: false,
@@ -271,11 +271,6 @@ const AdminAddProducts = () => {
 		canSubmit = true;
 	}
 
-	const handleSizeSelection = (size) => {
-		console.log('set state in parent to this', size);
-		setSizeSelected(size);
-	};
-
 	const addProductHandler = (e) => {
 		e.preventDefault();
 		console.log('triggered form submit');
@@ -321,6 +316,21 @@ const AdminAddProducts = () => {
 			}
 		);
 		// }
+	};
+
+	const addActivityHandler = () => {
+		console.log('should add another one to the current state', activities);
+
+		setActivities((prev) => {
+			return [
+				...prev,
+				{
+					index: +activities[activities.length - 1]?.index + 1,
+					size: null,
+					availability: null
+				}
+			];
+		});
 	};
 
 	return (
@@ -443,45 +453,34 @@ const AdminAddProducts = () => {
 					)}
 				</AddProductActionGroup>
 				<SizeAvailability canSubmit={sizeSelected && productsAvailability}>
-					<SizeAvailabilityItem
-						configLeft={{
-							dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
-							dataOption: 'selector',
-							onSizeSelected: handleSizeSelection
-						}}
-						configRight={{
-							dataOption: 'input',
-							dataType: 'number',
-							dataTypeConfig: {
-								min: 1,
-								max: 1000,
-								value: productsAvailability ?? '',
-								placeholder: 'Insert Product Availability'
-							},
-							stateController: {
-								state: productsAvailability,
-								setter: setProductsAvailability
-							}
-						}}
-					/>
-					{/* <SizeAvailabilityItem
-						// configLeft={{
-						// 	text: 'Product Availability'
-						// }}
-						configRight={{
-							dataOption: 'input',
-							dataType: 'number',
-							dataTypeConfig: {
-								min: 1,
-								max: 1000,
-								value: productsAvailability
-							},
-							stateController: {
-								state: productsAvailability,
-								setter: setProductsAvailability
-							}
-						}}
-					/> */}
+					{activities?.map((activity) => (
+						<SizeAvailabilityItem
+							key={activity?.index}
+							configLeft={{
+								dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
+								dataOption: 'selector',
+								onSizeSelected: setActivities,
+								index: activity?.index,
+								value: activity?.size || ''
+							}}
+							configRight={{
+								index: activity?.index,
+								dataOption: 'input',
+								dataType: 'number',
+								dataTypeConfig: {
+									min: 1,
+									max: 1000,
+									value: activity?.availability || 'Product Availability',
+									placeholder: 'Product Availability'
+								},
+								stateController: {
+									state: activities[activity.index].availability,
+									setter: setActivities
+								}
+							}}
+							onActivityAdded={addActivityHandler}
+						/>
+					))}
 				</SizeAvailability>
 				<AddProductButton type="submit" disabled={!canSubmit}>
 					Add Product
