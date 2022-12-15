@@ -27,7 +27,7 @@ const SizeAvailability = ({ children, canSubmit }) => {
 	};
 
 	return (
-		<SizeAvailabilityContainer isOpen={isOpen}>
+		<SizeAvailabilityContainer isOpen={isOpen} woBorder="true">
 			<SizeAvailabilityInnerContent isOpen={isOpen} onClick={handleOpen}>
 				<p>
 					Size & Availability <span style={{ color: 'red' }}>*</span>

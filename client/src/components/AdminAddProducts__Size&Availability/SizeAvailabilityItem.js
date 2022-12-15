@@ -1,4 +1,4 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
 	SAIContainer,
 	SAILeftSide,
@@ -11,9 +11,9 @@ import {
 	SAIGroup
 } from './SizeAvailabilityItem.styles';
 
-const buildFunctionality = (config) => {
+const buildFunctionality = (config, index) => {
 	console.log('buildFunctionality cfg', config);
-	const { dataOption, stateController, onSizeSelected, index } = config;
+	const { dataOption, stateController, onSizeSelected } = config;
 
 	let handleOptionSelection;
 	if (dataOption === 'selector') {
@@ -25,12 +25,15 @@ const buildFunctionality = (config) => {
 			console.log('selected value', e.target.value);
 			onSizeSelected((prev) => {
 				const updatedItemIndex = prev?.findIndex((item) => +item.index === index);
+				console.log('updatedItemIndex', updatedItemIndex);
 				const updatedItem = {
 					...prev[updatedItemIndex],
 					size: e.target.value
 				};
+				console.log('updatedItem', updatedItem);
 				const updatedState = [...prev];
 				updatedState[updatedItemIndex] = updatedItem;
+				console.log('updatedState', updatedState);
 				return updatedState;
 			});
 		};
@@ -62,8 +65,15 @@ const buildFunctionality = (config) => {
 	};
 };
 
-const SizeAvailabilityItem = ({ configLeft, configRight, onActivityAdded }) => {
-	console.log('configRightconfigRight', configRight);
+const SizeAvailabilityItem = ({
+	configLeft,
+	configRight,
+	onActivityAdded,
+	canBeRemoved,
+	canAddSibling,
+	onActivityRemoved,
+	index
+}) => {
 	const {
 		dataSource: dataSourceLeft,
 		dataOption: dataOptionLeft,
@@ -71,6 +81,10 @@ const SizeAvailabilityItem = ({ configLeft, configRight, onActivityAdded }) => {
 		dataTypeConfig: dataTypeConfigLeft,
 		value
 	} = configLeft;
+
+	console.log('index', index, 'has value', value);
+
+	console.log('@@@aradu configLeft', configLeft);
 	const {
 		dataOption: dataOptionRight,
 		dataType: dataTypeRight,
@@ -81,15 +95,20 @@ const SizeAvailabilityItem = ({ configLeft, configRight, onActivityAdded }) => {
 		handleOptionSelection: handleOptionSelectionLeft,
 		handleInputChange: handleInputChangeLeft,
 		index: indexLeft
-	} = buildFunctionality(configLeft);
+	} = buildFunctionality(configLeft, index);
 	const {
 		handleOptionSelection: handleOptionSelectionRight,
 		handleInputChange: handleInputChangeRight,
 		index: indexRight
-	} = buildFunctionality(configRight);
+	} = buildFunctionality(configRight, index);
 
 	const addActivityHandler = () => {
 		onActivityAdded();
+	};
+
+	const removeActivityHandler = (index) => {
+		console.log('removeActivityHandler index', index);
+		onActivityRemoved(index);
 	};
 
 	return (
@@ -117,7 +136,7 @@ const SizeAvailabilityItem = ({ configLeft, configRight, onActivityAdded }) => {
 				<SAIMiddleBar />
 				<SAIRightSide>
 					{dataOptionRight === 'selector' && (
-						<SAISelect onChange={handleOptionSelectionRight} {...dataTypeConfigRight}>
+						<SAISelect onChange={handleOptionSelectionRight} {...dataTypeConfigRight} value={value}>
 							<SAISelectOption disabled selected value="Select size">
 								Select size
 							</SAISelectOption>
@@ -138,6 +157,16 @@ const SizeAvailabilityItem = ({ configLeft, configRight, onActivityAdded }) => {
 			<SAIAddActionBtn icon={faPlus} onClick={addActivityHandler}>
 				+
 			</SAIAddActionBtn>
+			{canAddSibling && (
+				<SAIAddActionBtn icon={faPlus} onClick={addActivityHandler}>
+					+
+				</SAIAddActionBtn>
+			)}
+			{canBeRemoved && (
+				<SAIAddActionBtn icon={faMinus} onClick={removeActivityHandler.bind(this, index)}>
+					-
+				</SAIAddActionBtn>
+			)}
 		</SAIContainer>
 	);
 };

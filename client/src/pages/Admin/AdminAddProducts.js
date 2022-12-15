@@ -23,8 +23,6 @@ import SizeAvailabilityItem from '../../components/AdminAddProducts__Size&Availa
 
 const AdminAddProducts = () => {
 	const { sendRequest, error } = useAxiosInterceptors();
-	const [sizeSelected, setSizeSelected] = useState('');
-	const [productsAvailability, setProductsAvailability] = useState(0);
 	const [activities, setActivities] = useState([
 		{
 			index: 0,
@@ -248,9 +246,7 @@ const AdminAddProducts = () => {
 		productImage?.file &&
 		isValidTitle &&
 		isValidPrice &&
-		isValidDescription &&
-		sizeSelected &&
-		productsAvailability
+		isValidDescription
 	) {
 		console.log('submit', {
 			selectedteam: Object.keys(selectedTeam).length > 0,
@@ -262,11 +258,7 @@ const AdminAddProducts = () => {
 
 			isValidPrice,
 
-			isValidDescription,
-
-			sizeSelected,
-
-			productsAvailability
+			isValidDescription
 		});
 		canSubmit = true;
 	}
@@ -319,18 +311,21 @@ const AdminAddProducts = () => {
 	};
 
 	const addActivityHandler = () => {
-		console.log('should add another one to the current state', activities);
+		setActivities((prev) => [
+			...prev,
+			{
+				index: +activities[activities.length - 1]?.index + 1,
+				size: null,
+				availability: null
+			}
+		]);
+	};
 
-		setActivities((prev) => {
-			return [
-				...prev,
-				{
-					index: +activities[activities.length - 1]?.index + 1,
-					size: null,
-					availability: null
-				}
-			];
-		});
+	const removeActivityHandler = (activityItemIndex) => {
+		console.log('remove this index', activityItemIndex);
+		const filteredActivities = activities?.filter((item) => +item?.index !== +activityItemIndex);
+		console.log('filteredActivities', filteredActivities);
+		setActivities(filteredActivities);
 	};
 
 	return (
@@ -452,19 +447,24 @@ const AdminAddProducts = () => {
 						</AddProductsErrorFallback>
 					)}
 				</AddProductActionGroup>
-				<SizeAvailability canSubmit={sizeSelected && productsAvailability}>
+				<SizeAvailability canSubmit="true">
 					{activities?.map((activity) => (
 						<SizeAvailabilityItem
+							canBeRemoved={activities?.length > 1}
 							key={activity?.index}
+							index={activity?.index}
 							configLeft={{
 								dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
+								// .filter((size) => {
+								// 	const isSelected = activities.find((act) => act.size === size);
+								// 	console.log('isSelected', isSelected);
+								// 	if (!isSelected) return size;
+								// })
 								dataOption: 'selector',
 								onSizeSelected: setActivities,
-								index: activity?.index,
 								value: activity?.size || ''
 							}}
 							configRight={{
-								index: activity?.index,
 								dataOption: 'input',
 								dataType: 'number',
 								dataTypeConfig: {
@@ -474,11 +474,11 @@ const AdminAddProducts = () => {
 									placeholder: 'Product Availability'
 								},
 								stateController: {
-									state: activities[activity.index].availability,
 									setter: setActivities
 								}
 							}}
 							onActivityAdded={addActivityHandler}
+							onActivityRemoved={removeActivityHandler}
 						/>
 					))}
 				</SizeAvailability>

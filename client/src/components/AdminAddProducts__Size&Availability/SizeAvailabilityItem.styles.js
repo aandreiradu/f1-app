@@ -21,7 +21,7 @@ export const SAIGroup = styled.div`
 
 export const SAILeftSide = styled.div`
 	color: #fff;
-	flex: 1;
+	flex: 0.65;
 	/* padding: 2.5px 5px; */
 `;
 

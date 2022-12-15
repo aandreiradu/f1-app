@@ -34,6 +34,11 @@ export const SizeAvailabilityContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	border-bottom: 1px solid #1f1f1f;
+	${(props) =>
+		props.woBorder &&
+		css`
+			border-bottom: none;
+		`}
 	border-radius: 0;
 	/* height: 40px; */
 	min-height: ${(props) => (props.isOpen ? '250px' : '40px')};
