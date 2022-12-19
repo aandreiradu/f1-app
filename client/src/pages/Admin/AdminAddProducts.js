@@ -20,8 +20,10 @@ import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { useNavigate } from 'react-router-dom';
 import SizeAvailability from '../../components/AdminAddProducts__Size&Availability/SizeAvailability';
 import SizeAvailabilityItem from '../../components/AdminAddProducts__Size&Availability/SizeAvailabilityItem';
+import { removeIndexes } from '../../Utils/admin/removeIndexes_addProducts';
 
 const AdminAddProducts = () => {
+	const [canSubmitActivities, setCanSubmitActivities] = useState(false);
 	const { sendRequest, error } = useAxiosInterceptors();
 	const [activities, setActivities] = useState([
 		{
@@ -30,11 +32,6 @@ const AdminAddProducts = () => {
 			availability: null
 		}
 	]);
-
-	useEffect(() => {
-		console.log('activities', activities);
-	}, [activities]);
-
 	const [showModal, setShowModal] = useState({
 		show: false,
 		title: null,
@@ -118,15 +115,20 @@ const AdminAddProducts = () => {
 			case 422:
 				console.log('switch case 422');
 				console.log({ message, status, data });
-				if (message === 'Validation failed. Entered data is not in correct format') {
-					console.log('@@@if Validation failed. Entered data is not in correct format');
-					setShowModal({
-						show: true,
-						title: 'Something went wrong',
-						message: message
-					});
-					break;
-				}
+				// if (message === 'Validation failed. Entered data is not in correct format') {
+				// 	console.log('@@@if Validation failed. Entered data is not in correct format');
+				// 	setShowModal({
+				// 		show: true,
+				// 		title: 'Something went wrong',
+				// 		message: message
+				// 	});
+				// 	break;
+				// }
+				setShowModal({
+					show: true,
+					title: 'Something went wrong',
+					message: message
+				});
 				break;
 
 			default:
@@ -246,19 +248,16 @@ const AdminAddProducts = () => {
 		productImage?.file &&
 		isValidTitle &&
 		isValidPrice &&
-		isValidDescription
+		canSubmitActivities
 	) {
 		console.log('submit', {
 			selectedteam: Object.keys(selectedTeam).length > 0,
 			team: selectedTeam?.teamId,
-
 			image: productImage?.file,
-
 			isValidTitle,
-
 			isValidPrice,
-
-			isValidDescription
+			isValidDescription,
+			canSubmitActivities
 		});
 		canSubmit = true;
 	}
@@ -267,47 +266,48 @@ const AdminAddProducts = () => {
 		e.preventDefault();
 		console.log('triggered form submit');
 
-		// if (canSubmit) {
-		console.log('can submit', canSubmit);
+		if (canSubmit) {
+			console.log('can submit', canSubmit);
 
-		const controller = new AbortController();
-		const formData = new FormData();
-		formData.append('title', valueTitle);
-		formData.append('description', valueDescription);
-		formData.append('price', valuePrice);
-		formData.append('details', valueDetails);
-		formData.append('teamId', selectedTeam?.teamId);
-		formData.append('productPicture', productImage?.file);
-		console.log('makeRequest with this', formData);
+			const controller = new AbortController();
+			const formData = new FormData();
+			formData.append('title', valueTitle);
+			formData.append('description', valueDescription);
+			formData.append('price', valuePrice);
+			formData.append('details', valueDetails);
+			formData.append('teamId', selectedTeam?.teamId);
+			formData.append('productPicture', productImage?.file);
+			formData.append('sizeAvailability', JSON.stringify(removeIndexes(activities)));
+			console.log('makeRequest with this', formData);
 
-		sendRequest(
-			{
-				url: '/shop/createProduct',
-				method: 'POST',
-				body: formData,
-				withCredentials: true,
-				signal: controller.signal
-			},
-			(responseData) => {
-				console.log('responseData', responseData);
-				const { message, status } = responseData;
+			sendRequest(
+				{
+					url: '/shop/createProduct',
+					method: 'POST',
+					body: formData,
+					withCredentials: true,
+					signal: controller.signal
+				},
+				(responseData) => {
+					console.log('responseData', responseData);
+					const { message, status } = responseData;
 
-				if (status === 200 && message === 'Product created successfully') {
-					setShowModal({
-						show: true,
-						title: '',
-						message: 'Product created successfully'
-					});
+					if (status === 200 && message === 'Product created successfully') {
+						setShowModal({
+							show: true,
+							title: '',
+							message: 'Product created successfully'
+						});
 
-					/* Rest Form Inputs after the product was created */
-					resetTitle();
-					resetDetails();
-					resetPrice();
-					resetDescription();
+						/* Rest Form Inputs after the product was created */
+						resetTitle();
+						resetDetails();
+						resetPrice();
+						resetDescription();
+					}
 				}
-			}
-		);
-		// }
+			);
+		}
 	};
 
 	const addActivityHandler = () => {
@@ -447,7 +447,11 @@ const AdminAddProducts = () => {
 						</AddProductsErrorFallback>
 					)}
 				</AddProductActionGroup>
-				<SizeAvailability canSubmit="true">
+				<SizeAvailability
+					canSubmit="true"
+					activities={activities}
+					onSubmit={setCanSubmitActivities}
+				>
 					{activities?.map((activity) => (
 						<SizeAvailabilityItem
 							canBeRemoved={activities?.length > 1}

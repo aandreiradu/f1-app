@@ -8,8 +8,11 @@ import {
 	SizeAvailabilityIsSaved
 } from './SizeAvailability.styles';
 
-const SizeAvailability = ({ children, canSubmit }) => {
-	const [isSaved, setIsSaved] = useState(false);
+const SizeAvailability = ({ children, canSubmit, activities, onSubmit }) => {
+	const [isSaved, setIsSaved] = useState({
+		saved: false,
+		message: null
+	});
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOpen = (e) => {
@@ -19,10 +22,28 @@ const SizeAvailability = ({ children, canSubmit }) => {
 	const confirmHandler = () => {
 		if (!canSubmit) return;
 
+		console.log('activities', activities);
+		const hasEmptyActivities = activities?.find(
+			(activity) => !activity?.size || !activity?.availability || !activity.size === 'SELECT SIZE'
+		);
+
+		console.log(' hasEmptyActivities', hasEmptyActivities);
+		if (hasEmptyActivities) {
+			setIsSaved({
+				saved: false,
+				message: 'Please complete all the activities or remove incomplete activities'
+			});
+			return;
+		}
+
 		setIsSaved(true);
+		setIsSaved({
+			saved: true,
+			message: 'Size & Availability saved'
+		});
+		onSubmit.call(this, true);
 		setTimeout(() => {
 			setIsOpen(false);
-			setIsSaved(false);
 		}, 2000);
 	};
 
@@ -38,8 +59,8 @@ const SizeAvailability = ({ children, canSubmit }) => {
 				<>
 					{children}
 					{/* {isSaved && canSubmit && ( */}
-					<SizeAvailabilityIsSaved show={isSaved && canSubmit}>
-						Size & Availability saved
+					<SizeAvailabilityIsSaved show={isSaved && canSubmit} isSaved={isSaved?.saved}>
+						{isSaved?.message}
 					</SizeAvailabilityIsSaved>
 					{/* )} */}
 					<SizeAvailabilityConfirmBtn type="button" disabled={!canSubmit} onClick={confirmHandler}>

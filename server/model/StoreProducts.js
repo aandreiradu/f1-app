@@ -33,13 +33,13 @@ const productSchema = new Schema(
       required: true,
     },
 
-    sizeAndAvailableQuantity: [
+    sizeAndAvailability: [
       {
         size: {
           type: String,
           required: true,
         },
-        availableQuantity: {
+        availability: {
           type: Number,
           required: true,
         },

@@ -114,7 +114,7 @@ export const SizeAvailabilityConfirmBtn = styled.button`
 export const SizeAvailabilityIsSaved = styled.p`
 	text-align: center;
 	font-size: 14px;
-	color: #3cb371;
+	color: ${(props) => (props.isSaved ? '#3cb371' : 'red')};
 	visibility: hidden;
 
 	${(props) =>

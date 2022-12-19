@@ -87,6 +87,40 @@ router.post(
 
       return true;
     }),
+    body("sizeAvailability").custom((value) => {
+      console.log("sizeAvailability validator", value);
+      try {
+        console.log("is array?", Array.isArray(JSON.parse(value)));
+        const checkSA = JSON.parse(value);
+        console.log("checkSA", checkSA);
+        console.log("checkSA array", Array.isArray(checkSA));
+        checkSA.forEach((item, idx) => {
+          console.log("item is", item);
+          const { index, size, availability } = item;
+          console.log("for idx", idx, "we receieved this", item);
+          console.log({ index, size, availability });
+
+          if (!size || !availability) {
+            console.log({ size, avilability });
+            throw new Error("Invalid parameter SIZEAVAILABILITY");
+          }
+          const sizes = ["S", "M", "L", "XL", "XXL"];
+          if (!sizes.includes(size)) {
+            throw new Error("Invalid parameter size");
+          }
+
+          if (availability < 0 || availability > 1000) {
+            throw new Error("Availability out of range");
+          }
+        });
+
+        console.log("Availabilit passed validations");
+        return true;
+      } catch (error) {
+        console.log("catch middleware SAI", error);
+        return Promise.reject(error || "Unexpected error occured");
+      }
+    }),
   ],
   createProduct
 );

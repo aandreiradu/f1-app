@@ -117,9 +117,7 @@ const SizeAvailabilityItem = ({
 				<SAILeftSide>
 					{dataOptionLeft === 'selector' && (
 						<SAISelect onChange={handleOptionSelectionLeft} {...dataTypeConfigLeft} value={value}>
-							<SAISelectOption disabled defaultValue="Select size">
-								Select size
-							</SAISelectOption>
+							<SAISelectOption defaultValue="Select size">Select size</SAISelectOption>
 							{dataSourceLeft?.map((option, index) => (
 								<SAISelectOption key={index}>{option}</SAISelectOption>
 							))}
