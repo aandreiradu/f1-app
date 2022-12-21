@@ -11,6 +11,7 @@ import ProductDetailsActions from '../../../components/Store/Store__ProductDetai
 import Footer from '../../../components/Footer/Footer';
 
 const ShopProductDeatils = () => {
+	const [isSizeSelected, setIsSizeSelected] = useState(false);
 	const [productDetails, setProductDetails] = useState({});
 	const { sendRequest, error } = useAxiosInterceptors();
 	const { productId } = useParams();
@@ -73,8 +74,14 @@ const ShopProductDeatils = () => {
 				<ProductDetailsInfo
 					product={productDetails?.product}
 					teamLogo={productDetails?.team?.logoUrl}
+					onSizeSelected={setIsSizeSelected}
+					isSelected={isSizeSelected}
 				/>
-				<ProductDetailsActions hasAvailableProducts={productsAvailable} />
+				<ProductDetailsActions
+					product={productDetails?.product}
+					hasAvailableProducts={productsAvailable}
+					isSizeSelected={isSizeSelected}
+				/>
 			</ProductDetailsContainer>
 			<Footer />
 		</>

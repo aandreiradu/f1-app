@@ -70,6 +70,9 @@ export const ProductDetailsInfoDescription = styled.p`
 	font-weight: 400;
 	color: #242424;
 	line-height: 1.5;
+	max-height: 75px;
+	overflow: hidden;
+	overflow-y: auto;
 `;
 
 export const ProductDetailsSizes = styled.div`
@@ -101,13 +104,14 @@ export const ProductDetailsSizeItem = styled.button`
 	font-weight: bold;
 	padding: 2px 10px;
 	cursor: pointer;
+	color: #1f1f1f;
 
 	${(props) =>
 		props.isSelected &&
 		css`
 			background-color: #e10600;
 			color: #fff;
-			border-radius: 50%;
+			border-radius: 90px;
 			animation: ${sizeSelectionAnimation} 0.15s linear;
 		`}
 
@@ -126,5 +130,11 @@ export const ProductDetailsSizeItem = styled.button`
 		transform: rotate(45deg);
 		transform-origin: 0% 0%;
 		background-color: tomato;
+	}
+
+	&:hover {
+		background-color: #e10600;
+		color: #fff;
+		transition: all 0.15s ease-in;
 	}
 `;

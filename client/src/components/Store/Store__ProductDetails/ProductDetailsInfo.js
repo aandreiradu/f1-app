@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useState } from 'react';
 import apiConfig from '../../../constants/apiConfig';
 import {
@@ -12,13 +13,13 @@ import {
 	ProductDetailsSizeContainer
 } from './ProductDetailsInfo.styles';
 
-const ProductDetailsInfo = ({ product, teamLogo }) => {
-	const [selectedSize, setSelectedSize] = useState('');
-	const { title, price, description, details, sizeAndAvailableQuantity } = product || {};
+const ProductDetailsInfo = ({ product, teamLogo, onSizeSelected, isSelected }) => {
+	console.log('@@@ ProductDetailsInfoproduct ProductDetailsInfo', product);
+	const { title, price, description, details, sizeAndAvailability } = product || {};
 
 	const handleSizeSelection = (size) => {
 		console.log('size received', size);
-		setSelectedSize(size);
+		onSizeSelected(size);
 	};
 
 	return (
@@ -32,16 +33,16 @@ const ProductDetailsInfo = ({ product, teamLogo }) => {
 				<ProductDetailsInfoPrice>{price || 'N/A'}€</ProductDetailsInfoPrice>
 			</ProductDetailsInfoTitlePrice>
 			<ProductDetailsInfoDescription>{description}</ProductDetailsInfoDescription>
-			{sizeAndAvailableQuantity?.length > 0 && (
+			{sizeAndAvailability?.length > 0 && (
 				<ProductDetailsSizes>
 					<p>Size</p>
 					<ProductDetailsSizeContainer>
-						{sizeAndAvailableQuantity?.map((item, index) => (
+						{sizeAndAvailability?.map((item, index) => (
 							<ProductDetailsSizeItem
 								key={index}
 								size={item?.size}
 								onClick={handleSizeSelection.bind(this, item?.size)}
-								isSelected={selectedSize === item?.size}
+								isSelected={isSelected === item?.size}
 								disabled={+item?.availableQuantity === 0}
 							>
 								{item?.size}

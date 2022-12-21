@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const ProductDetailsActionsContainer = styled.div`
@@ -15,6 +15,17 @@ export const ProductDetailsActionsAddToFavorite = styled(FontAwesomeIcon)`
 	padding: 10px 20px;
 	border-radius: 20px;
 	cursor: pointer;
+
+	${(props) => {
+		console.log('props', props.disabled);
+		props.disabled &&
+			css`
+				cursor: not-allowed;
+				pointer-events: none;
+				background-color: green;
+				color: #1f1f1f;
+			`;
+	}}
 `;
 
 export const ProductDetailsActionsAddToCartBtn = styled.button`
@@ -23,13 +34,7 @@ export const ProductDetailsActionsAddToCartBtn = styled.button`
 	font-weight: 700;
 	cursor: pointer;
 	color: #fff;
-	background: #232526; /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(
-		to right,
-		#414345,
-		#232526
-	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background-color: #e10600;
 
 	padding: 10px 20px;
 	border-radius: 20px;
@@ -46,10 +51,28 @@ export const ProductDetailsActionsAddToCartBtn = styled.button`
 	&:focus {
 		outline: none;
 	}
+
+	&:disabled {
+		cursor: not-allowed;
+		/* background: #232526;
+		background: -webkit-linear-gradient(to right, #414345, #232526);
+		background: linear-gradient(to right, #414345, #232526); */
+		background-color: #ccc;
+		color: #1f1f1f;
+		transition: background-color 0.5s ease;
+	}
 `;
 
 export const ProductDetailsActionsAddToCartBtnIcon = styled(FontAwesomeIcon)`
 	width: 20px;
 	height: 30px;
 	/* cursor: pointer; */
+`;
+
+export const ErrorMessage = styled.span`
+	margin-bottom: 7.5px;
+	font-size: 14px;
+	text-align: right;
+	width: 100%;
+	color: #1f1f1f;
 `;

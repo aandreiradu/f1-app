@@ -23,6 +23,7 @@ import SizeAvailabilityItem from '../../components/AdminAddProducts__Size&Availa
 import { removeIndexes } from '../../Utils/admin/removeIndexes_addProducts';
 
 const AdminAddProducts = () => {
+	const [noSizeItem, setNoSizeItem] = useState(false);
 	const [canSubmitActivities, setCanSubmitActivities] = useState(false);
 	const { sendRequest, error } = useAxiosInterceptors();
 	const [activities, setActivities] = useState([
@@ -264,11 +265,7 @@ const AdminAddProducts = () => {
 
 	const addProductHandler = (e) => {
 		e.preventDefault();
-		console.log('triggered form submit');
-
 		if (canSubmit) {
-			console.log('can submit', canSubmit);
-
 			const controller = new AbortController();
 			const formData = new FormData();
 			formData.append('title', valueTitle);
@@ -277,9 +274,11 @@ const AdminAddProducts = () => {
 			formData.append('details', valueDetails);
 			formData.append('teamId', selectedTeam?.teamId);
 			formData.append('productPicture', productImage?.file);
-			formData.append('sizeAvailability', JSON.stringify(removeIndexes(activities)));
-			console.log('makeRequest with this', formData);
-
+			if (noSizeItem) {
+				formData.append('itemWithNoSize', !noSizeItem);
+			} else {
+				formData.append('sizeAvailability', JSON.stringify(removeIndexes(activities)));
+			}
 			sendRequest(
 				{
 					url: '/shop/createProduct',
@@ -326,6 +325,12 @@ const AdminAddProducts = () => {
 		const filteredActivities = activities?.filter((item) => +item?.index !== +activityItemIndex);
 		console.log('filteredActivities', filteredActivities);
 		setActivities(filteredActivities);
+	};
+
+	const handleNoSizeItem = (e) => {
+		console.log(e.target.checked);
+		setNoSizeItem(e.target.checked);
+		setCanSubmitActivities(true);
 	};
 
 	return (
@@ -447,45 +452,59 @@ const AdminAddProducts = () => {
 						</AddProductsErrorFallback>
 					)}
 				</AddProductActionGroup>
-				<SizeAvailability
-					canSubmit="true"
-					activities={activities}
-					onSubmit={setCanSubmitActivities}
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						gap: '10px',
+						width: '100%',
+						justifyContent: 'flex-end'
+					}}
 				>
-					{activities?.map((activity) => (
-						<SizeAvailabilityItem
-							canBeRemoved={activities?.length > 1}
-							key={activity?.index}
-							index={activity?.index}
-							configLeft={{
-								dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
-								// .filter((size) => {
-								// 	const isSelected = activities.find((act) => act.size === size);
-								// 	console.log('isSelected', isSelected);
-								// 	if (!isSelected) return size;
-								// })
-								dataOption: 'selector',
-								onSizeSelected: setActivities,
-								value: activity?.size || ''
-							}}
-							configRight={{
-								dataOption: 'input',
-								dataType: 'number',
-								dataTypeConfig: {
-									min: 1,
-									max: 1000,
-									value: activity?.availability || 'Product Availability',
-									placeholder: 'Product Availability'
-								},
-								stateController: {
-									setter: setActivities
-								}
-							}}
-							onActivityAdded={addActivityHandler}
-							onActivityRemoved={removeActivityHandler}
-						/>
-					))}
-				</SizeAvailability>
+					<label htmlFor="noSizeItem">Item With No Size</label>
+					<input name="noSizeItem" id="noSizeItem" type="checkbox" onChange={handleNoSizeItem} />
+				</div>
+				{!noSizeItem && (
+					<SizeAvailability
+						canSubmit="true"
+						activities={activities}
+						onSubmit={setCanSubmitActivities}
+					>
+						{activities?.map((activity) => (
+							<SizeAvailabilityItem
+								canBeRemoved={activities?.length > 1}
+								key={activity?.index}
+								index={activity?.index}
+								configLeft={{
+									dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
+									// .filter((size) => {
+									// 	const isSelected = activities.find((act) => act.size === size);
+									// 	console.log('isSelected', isSelected);
+									// 	if (!isSelected) return size;
+									// })
+									dataOption: 'selector',
+									onSizeSelected: setActivities,
+									value: activity?.size || ''
+								}}
+								configRight={{
+									dataOption: 'input',
+									dataType: 'number',
+									dataTypeConfig: {
+										min: 1,
+										max: 1000,
+										value: activity?.availability || 'Product Availability',
+										placeholder: 'Product Availability'
+									},
+									stateController: {
+										setter: setActivities
+									}
+								}}
+								onActivityAdded={addActivityHandler}
+								onActivityRemoved={removeActivityHandler}
+							/>
+						))}
+					</SizeAvailability>
+				)}
 				<AddProductButton type="submit" disabled={!canSubmit}>
 					Add Product
 				</AddProductButton>
