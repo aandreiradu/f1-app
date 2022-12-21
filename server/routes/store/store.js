@@ -10,7 +10,7 @@ const {
 } = require("../../controllers/shopController");
 const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
 const populateTeamInfo = require("../../middlewares/populateTeamInfoById");
-const { body } = require("express-validator");
+const { body, oneOf } = require("express-validator");
 const itsAuthorized = require("../../middlewares/shop/itsAuthorized.middleware");
 
 // Configure multer
@@ -87,40 +87,59 @@ router.post(
 
       return true;
     }),
-    body("sizeAvailability").custom((value) => {
-      console.log("sizeAvailability validator", value);
-      try {
-        console.log("is array?", Array.isArray(JSON.parse(value)));
-        const checkSA = JSON.parse(value);
-        console.log("checkSA", checkSA);
-        console.log("checkSA array", Array.isArray(checkSA));
-        checkSA.forEach((item, idx) => {
-          console.log("item is", item);
-          const { index, size, availability } = item;
-          console.log("for idx", idx, "we receieved this", item);
-          console.log({ index, size, availability });
+    oneOf([
+      body("sizeAvailability")
+        // .exists()
+        .custom((value) => {
+          console.log("sizeAvailability validator", value);
 
-          if (!size || !availability) {
-            console.log({ size, avilability });
-            throw new Error("Invalid parameter SIZEAVAILABILITY");
+          if (!value && body("itemWithNoSize").equals(true)) {
+            console.log("pass validation for size & availability");
+            return true;
           }
-          const sizes = ["S", "M", "L", "XL", "XXL"];
-          if (!sizes.includes(size)) {
-            throw new Error("Invalid parameter size");
-          }
+          try {
+            console.log("is array?", Array.isArray(JSON.parse(value)));
+            const checkSA = JSON.parse(value);
+            console.log("checkSA", checkSA);
+            console.log("checkSA array", Array.isArray(checkSA));
+            checkSA.forEach((item, idx) => {
+              console.log("item is", item);
+              const { index, size, availability } = item;
+              console.log("for idx", idx, "we receieved this", item);
+              console.log({ index, size, availability });
 
-          if (availability < 0 || availability > 1000) {
-            throw new Error("Availability out of range");
-          }
-        });
+              if (!size || !availability) {
+                throw new Error("Invalid parameter SIZEAVAILABILITY");
+              }
+              const sizes = ["S", "M", "L", "XL", "XXL"];
+              if (!sizes.includes(size)) {
+                throw new Error("Invalid parameter size");
+              }
 
-        console.log("Availabilit passed validations");
-        return true;
-      } catch (error) {
-        console.log("catch middleware SAI", error);
-        return Promise.reject(error || "Unexpected error occured");
-      }
-    }),
+              if (availability < 0 || availability > 1000) {
+                throw new Error("Availability out of range");
+              }
+            });
+
+            console.log("Availabilit passed validations");
+            return true;
+          } catch (error) {
+            console.log("catch middleware SAI", error);
+            return Promise.reject(error || "Unexpected error occured");
+          }
+        }),
+      body("itemWithNoSize")
+        // .exists()
+        .custom((noVal) => {
+          console.log("itemWithNoSize", noVal);
+          if (noVal) {
+            console.log(
+              "Item with no size passed as in req body, the validation should be skipped"
+            );
+            return true;
+          }
+        }),
+    ]),
   ],
   createProduct
 );

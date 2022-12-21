@@ -5,8 +5,15 @@ const { removeFile } = require("../utils/files");
 const path = require("path");
 
 const createProduct = async (req, res, next) => {
-  const { title, description, price, details, teamId, sizeAvailability } =
-    req.body;
+  const {
+    title,
+    description,
+    price,
+    details,
+    teamId,
+    sizeAvailability,
+    itemWithNoSize,
+  } = req.body;
   console.log("req.file", req.file);
 
   console.log("req.body baa", req.body);
@@ -64,15 +71,17 @@ const createProduct = async (req, res, next) => {
     }
 
     console.log("SA", sizeAvailability);
-    console.log(
-      "SA PARSED w/ stringify",
-      JSON.stringify(JSON.parse(sizeAvailability))
-    );
-    console.log("sa is array", Array.isArray(sizeAvailability));
-    console.log(
-      "sa is array parsed",
-      Array.isArray(JSON.parse(sizeAvailability))
-    );
+    if (sizeAvailability) {
+      console.log(
+        "SA PARSED w/ stringify",
+        JSON.stringify(JSON.parse(sizeAvailability))
+      );
+      console.log("sa is array", Array.isArray(sizeAvailability));
+      console.log(
+        "sa is array parsed",
+        Array.isArray(JSON.parse(sizeAvailability))
+      );
+    }
 
     const product = new Product({
       title,
@@ -82,7 +91,10 @@ const createProduct = async (req, res, next) => {
       price,
       creator: req.userId,
       teamId: teamId,
-      sizeAndAvailability: [...JSON.parse(sizeAvailability)],
+      sizeAndAvailability: sizeAvailability
+        ? [...JSON.parse(sizeAvailability)]
+        : [],
+      hasSize: itemWithNoSize,
     });
     await product.save();
 
@@ -181,7 +193,8 @@ const getProductById = async (req, res, next) => {
       description: product?.description,
       details: product?.details,
       imageUrl: product?.imageUrl,
-      sizeAndAvailableQuantity: product?.sizeAndAvailableQuantity,
+      sizeAndAvailability: product?.sizeAndAvailability || [],
+      hasSize: product?.hasSize,
     },
     team: {
       ...product?.teamId.toJSON(), // to avoid _doc
