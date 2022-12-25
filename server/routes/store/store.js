@@ -12,6 +12,9 @@ const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
 const populateTeamInfo = require("../../middlewares/populateTeamInfoById");
 const { body, oneOf } = require("express-validator");
 const itsAuthorized = require("../../middlewares/shop/itsAuthorized.middleware");
+const isValidProduct = require("../../middlewares/shop/isValidProduct.middleware");
+const addProductToFavorites = require("../../controllers/shop/addProductToFavorites.controller");
+const getFavoriteProductsByUID = require("../../controllers/shop/getFavoriteProducts.controller");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -149,5 +152,11 @@ router.get("/shop/product/:productId", getProductById);
 
 // Return all the products by teamId
 router.get("/shop/team/:teamId", populateTeamInfo, getProductsByTeamId);
+
+// Return all the favorite items if exists;
+router.get("/shop/getFavorites", getFavoriteProductsByUID);
+
+// Add item to favorites in store
+router.post("/shop/addToFavorites", isValidProduct, addProductToFavorites);
 
 module.exports = router;

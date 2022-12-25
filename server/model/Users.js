@@ -47,6 +47,16 @@ const userSchema = new mongoose.Schema(
 
     raceBets: [RaceBetsModel],
 
+    favoriteProducts: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "f1_products",
+          required: true,
+        },
+      },
+    ],
+
     cart: {
       items: [
         {
