@@ -1,6 +1,33 @@
 const User = require("../../model/Users");
 
 const getFavoriteProductsByUID = async (req, res, next) => {
+  console.log("getFavoriteProductsByUID start for userId", req.userId);
+  const { userId } = req;
+
+  if (!userId) {
+    const error = new Error("No associate user for userId");
+    error.statusCode = 401;
+    return next(error);
+  }
+
+  // get all the favorite products from User schema
+  const user = await User.findById(userId).select("favoriteProducts");
+  console.log("found this user", user);
+
+  if (!user) {
+    const error = new Error("No data related to this user");
+    error.statusCode = 204;
+    return next(error);
+  }
+
+  console.log("getFavoriteProductsByUID stop for userId", req.userId);
+  return res.status(200).json({
+    message: "Fetched favorite products successfully",
+    products: user.favoriteProducts || [],
+  });
+};
+
+const getFavoriteProductDetailsByUID = async (req, res, next) => {
   const { userId } = req;
   console.log("@@getFavoriteProducts userId", userId);
 
@@ -69,4 +96,4 @@ const getFavoriteProductsByUID = async (req, res, next) => {
   });
 };
 
-module.exports = getFavoriteProductsByUID;
+module.exports = { getFavoriteProductsByUID, getFavoriteProductDetailsByUID };

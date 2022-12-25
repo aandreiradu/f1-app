@@ -14,7 +14,10 @@ const { body, oneOf } = require("express-validator");
 const itsAuthorized = require("../../middlewares/shop/itsAuthorized.middleware");
 const isValidProduct = require("../../middlewares/shop/isValidProduct.middleware");
 const addProductToFavorites = require("../../controllers/shop/addProductToFavorites.controller");
-const getFavoriteProductsByUID = require("../../controllers/shop/getFavoriteProducts.controller");
+const {
+  getFavoriteProductDetailsByUID,
+  getFavoriteProductsByUID,
+} = require("../../controllers/shop/getFavoriteProducts.controller");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
