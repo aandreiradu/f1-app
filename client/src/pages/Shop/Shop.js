@@ -22,11 +22,14 @@ import {
 } from '../../store/Shop__Products/shopProducts.actions';
 import { selectProducts } from '../../store/Shop__Products/shopProducts.selector';
 import Paginator from '../../components/Paginator/Paginator';
+import {
+	fetchShopFavoritesSuccess,
+	shopUserAddToFavoritesFailure
+} from '../../store/Store__UserProducts/store__userProducts.actions.js';
 
 const Store = () => {
 	const dispatch = useDispatch();
 	const { products, productsPage, totalProducts, cachedPages } = useSelector(selectProducts);
-	console.log({ products, productsPage, totalProducts, cachedPages });
 	console.log('products from STORE!!!', products);
 	const [showModal, setShowModal] = useState({
 		show: false,
@@ -97,9 +100,10 @@ const Store = () => {
 	};
 
 	useEffect(() => {
-		try {
-			console.log('products', products);
-			if (products?.length === 0) {
+		console.log('products', products);
+		// fetch products
+		if (products?.length === 0) {
+			try {
 				// Fetch products
 				dispatch(fetchShopProductsStart());
 				const controller = new AbortController();
@@ -123,12 +127,33 @@ const Store = () => {
 						}
 					}
 				);
-			} else {
-				console.log('no need to fetch, products already in store');
+			} catch (error) {
+				console.log('@@@ERROR Store getProducts', error);
+				fetchShopProductsFailure(error);
 			}
+		}
+
+		// fetch favorite products
+		const favoritesController = new AbortController();
+		try {
+			sendRequest(
+				{
+					url: `/shop/getFavorites`,
+					controller: favoritesController.signal,
+					withCredentials: true
+				},
+				(responseData) => {
+					console.log('responseFavorites', responseData);
+					const { products, message, status } = responseData || null;
+
+					if (status === 200 && message === 'Fetched favorite products successfully') {
+						dispatch(fetchShopFavoritesSuccess(products));
+					}
+				}
+			);
 		} catch (error) {
-			console.log('@@@ERROR Store getProducts', error);
-			fetchShopProductsFailure(error);
+			console.log('@@@ERROR Store getFavoriteProducts', error);
+			shopUserAddToFavoritesFailure(error);
 		}
 	}, [dispatch, sendRequest, products, productsPage]);
 

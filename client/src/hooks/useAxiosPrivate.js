@@ -91,17 +91,17 @@ const useAxiosPrivate = () => {
 	useEffect(() => {
 		const requestIntercept = axiosPrivate.interceptors.request.use(
 			(config) => {
-				console.log('REQUEST INTERCEPT CONFIG', config);
+				// console.log('REQUEST INTERCEPT CONFIG', config);
 
 				if (!(config?.headers?.Authorization || config?.headers?.authorization)) {
-					console.log('!NU AM AUTHORIZATON IN HEADER!');
+					// console.log('!NU AM AUTHORIZATON IN HEADER!');
 					config.headers = {
 						...config?.headers,
 						Authorization: `Bearer ${accessToken}`
 					};
-					console.log('am pus token pe auth', config.headers);
+					// console.log('am pus token pe auth', config.headers);
 				} else {
-					console.log('am authorization, config arata asa', config);
+					// console.log('am authorization, config arata asa', config);
 				}
 				return config;
 			},
@@ -110,11 +110,11 @@ const useAxiosPrivate = () => {
 
 		const responseIntercept = axiosPrivate.interceptors.response.use(
 			(response) => {
-				console.log('responseIntercept', response);
+				// console.log('responseIntercept', response);
 				return response;
 			},
 			async (error) => {
-				console.log('error response intercept', error);
+				// console.log('error response intercept', error);
 				const prevRequest = error?.config;
 				if (error?.response?.status === 403 && !prevRequest?.sent) {
 					prevRequest.sent = true;

@@ -43,6 +43,14 @@ export const storeUserReducer = (state = storeUserInitialState, action = {}) => 
 				favoriteStoreItems: payload
 			};
 
+		// Success adding item to cart
+		case STORE__USER_PRODUCTS_TYPES.SHOP_CART_ADD:
+			return {
+				...state,
+				isLoading: false,
+				cart: payload
+			};
+
 		// Failure fetching cart products/favorites from backend
 		case (STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE,
 		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE):

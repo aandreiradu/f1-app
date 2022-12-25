@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductDetailsHeader from '../../../components/Store/Store__ProductDetails/ProductDetails__header';
 import { StoreGlobalSettings } from '../Shop.styles';
@@ -11,14 +10,12 @@ import ProductDetailsActions from '../../../components/Store/Store__ProductDetai
 import Footer from '../../../components/Footer/Footer';
 
 const ShopProductDeatils = () => {
+	const { productId } = useParams();
 	const [isSizeSelected, setIsSizeSelected] = useState(false);
 	const [productDetails, setProductDetails] = useState({});
 	const { sendRequest, error } = useAxiosInterceptors();
-	const { productId } = useParams();
 
 	console.log('@@@productDetails is', productDetails);
-	console.log('@@@productDetails?.product?.imageUrl is', productDetails?.product?.imageUrl);
-	console.log('@@@productDetails?.product?.name is', productDetails?.product?.name);
 
 	useEffect(() => {
 		console.log('@@@ShopProductDeatils useEffect error');

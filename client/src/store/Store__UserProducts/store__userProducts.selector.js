@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { STORE__USER_PRODUCTS_TYPES } from './store__userProducts.types';
 
 const shopUserReducer = (state) => state.shopUser;
 
@@ -18,3 +17,12 @@ export const selectFavoriteItems = createSelector(shopUserReducer, (state) => {
 		error: state.error
 	};
 });
+
+export const selectFavItemById = (id) =>
+	createSelector(shopUserReducer, (state) => {
+		console.log('looking into fav store if we can find item with id', state.favoriteStoreItems, id);
+		const favItem = state?.favoriteStoreItems?.find((p) => p?.product?._id === id);
+		console.log('favItem', favItem);
+
+		return favItem;
+	});
