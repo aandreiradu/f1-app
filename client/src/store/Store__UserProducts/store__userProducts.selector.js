@@ -21,7 +21,7 @@ export const selectFavoriteItems = createSelector(shopUserReducer, (state) => {
 export const selectFavItemById = (id) =>
 	createSelector(shopUserReducer, (state) => {
 		console.log('looking into fav store if we can find item with id', state.favoriteStoreItems, id);
-		const favItem = state?.favoriteStoreItems?.find((p) => p?.product?._id === id);
+		const favItem = state?.favoriteStoreItems?.find((p) => p?.productId === id);
 		console.log('favItem', favItem);
 
 		return favItem;

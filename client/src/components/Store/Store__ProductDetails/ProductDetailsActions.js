@@ -23,12 +23,8 @@ import { selectFavItemById } from '../../../store/Store__UserProducts/store__use
 
 const ProductDetailsActions = ({ product, isSizeSelected }) => {
 	const dispatch = useDispatch();
-	const favoriteProductsSelector = useSelector(selectFavoriteItems);
-	console.log('favoriteProductsSelector', favoriteProductsSelector);
 	const isFavProduct = useSelector(selectFavItemById.call(this, product?.id));
 	console.log('isFavProduct', isFavProduct);
-	const { favoriteStoreItems, isLoading, error } = favoriteProductsSelector;
-	// console.log('Actions received this product', product);
 	const [hasError, setHasError] = useState(null);
 	const { sendRequest, error: errorAxios, isLoading: isLoadingAxios } = useAxiosInterceptors();
 
@@ -39,10 +35,6 @@ const ProductDetailsActions = ({ product, isSizeSelected }) => {
 
 	const handleAddProdToFav = (product) => {
 		try {
-			// const isAlreadyFav = favoriteStoreItems?.find((item) => item?.id === product?.id);
-			// console.log('isAlreadyFav', isAlreadyFav);
-
-			// if (!isFavProduct) {
 			dispatch(fetchShopFavoritesStart());
 			console.log(
 				'this product is not in fav redux store, dispatch and make request to backend',
@@ -72,8 +64,8 @@ const ProductDetailsActions = ({ product, isSizeSelected }) => {
 						case 'Removed': {
 							console.log('@@removed case ', responseData);
 							// dispatch and update the store
-							console.log('new redux store will be', [...favoriteProducts]);
-							dispatch(shopUserAddToFavorites([...favoriteProducts]));
+							console.log('new redux store will be', favoriteProducts);
+							dispatch(shopUserAddToFavorites(favoriteProducts));
 							break;
 						}
 
@@ -90,17 +82,6 @@ const ProductDetailsActions = ({ product, isSizeSelected }) => {
 					}
 				}
 			);
-			// } else {
-			// 	dispatch(fetchShopFavoritesStart());
-			// 	console.log(
-			// 		'this product is already in favorites redux store, dispatch to remove it adn send request to backend'
-			// 	);
-
-			// 	console.log('@aradu favoriteStoreItems', favoriteStoreItems);
-			// 	const filteredFavProducts = favoriteStoreItems?.filter((item) => item?.id !== product?.id);
-			// 	console.log('filteredFavProducts', filteredFavProducts);
-			// 	dispatch(shopUserAddToFavorites(filteredFavProducts));
-			// }
 		} catch (error) {
 			console.log('ERROR handleAddProdToFav for product', product, error);
 			dispatch(shopUserAddToFavoritesFailure(error));
@@ -151,14 +132,14 @@ const ProductDetailsActions = ({ product, isSizeSelected }) => {
 		<>
 			{hasError?.hasError && <ErrorMessage>{hasError?.errorMessage}</ErrorMessage>}
 			<ProductDetailsActionsContainer>
-				{console.log('disabled passed to heart comp', isLoading)}
+				{console.log('disabled passed to heart comp', isLoadingAxios)}
 				<ProductDetailsActionsAddToFavorite
 					icon={isFavProduct ? faKissWinkHeart : faHeart}
 					onClick={handleAddProdToFav.bind(this, product, isSizeSelected)}
-					disabled={isLoading}
+					disabled={isLoadingAxios}
 				/>
 				<ProductDetailsActionsAddToCartBtn
-					disabled={isLoading /*|| !isSizeSelected*/}
+					disabled={isLoadingAxios /*|| !isSizeSelected*/}
 					onClick={addToCartHandler.bind(this, product)}
 				>
 					<ProductDetailsActionsAddToCartBtnIcon icon={faCartPlus} />
