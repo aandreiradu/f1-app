@@ -26,8 +26,11 @@ import {
 	fetchShopFavoritesSuccess,
 	shopUserAddToFavoritesFailure
 } from '../../store/Store__UserProducts/store__userProducts.actions.js';
+import { selectFavoriteItems } from '../../store/Store__UserProducts/store__userProducts.selector';
 
 const Store = () => {
+	const favoriteProductsSelector = useSelector(selectFavoriteItems);
+	console.log('@@favoriteProductsSelector', favoriteProductsSelector);
 	const dispatch = useDispatch();
 	const { products, productsPage, totalProducts, cachedPages } = useSelector(selectProducts);
 	console.log('products from STORE!!!', products);
@@ -100,6 +103,32 @@ const Store = () => {
 	};
 
 	useEffect(() => {
+		// fetch favorite products on page render
+		const favoritesController = new AbortController();
+		try {
+			sendRequest(
+				{
+					url: `/shop/getFavorites`,
+					controller: favoritesController.signal,
+					withCredentials: true
+				},
+				(responseData) => {
+					console.log('responseFavorites', responseData);
+					const { products, message, status } = responseData || null;
+
+					if (status === 200 && message === 'Fetched favorite products successfully') {
+						dispatch(fetchShopFavoritesSuccess(products));
+					}
+				}
+			);
+		} catch (error) {
+			console.log('@@@ERROR Store getFavoriteProducts', error);
+			shopUserAddToFavoritesFailure(error);
+		}
+	}, []);
+
+	useEffect(() => {
+		console.log('effect run for getting products');
 		console.log('products', products);
 		// fetch products
 		if (products?.length === 0) {
@@ -131,29 +160,6 @@ const Store = () => {
 				console.log('@@@ERROR Store getProducts', error);
 				fetchShopProductsFailure(error);
 			}
-		}
-
-		// fetch favorite products
-		const favoritesController = new AbortController();
-		try {
-			sendRequest(
-				{
-					url: `/shop/getFavorites`,
-					controller: favoritesController.signal,
-					withCredentials: true
-				},
-				(responseData) => {
-					console.log('responseFavorites', responseData);
-					const { products, message, status } = responseData || null;
-
-					if (status === 200 && message === 'Fetched favorite products successfully') {
-						dispatch(fetchShopFavoritesSuccess(products));
-					}
-				}
-			);
-		} catch (error) {
-			console.log('@@@ERROR Store getFavoriteProducts', error);
-			shopUserAddToFavoritesFailure(error);
 		}
 	}, [dispatch, sendRequest, products, productsPage]);
 
@@ -224,6 +230,9 @@ const Store = () => {
 									title={product?.title || 'N/A'}
 									price={product?.price || 'N/A'}
 									details={product?.details}
+									isFavorite={favoriteProductsSelector?.favoriteStoreItems?.find(
+										(item) => item?.productId === product?._id
+									)}
 								/>
 							))}
 						</StoreProductsContainer>

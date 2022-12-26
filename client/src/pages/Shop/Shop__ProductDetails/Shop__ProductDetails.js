@@ -15,8 +15,6 @@ const ShopProductDeatils = () => {
 	const [productDetails, setProductDetails] = useState({});
 	const { sendRequest, error } = useAxiosInterceptors();
 
-	console.log('@@@productDetails is', productDetails);
-
 	useEffect(() => {
 		console.log('@@@ShopProductDeatils useEffect error');
 		if (error) {
@@ -55,9 +53,12 @@ const ShopProductDeatils = () => {
 		};
 	}, [productId]);
 
-	const productsAvailable = productDetails?.product?.sizeAndAvailableQuantity?.some(
-		(item) => item?.availableQuantity > 0
+	const productsAvailable = productDetails?.product?.sizeAndAvailability?.some(
+		(item) => item?.availability > 0
 	);
+
+	console.log('@@@productDetails is', productDetails);
+	console.log('productsAvailable', productsAvailable);
 
 	return (
 		<>
@@ -76,7 +77,7 @@ const ShopProductDeatils = () => {
 				/>
 				<ProductDetailsActions
 					product={productDetails?.product}
-					hasAvailableProducts={productsAvailable}
+					productsAvailable={productsAvailable}
 					isSizeSelected={isSizeSelected}
 				/>
 			</ProductDetailsContainer>

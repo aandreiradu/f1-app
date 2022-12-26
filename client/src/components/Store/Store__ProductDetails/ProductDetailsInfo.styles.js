@@ -138,3 +138,24 @@ export const ProductDetailsSizeItem = styled.button`
 		transition: all 0.15s ease-in;
 	}
 `;
+
+export const OutOfStock = styled.span`
+	position: relative;
+	color: #1f1f1f;
+	width: 100%;
+	text-align: center;
+	font-size: 16px;
+	text-transform: uppercase;
+	font-weight: 700;
+
+	&::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		width: 60px;
+		height: 1px;
+		background-color: red;
+		transform: translate(-50%, -50%);
+	}
+`;

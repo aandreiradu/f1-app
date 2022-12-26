@@ -1,5 +1,6 @@
-import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faCartPlus, faKissWinkHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as FullHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as EmptyHeart } from '@fortawesome/free-regular-svg-icons';
+import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -21,17 +22,13 @@ import {
 import useAxiosInterceptors from '../../../hooks/useHttpInterceptors';
 import { selectFavItemById } from '../../../store/Store__UserProducts/store__userProducts.selector';
 
-const ProductDetailsActions = ({ product, isSizeSelected }) => {
+const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable }) => {
+	console.log('productsAvailable', productsAvailable);
 	const dispatch = useDispatch();
 	const isFavProduct = useSelector(selectFavItemById.call(this, product?.id));
 	console.log('isFavProduct', isFavProduct);
 	const [hasError, setHasError] = useState(null);
 	const { sendRequest, error: errorAxios, isLoading: isLoadingAxios } = useAxiosInterceptors();
-
-	// console.log('@@@isSizeSelected', isSizeSelected);
-	/* 
-		TODO : disable addToCart button if no product are available, regardless of size
-	*/
 
 	const handleAddProdToFav = (product) => {
 		try {
@@ -134,12 +131,13 @@ const ProductDetailsActions = ({ product, isSizeSelected }) => {
 			<ProductDetailsActionsContainer>
 				{console.log('disabled passed to heart comp', isLoadingAxios)}
 				<ProductDetailsActionsAddToFavorite
-					icon={isFavProduct ? faKissWinkHeart : faHeart}
+					color={isFavProduct ? 'red' : '#1f1f1f'}
+					icon={isFavProduct ? FullHeart : EmptyHeart}
 					onClick={handleAddProdToFav.bind(this, product, isSizeSelected)}
 					disabled={isLoadingAxios}
 				/>
 				<ProductDetailsActionsAddToCartBtn
-					disabled={isLoadingAxios /*|| !isSizeSelected*/}
+					disabled={isLoadingAxios || !productsAvailable}
 					onClick={addToCartHandler.bind(this, product)}
 				>
 					<ProductDetailsActionsAddToCartBtnIcon icon={faCartPlus} />
