@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { sizeSelectionAnimation, slidingFromRight } from './ProductDetailsInfo.styles';
 
 export const ProductDetailsActionsContainer = styled.div`
 	display: flex;
@@ -70,9 +71,12 @@ export const ProductDetailsActionsAddToCartBtnIcon = styled(FontAwesomeIcon)`
 `;
 
 export const ErrorMessage = styled.span`
+	position: relative;
 	margin-bottom: 7.5px;
-	font-size: 14px;
+	font-size: 15px;
 	text-align: right;
 	width: 100%;
 	color: #1f1f1f;
+	font-weight: 600;
+	animation: ${sizeSelectionAnimation} 0.25s ease;
 `;

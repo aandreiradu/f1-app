@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled, { css, keyframes } from 'styled-components';
 
-const sizeSelectionAnimation = keyframes`
+export const sizeSelectionAnimation = keyframes`
 	from {
 		/* padding: 0; */
 		transform: scale(0);
@@ -158,4 +158,11 @@ export const OutOfStock = styled.span`
 		background-color: red;
 		transform: translate(-50%, -50%);
 	}
+`;
+
+export const RiskStock = styled.span`
+	font-size: 15px;
+	font-weight: 600;
+	text-align: right;
+	animation: ${sizeSelectionAnimation} 0.25s ease;
 `;

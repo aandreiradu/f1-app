@@ -15,7 +15,7 @@ export const StoreItemContainer = styled(Link)`
 	background: #fff;
 `;
 
-export const StoreItemImageWrapper = styled.div`
+export const StoreItemImageWrapper = styled(Link)`
 	height: 70%;
 	width: 100%;
 	border-top-left-radius: 10px;
@@ -30,7 +30,7 @@ export const StoreItemImage = styled.img`
 	border-top-right-radius: 10px;
 `;
 
-export const StoreItemInformationWrapper = styled.div`
+export const StoreItemInformationWrapper = styled(Link)`
 	padding: 10px;
 	width: 100%;
 `;

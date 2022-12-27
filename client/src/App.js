@@ -108,7 +108,6 @@ function App() {
 							<Route path="/shop">
 								<Route index element={<Store />} />
 								<Route path="/shop/team/:teamId" element={<ShopByTeam />} />
-								{/* <Route path="/shop/team/:teamId" element={<ShopByTeam />} />/ */}
 								<Route path="/shop/product/:productId" element={<ShopProductDeatils />} />
 							</Route>
 

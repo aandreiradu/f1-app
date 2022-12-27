@@ -17,19 +17,19 @@ const StoreItem = ({ productId, description, imageUrl, title, price, details, is
 	};
 
 	return (
-		<StoreItemContainer to={`/shop/product/${productId}`} replace="true">
+		<StoreItemContainer>
 			<StoreItemAddToFavorite
 				color={isFavorite ? 'red' : '#1f1f1f'}
 				icon={isFavorite ? FullHeart : EmptyHeart}
 				onClick={addToFavorite}
 			/>
-			<StoreItemImageWrapper>
+			<StoreItemImageWrapper to={`/shop/product/${productId}`}>
 				<StoreItemImage
 					src={imageUrl ? `${apiConfig.baseURL}/${imageUrl}` : ''}
 					alt="Product Image"
 				/>
 			</StoreItemImageWrapper>
-			<StoreItemInformationWrapper>
+			<StoreItemInformationWrapper to={`/shop/product/${productId}`}>
 				<StoreItemTitle>{title}</StoreItemTitle>
 				<StoreItemPrice>{Number(price).toFixed(2)}€</StoreItemPrice>
 			</StoreItemInformationWrapper>

@@ -11,17 +11,42 @@ import {
 	ProductDetailsSizes,
 	ProductDetailsSizeItem,
 	ProductDetailsSizeContainer,
-	OutOfStock
+	OutOfStock,
+	RiskStock
 } from './ProductDetailsInfo.styles';
 
 const ProductDetailsInfo = ({ product, teamLogo, onSizeSelected, isSelected }) => {
+	const [riskStock, setRiskStock] = useState({
+		show: false,
+		message: null
+	});
 	console.log('@@@ ProductDetailsInfoproduct ProductDetailsInfo', product);
-	const { title, price, description, details, sizeAndAvailability } = product || {};
+	const { title, price, description, details, sizeAndAvailability, hasSize } = product || {};
 
 	console.log('@here sizeAndAvailability', sizeAndAvailability);
 
 	const handleSizeSelection = (size) => {
 		console.log('size received', size);
+
+		const lessProducts = sizeAndAvailability?.find(
+			(p) => p?.size.toLowerCase() === size?.toLowerCase()
+		)?.availability;
+
+		console.log('lessProducts', lessProducts);
+		if (lessProducts && lessProducts <= 5 && hasSize) {
+			console.log('da da da');
+			setRiskStock({
+				show: true,
+				message: `Hurry, we have only ${lessProducts} ${
+					lessProducts <= 1 ? 'product' : 'products'
+				} left in stock`
+			});
+		} else {
+			setRiskStock({
+				show: false,
+				message: null
+			});
+		}
 		onSizeSelected(size);
 	};
 
@@ -61,8 +86,9 @@ const ProductDetailsInfo = ({ product, teamLogo, onSizeSelected, isSelected }) =
 					</ProductDetailsSizeContainer>
 				</ProductDetailsSizes>
 			) : (
-				<OutOfStock>Out Of Stock</OutOfStock>
+				sizeAndAvailability?.length === 0 && hasSize && <OutOfStock>Out Of Stock</OutOfStock>
 			)}
+			{riskStock?.show && <RiskStock>{riskStock?.message}</RiskStock>}
 		</ProductDetailsInfoContainer>
 	);
 };

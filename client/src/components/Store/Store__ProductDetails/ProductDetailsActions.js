@@ -1,7 +1,7 @@
+import { useEffect, useState } from 'react';
 import { faHeart as FullHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as EmptyHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	selectCart,
@@ -21,14 +21,43 @@ import {
 } from '../../../store/Store__UserProducts/store__userProducts.actions';
 import useAxiosInterceptors from '../../../hooks/useHttpInterceptors';
 import { selectFavItemById } from '../../../store/Store__UserProducts/store__userProducts.selector';
+import ErrorModal from '../../UI/ErrorModal';
 
-const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable }) => {
-	console.log('productsAvailable', productsAvailable);
+const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, hasSize }) => {
+	const [showModal, setShowModal] = useState({
+		show: false,
+		message: null
+	});
 	const dispatch = useDispatch();
 	const isFavProduct = useSelector(selectFavItemById.call(this, product?.id));
 	console.log('isFavProduct', isFavProduct);
 	const [hasError, setHasError] = useState(null);
 	const { sendRequest, error: errorAxios, isLoading: isLoadingAxios } = useAxiosInterceptors();
+
+	useEffect(() => {
+		console.error('errorAxios', errorAxios);
+		if (errorAxios) {
+			setShowModal({
+				show: true,
+				message: errorAxios?.message || 'Unexpected error occured'
+			});
+		}
+	}, [errorAxios]);
+
+	const confirmCloseModal = () =>
+		setShowModal({
+			show: false,
+			message: null
+		});
+
+	useEffect(() => {
+		console.log('isSizeSelected effect', isSizeSelected);
+		console.log('hasError is', hasError);
+		if (isSizeSelected && hasError?.hasError && hasError?.errorMessage) {
+			console.log('a setat pe null');
+			setHasError(null);
+		}
+	}, [isSizeSelected]);
 
 	const handleAddProdToFav = (product) => {
 		try {
@@ -86,19 +115,20 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable }) =
 	};
 
 	const addToCartHandler = (item) => {
+		console.log('item', item);
 		console.log('@@@isSizeSelected', isSizeSelected);
-		if (!product?.hasSize) {
-			console.log('Products with no size, like figurines, monoposts etc', product);
+		if (!item?.hasSize) {
+			console.log('Products with no size, like figurines, monoposts etc', item);
 			if (hasError?.hasError) {
 				setHasError({
 					hasError: false,
 					errorMessage: ''
 				});
 			}
-			console.log('Add to cart next');
+			console.log('Add to cart figurines next');
 		} else {
 			if (!isSizeSelected) {
-				console.log(
+				console.error(
 					'Product with hasSize property = true, but without size selected',
 					product,
 					isSizeSelected
@@ -108,19 +138,38 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable }) =
 					errorMessage: 'Please select a size'
 				});
 			} else {
+				setHasError({
+					hasError: false,
+					errorMessage: ''
+				});
+
 				console.log(
 					'Product with hasSize property = true, and with size selected',
 					isSizeSelected,
 					'add to cart this product',
 					item
 				);
-				setHasError({
-					hasError: false,
-					errorMessage: ''
-				});
 
 				try {
-				} catch (error) {}
+					const controller = new AbortController();
+					sendRequest(
+						{
+							url: `/shop/cart`,
+							method: 'POST',
+							withCredentials: true,
+							controller: controller.signal,
+							body: {
+								productId: item?.id,
+								size: isSizeSelected
+							}
+						},
+						(responseData) => {
+							console.log('@@response addToCartHandler', responseData);
+						}
+					);
+				} catch (error) {
+					console.log('error addToCartHandler', error);
+				}
 			}
 		}
 	};
@@ -128,6 +177,9 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable }) =
 	return (
 		<>
 			{hasError?.hasError && <ErrorMessage>{hasError?.errorMessage}</ErrorMessage>}
+			{showModal?.show && (
+				<ErrorModal title="Ooops!" message={showModal.message} onConfirm={confirmCloseModal} />
+			)}
 			<ProductDetailsActionsContainer>
 				{console.log('disabled passed to heart comp', isLoadingAxios)}
 				<ProductDetailsActionsAddToFavorite
@@ -137,7 +189,7 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable }) =
 					disabled={isLoadingAxios}
 				/>
 				<ProductDetailsActionsAddToCartBtn
-					disabled={isLoadingAxios || !productsAvailable}
+					disabled={isLoadingAxios || (!productsAvailable && hasSize) || errorAxios}
 					onClick={addToCartHandler.bind(this, product)}
 				>
 					<ProductDetailsActionsAddToCartBtnIcon icon={faCartPlus} />
