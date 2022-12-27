@@ -3,13 +3,20 @@ const Products = require("../../model/StoreProducts");
 const isValidProduct = async (req, res, next) => {
   console.log("a intrat aici");
   const { productId } = req.body;
+
+  if (!productId) {
+    const error = new Error("Invalid request params");
+    error.statusCode = 403;
+    return next(error);
+  }
+
   try {
     const product = await Products.findById(productId);
     console.log("product", product);
 
     if (!product) {
       const error = new Error("Invalid product");
-      error.statusCode = 401;
+      error.statusCode = 403;
       return next(error);
     }
 

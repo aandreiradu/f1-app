@@ -18,6 +18,8 @@ const {
   getFavoriteProductDetailsByUID,
   getFavoriteProductsByUID,
 } = require("../../controllers/shop/getFavoriteProducts.controller");
+const isValidProductSA = require("../../middlewares/shop/isValidProductSizeAndAvailability.middleware");
+const addToCartController = require("../../controllers/shop/addToCart.controller");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -161,5 +163,8 @@ router.get("/shop/getFavorites", getFavoriteProductsByUID);
 
 // Add item to favorites in store
 router.post("/shop/addToFavorites", isValidProduct, addProductToFavorites);
+
+// POST - add item to cart
+router.post("/shop/cart", isValidProductSA, addToCartController);
 
 module.exports = router;
