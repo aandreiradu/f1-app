@@ -141,6 +141,8 @@ const handleRefreshToken = async (req, res) => {
           favoriteConstructor: findUser.favoriteConstructor,
           imageUrl: findUser.imageUrl,
           favoriteProducts: findUser?.favoriteProducts,
+          favoriteProductsCount: findUser.favoriteProducts.length,
+          cartItemsCount: findUser.cart.items.length,
         });
       }
     );
