@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RiCloseFill, RiUser3Fill } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
-import { selectIsAuthenticated, selectIsAdmin } from '../../store/Auth/auth.selector';
+import { selectIsAuth } from '../../store/Auth/auth.selector';
 import classes from './Sidebar.module.css';
 import { motion } from 'framer-motion';
 import { driverCards } from '../../animationsPresets/animationsPresets';
@@ -12,8 +12,9 @@ import useLogout from '../../hooks/useLogout';
 const Sidebar = (props) => {
 	const [showModal, setShowModal] = useState(true);
 	const { errorLogin, logoutHandler } = useLogout();
-	const isAuthenticted = useSelector(selectIsAuthenticated);
-	const isAdmin = useSelector(selectIsAdmin);
+	// const isAuthenticted = useSelector(selectIsAuthenticated);
+	// const isAdmin = useSelector(selectIsAdmin);
+	const { username, isAuth: isAuthenticted, isAdmin } = useSelector(selectIsAuth);
 	console.log('sidebar isAuthenticted', isAuthenticted);
 	console.log('isAdmin', isAdmin);
 
@@ -63,14 +64,22 @@ const Sidebar = (props) => {
 						></motion.path>
 					</motion.svg>
 				</div>
-				<div className={classes['user-login']} onClick={handleProfiler}>
+				{/* <div className={classes['user-login']} onClick={handleProfiler}>
 					<RiUser3Fill className={classes['sidebar-icon']} />
-				</div>
+				</div> */}
 			</div>
 			{errorLogin && showModal && (
 				<ErrorModal title="Ooops!" message={errorLogin} onConfirm={confirmErrorModal} />
 			)}
 			<ul className={`${classes['sidebar-links']} defaultTransition .defaultTransition-M1`}>
+				<li className={`${classes['sidebar-link-item']}`}>
+					<Link onClick={() => props.onClose()} to={`/profile/${username}`}>
+						My Profile
+					</Link>
+					<Link onClick={() => props.onClose()} to="/shop">
+						<i className="fa-solid fa-chevron-right"></i>
+					</Link>
+				</li>
 				<li className={`${classes['sidebar-link-item']}`}>
 					<Link onClick={() => props.onClose()} to="/shop">
 						Shop

@@ -10,7 +10,9 @@ export const setAccessToken = (
 	favoriteConstructor,
 	favoriteDriver,
 	imageUrl,
-	isAdmin
+	isAdmin,
+	favoriteProductsCount,
+	cartItemsCount
 ) => {
 	return createAction(AUTH_TYPES.AUTH_SET_ACCESS_TOKEN, {
 		accessToken: token,
@@ -21,7 +23,9 @@ export const setAccessToken = (
 		favoriteConstructor,
 		favoriteDriver,
 		imageUrl,
-		isAdmin
+		isAdmin,
+		favoriteProductsCount,
+		cartItemsCount
 	});
 };
 
@@ -34,7 +38,9 @@ export const refreshToken = (
 	favoriteConstructor,
 	favoriteDriver,
 	imageUrl,
-	isAdmin
+	isAdmin,
+	favoriteProductsCount,
+	cartItemsCount
 ) => {
 	return createAction(AUTH_TYPES.AUTH_REFRESH_TOKEN, {
 		accessToken: token,
@@ -45,7 +51,9 @@ export const refreshToken = (
 		favoriteConstructor,
 		favoriteDriver,
 		imageUrl,
-		isAdmin
+		isAdmin,
+		favoriteProductsCount,
+		cartItemsCount
 	});
 };
 

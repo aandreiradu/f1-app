@@ -24,3 +24,10 @@ export const selectIsAdmin = createSelector(selectAuthReducer, (auth) => {
 	console.log('isAdmin && isAuth', isAdmin && isAuth);
 	return isAdmin && isAuth;
 });
+
+export const selectFavAndCartCounter = createSelector(selectAuthReducer, (auth) => {
+	const { favoriteProductsCount, cartItemsCount } = auth;
+
+	console.log('auth hereee', auth);
+	return { favoriteProductsCount, cartItemsCount };
+});

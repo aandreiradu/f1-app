@@ -21,7 +21,9 @@ const useRefreshToken = () => {
 			favoriteDriver,
 			imageUrl,
 			isAdmin,
-			favoriteProducts
+			favoriteProducts,
+			favoriteProductsCount,
+			cartItemsCount
 		} = response.data || null;
 		if (accessToken) {
 			console.log(
@@ -36,7 +38,9 @@ const useRefreshToken = () => {
 					favoriteDriver,
 					imageUrl,
 					isAdmin,
-					favoriteProducts
+					favoriteProducts,
+					favoriteProductsCount,
+					cartItemsCount
 				})
 			);
 			dispatch(
@@ -49,7 +53,9 @@ const useRefreshToken = () => {
 					favoriteConstructor,
 					favoriteDriver,
 					imageUrl,
-					isAdmin
+					isAdmin,
+					favoriteProductsCount,
+					cartItemsCount
 				)
 			);
 			if (favoriteProducts.length > 0) {

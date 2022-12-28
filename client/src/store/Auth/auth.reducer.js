@@ -9,7 +9,10 @@ const initialState = {
 	email: null,
 	favoriteDriver: null,
 	favoriteConstructor: null,
-	imageUrl: null
+	imageUrl: null,
+	isAdmin: null,
+	favoriteProductsCount: 0,
+	cartItemsCount: 0
 };
 
 export const authReducer = (state = initialState, action = {}) => {
@@ -28,7 +31,9 @@ export const authReducer = (state = initialState, action = {}) => {
 				favoriteDriver: payload.favoriteDriver,
 				favoriteConstructor: payload.favoriteConstructor,
 				imageUrl: payload.imageUrl,
-				isAdmin: payload.isAdmin
+				isAdmin: payload.isAdmin,
+				favoriteProductsCount: payload.favoriteProductsCount,
+				cartItemsCount: payload.cartItemsCount
 			};
 
 		case AUTH_TYPES.AUTH_REFRESH_TOKEN:
@@ -43,7 +48,9 @@ export const authReducer = (state = initialState, action = {}) => {
 				favoriteDriver: payload.favoriteDriver,
 				favoriteConstructor: payload.favoriteConstructor,
 				imageUrl: payload.imageUrl,
-				isAdmin: payload.isAdmin
+				isAdmin: payload.isAdmin,
+				favoriteProductsCount: payload.favoriteProductsCount,
+				cartItemsCount: payload.cartItemsCount
 			};
 
 		case AUTH_TYPES['AUTH/GET_USER_INFO']:
@@ -80,7 +87,9 @@ export const authReducer = (state = initialState, action = {}) => {
 				favoriteDriver: null,
 				favoriteConstructor: null,
 				imageUrl: null,
-				isAdmin: null
+				isAdmin: null,
+				favoriteProductsCount: 0,
+				cartItemsCount: 0
 			};
 
 		default:

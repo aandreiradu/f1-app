@@ -41,6 +41,11 @@
 }
 
 
+.hamburgerMenu {
+    flex: 1;
+    justify-content: flex-start;
+}
+
 .hamburgerMenu svg{
     width: 30px;
     height: 25px;
@@ -95,3 +100,33 @@
         height: 4rem;
     }
 }
+
+
+.nav-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 40px;
+    flex: 1;
+    padding: 0 10px;
+}
+
+
+.icon__badge{
+    position: relative;
+    /* width: 30px; */
+    /* height: 30px; */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+
+/* .icon__badge img {
+    width: 20px;
+    height: 20px;
+    color: #fff;
+} */
+
