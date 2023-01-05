@@ -22,11 +22,17 @@ import {
 } from '../../store/Shop__Products/shopProducts.actions';
 import { selectProducts } from '../../store/Shop__Products/shopProducts.selector';
 import Paginator from '../../components/Paginator/Paginator';
+import {
+	fetchShopFavoritesSuccess,
+	shopUserAddToFavoritesFailure
+} from '../../store/Store__UserProducts/store__userProducts.actions.js';
+import { selectFavoriteItems } from '../../store/Store__UserProducts/store__userProducts.selector';
 
 const Store = () => {
+	const favoriteProductsSelector = useSelector(selectFavoriteItems);
+	console.log('@@favoriteProductsSelector', favoriteProductsSelector);
 	const dispatch = useDispatch();
 	const { products, productsPage, totalProducts, cachedPages } = useSelector(selectProducts);
-	console.log({ products, productsPage, totalProducts, cachedPages });
 	console.log('products from STORE!!!', products);
 	const [showModal, setShowModal] = useState({
 		show: false,
@@ -97,9 +103,34 @@ const Store = () => {
 	};
 
 	useEffect(() => {
+		// fetch favorite products on page render
+		const favoritesController = new AbortController();
 		try {
-			console.log('products', products);
-			if (products?.length === 0) {
+			sendRequest(
+				{
+					url: `/shop/getFavorites`,
+					controller: favoritesController.signal,
+					withCredentials: true
+				},
+				(responseData) => {
+					console.log('responseFavorites', responseData);
+					const { products, message, status } = responseData || null;
+
+					if (status === 200 && message === 'Fetched favorite products successfully') {
+						dispatch(fetchShopFavoritesSuccess(products));
+					}
+				}
+			);
+		} catch (error) {
+			console.log('@@@ERROR Store getFavoriteProducts', error);
+			shopUserAddToFavoritesFailure(error);
+		}
+	}, []);
+
+	useEffect(() => {
+		// fetch products
+		if (products?.length === 0) {
+			try {
 				// Fetch products
 				dispatch(fetchShopProductsStart());
 				const controller = new AbortController();
@@ -123,17 +154,14 @@ const Store = () => {
 						}
 					}
 				);
-			} else {
-				console.log('no need to fetch, products already in store');
+			} catch (error) {
+				console.log('@@@ERROR Store getProducts', error);
+				fetchShopProductsFailure(error);
 			}
-		} catch (error) {
-			console.log('@@@ERROR Store getProducts', error);
-			fetchShopProductsFailure(error);
 		}
 	}, [dispatch, sendRequest, products, productsPage]);
 
 	useEffect(() => {
-		console.log('@@@ERROR Store useEffect ', error);
 		if (error) {
 			const { message, status, data } = error || {};
 			console.log({ message, status, data });
@@ -199,6 +227,9 @@ const Store = () => {
 									title={product?.title || 'N/A'}
 									price={product?.price || 'N/A'}
 									details={product?.details}
+									isFavorite={favoriteProductsSelector?.favoriteStoreItems?.find(
+										(item) => item?.productId === product?._id
+									)}
 								/>
 							))}
 						</StoreProductsContainer>

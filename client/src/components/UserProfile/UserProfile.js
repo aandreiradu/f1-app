@@ -12,7 +12,7 @@ import {
 	UserProfilePicture,
 	UserProfilePictureWrapper
 } from './UserProfile.styles';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { faHeartCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { faWrench } from '@fortawesome/free-solid-svg-icons';
 import { faPerson } from '@fortawesome/free-solid-svg-icons';
@@ -26,7 +26,7 @@ const UserProfile = () => {
 	const { username: usernameParams } = useParams();
 	const { username, fullName, email, favoriteDriver, favoriteConstructor, imageUrl } =
 		useSelector(selectIsAuth);
-	console.log({ username, fullName, imageUrl });
+	console.log({ usernameParams, username, fullName, imageUrl });
 	const navigate = useNavigate();
 
 	const goToProfileEditHandler = () => {
@@ -54,8 +54,8 @@ const UserProfile = () => {
 				<UserProfileHeaderTitle>Content</UserProfileHeaderTitle>
 				<UserProfileHeaderContentItem>
 					<UserProfileHeaderContentItemWrapping>
-						<UserProfileHeaderContentItemIcon icon={faPerson} />
-						<UserProfileHeaderContentItemText>My Drivers</UserProfileHeaderContentItemText>
+						<UserProfileHeaderContentItemIcon icon={faCartPlus} />
+						<UserProfileHeaderContentItemText>My Cart</UserProfileHeaderContentItemText>
 					</UserProfileHeaderContentItemWrapping>
 					<UserProfileHeaderContentItemArrow icon={faArrowRight} />
 				</UserProfileHeaderContentItem>
@@ -70,22 +70,28 @@ const UserProfile = () => {
 				<UserProfileHeaderTitle>News</UserProfileHeaderTitle>
 				<UserProfileHeaderContentItem>
 					<UserProfileHeaderContentItemWrapping>
-						<UserProfileHeaderContentItemIcon icon={faWrench} />
-						<UserProfileHeaderContentItemText>Coming Soon</UserProfileHeaderContentItemText>
+						<UserProfileHeaderContentItemIcon icon={faPerson} />
+						<UserProfileHeaderContentItemText>
+							My Drivers - Coming Soon
+						</UserProfileHeaderContentItemText>
 					</UserProfileHeaderContentItemWrapping>
 					<UserProfileHeaderContentItemArrow icon={faArrowRight} />
 				</UserProfileHeaderContentItem>
 				<UserProfileHeaderContentItem>
 					<UserProfileHeaderContentItemWrapping>
 						<UserProfileHeaderContentItemIcon icon={faWrench} />
-						<UserProfileHeaderContentItemText>Coming Soon</UserProfileHeaderContentItemText>
+						<UserProfileHeaderContentItemText>
+							My Circuits - Coming Soon
+						</UserProfileHeaderContentItemText>
 					</UserProfileHeaderContentItemWrapping>
 					<UserProfileHeaderContentItemArrow icon={faArrowRight} />
 				</UserProfileHeaderContentItem>
 				<UserProfileHeaderContentItem>
 					<UserProfileHeaderContentItemWrapping>
 						<UserProfileHeaderContentItemIcon icon={faWrench} />
-						<UserProfileHeaderContentItemText>Coming Soon</UserProfileHeaderContentItemText>
+						<UserProfileHeaderContentItemText>
+							My Bets - Coming Soon
+						</UserProfileHeaderContentItemText>
 					</UserProfileHeaderContentItemWrapping>
 					<UserProfileHeaderContentItemArrow icon={faArrowRight} />
 				</UserProfileHeaderContentItem>

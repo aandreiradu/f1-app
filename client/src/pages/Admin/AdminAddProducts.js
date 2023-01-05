@@ -18,14 +18,26 @@ import useInput from '../../hooks/useInput';
 import CustomDropdown from '../../components/CustomDropdown/CustomDropdown';
 import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { useNavigate } from 'react-router-dom';
+import SizeAvailability from '../../components/AdminAddProducts__Size&Availability/SizeAvailability';
+import SizeAvailabilityItem from '../../components/AdminAddProducts__Size&Availability/SizeAvailabilityItem';
+import { removeIndexes } from '../../Utils/admin/removeIndexes_addProducts';
 
 const AdminAddProducts = () => {
+	const [noSizeItem, setNoSizeItem] = useState(false);
+	const [canSubmitActivities, setCanSubmitActivities] = useState(false);
+	const { sendRequest, error } = useAxiosInterceptors();
+	const [activities, setActivities] = useState([
+		{
+			index: 0,
+			size: null,
+			availability: null
+		}
+	]);
 	const [showModal, setShowModal] = useState({
 		show: false,
 		title: null,
 		message: null
 	});
-	const { sendRequest, error } = useAxiosInterceptors();
 	const [selectedTeam, setSelectedTeam] = useState({});
 	const [productImage, setProductImage] = useState({
 		file: null,
@@ -104,15 +116,20 @@ const AdminAddProducts = () => {
 			case 422:
 				console.log('switch case 422');
 				console.log({ message, status, data });
-				if (message === 'Validation failed. Entered data is not in correct format') {
-					console.log('@@@if Validation failed. Entered data is not in correct format');
-					setShowModal({
-						show: true,
-						title: 'Something went wrong',
-						message: message
-					});
-					break;
-				}
+				// if (message === 'Validation failed. Entered data is not in correct format') {
+				// 	console.log('@@@if Validation failed. Entered data is not in correct format');
+				// 	setShowModal({
+				// 		show: true,
+				// 		title: 'Something went wrong',
+				// 		message: message
+				// 	});
+				// 	break;
+				// }
+				setShowModal({
+					show: true,
+					title: 'Something went wrong',
+					message: message
+				});
 				break;
 
 			default:
@@ -232,56 +249,88 @@ const AdminAddProducts = () => {
 		productImage?.file &&
 		isValidTitle &&
 		isValidPrice &&
-		isValidDescription
+		canSubmitActivities
 	) {
+		console.log('submit', {
+			selectedteam: Object.keys(selectedTeam).length > 0,
+			team: selectedTeam?.teamId,
+			image: productImage?.file,
+			isValidTitle,
+			isValidPrice,
+			isValidDescription,
+			canSubmitActivities
+		});
 		canSubmit = true;
 	}
 
 	const addProductHandler = (e) => {
 		e.preventDefault();
-		console.log('triggered form submit');
-
-		// if (canSubmit) {
-		console.log('can submit', canSubmit);
-
-		const controller = new AbortController();
-		const formData = new FormData();
-		formData.append('title', valueTitle);
-		formData.append('description', valueDescription);
-		formData.append('price', valuePrice);
-		formData.append('details', valueDetails);
-		formData.append('teamId', selectedTeam?.teamId);
-		formData.append('productPicture', productImage?.file);
-		console.log('makeRequest with this', formData);
-
-		sendRequest(
-			{
-				url: '/shop/createProduct',
-				method: 'POST',
-				body: formData,
-				withCredentials: true,
-				signal: controller.signal
-			},
-			(responseData) => {
-				console.log('responseData', responseData);
-				const { message, status } = responseData;
-
-				if (status === 200 && message === 'Product created successfully') {
-					setShowModal({
-						show: true,
-						title: '',
-						message: 'Product created successfully'
-					});
-
-					/* Rest Form Inputs after the product was created */
-					resetTitle();
-					resetDetails();
-					resetPrice();
-					resetDescription();
-				}
+		if (canSubmit) {
+			const controller = new AbortController();
+			const formData = new FormData();
+			formData.append('title', valueTitle);
+			formData.append('description', valueDescription);
+			formData.append('price', valuePrice);
+			formData.append('details', valueDetails);
+			formData.append('teamId', selectedTeam?.teamId);
+			formData.append('productPicture', productImage?.file);
+			if (noSizeItem) {
+				formData.append('itemWithNoSize', !noSizeItem);
+			} else {
+				formData.append('sizeAvailability', JSON.stringify(removeIndexes(activities)));
 			}
-		);
-		// }
+			sendRequest(
+				{
+					url: '/shop/createProduct',
+					method: 'POST',
+					body: formData,
+					withCredentials: true,
+					signal: controller.signal
+				},
+				(responseData) => {
+					console.log('responseData', responseData);
+					const { message, status } = responseData;
+
+					if (status === 200 && message === 'Product created successfully') {
+						setShowModal({
+							show: true,
+							title: '',
+							message: 'Product created successfully'
+						});
+
+						/* Rest Form Inputs after the product was created */
+						resetTitle();
+						resetDetails();
+						resetPrice();
+						resetDescription();
+					}
+				}
+			);
+		}
+	};
+
+	const addActivityHandler = () => {
+		setActivities((prev) => [
+			...prev,
+			{
+				index: +activities[activities.length - 1]?.index + 1,
+				size: null,
+				availability: null
+			}
+		]);
+	};
+
+	const removeActivityHandler = (activityItemIndex) => {
+		console.log('remove this index', activityItemIndex);
+		const filteredActivities = activities?.filter((item) => +item?.index !== +activityItemIndex);
+		console.log('filteredActivities', filteredActivities);
+		setActivities(filteredActivities);
+	};
+
+	const handleNoSizeItem = (e) => {
+		console.log(e.target.checked);
+		setNoSizeItem(e.target.checked);
+		setCanSubmitActivities(true);
 	};
 
 	return (
@@ -403,6 +452,59 @@ const AdminAddProducts = () => {
 						</AddProductsErrorFallback>
 					)}
 				</AddProductActionGroup>
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						gap: '10px',
+						width: '100%',
+						justifyContent: 'flex-end'
+					}}
+				>
+					<label htmlFor="noSizeItem">Item With No Size</label>
+					<input name="noSizeItem" id="noSizeItem" type="checkbox" onChange={handleNoSizeItem} />
+				</div>
+				{!noSizeItem && (
+					<SizeAvailability
+						canSubmit="true"
+						activities={activities}
+						onSubmit={setCanSubmitActivities}
+					>
+						{activities?.map((activity) => (
+							<SizeAvailabilityItem
+								canBeRemoved={activities?.length > 1}
+								key={activity?.index}
+								index={activity?.index}
+								configLeft={{
+									dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
+									// .filter((size) => {
+									// 	const isSelected = activities.find((act) => act.size === size);
+									// 	console.log('isSelected', isSelected);
+									// 	if (!isSelected) return size;
+									// })
+									dataOption: 'selector',
+									onSizeSelected: setActivities,
+									value: activity?.size || ''
+								}}
+								configRight={{
+									dataOption: 'input',
+									dataType: 'number',
+									dataTypeConfig: {
+										min: 1,
+										max: 1000,
+										value: activity?.availability || 'Product Availability',
+										placeholder: 'Product Availability'
+									},
+									stateController: {
+										setter: setActivities
+									}
+								}}
+								onActivityAdded={addActivityHandler}
+								onActivityRemoved={removeActivityHandler}
+							/>
+						))}
+					</SizeAvailability>
+				)}
 				<AddProductButton type="submit" disabled={!canSubmit}>
 					Add Product
 				</AddProductButton>

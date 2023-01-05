@@ -17,7 +17,22 @@ const handleRefreshToken = async (req, res) => {
 
   try {
     const refreshToken = jwt;
-    const findUser = await Users.findOne({ refreshToken }).exec();
+    const findUser = await Users.findOne({ refreshToken })
+      // .populate([
+      //   {
+      //     path: "favoriteProducts",
+      //     populate: {
+      //       path: "productId",
+      //     },
+      //   },
+      //   {
+      //     path: "favoriteProducts.productId",
+      //     populate: {
+      //       path: "teamId",
+      //     },
+      //   },
+      // ])
+      .exec();
 
     if (!findUser) {
       JSONWEBTOKEN.verify(
@@ -125,6 +140,12 @@ const handleRefreshToken = async (req, res) => {
           favoriteDriver: findUser?.favoriteDriver,
           favoriteConstructor: findUser.favoriteConstructor,
           imageUrl: findUser.imageUrl,
+          favoriteProducts: findUser?.favoriteProducts,
+          favoriteProductsCount: findUser.favoriteProducts.length,
+          cartItemsCount: findUser.cart.items.reduce(
+            (acc, el) => acc + el.quantity,
+            0
+          ),
         });
       }
     );

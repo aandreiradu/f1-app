@@ -24,6 +24,7 @@ export const StoreMainContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	padding: 1rem;
+	position: relative;
 `;
 
 export const StoreHeaderContainer = styled.div`

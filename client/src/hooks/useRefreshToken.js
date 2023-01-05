@@ -1,6 +1,10 @@
 import axios from '../api/axios';
 import { useDispatch } from 'react-redux';
 import { refreshToken } from '../store/Auth/auth.actions';
+import {
+	shopUserAddToFavorites,
+	shopUserSyncFavorites
+} from '../store/Store__UserProducts/store__userProducts.actions';
 
 const useRefreshToken = () => {
 	const dispatch = useDispatch();
@@ -19,7 +23,10 @@ const useRefreshToken = () => {
 			favoriteConstructor,
 			favoriteDriver,
 			imageUrl,
-			isAdmin
+			isAdmin,
+			favoriteProducts,
+			favoriteProductsCount,
+			cartItemsCount
 		} = response.data || null;
 		if (accessToken) {
 			console.log(
@@ -33,7 +40,10 @@ const useRefreshToken = () => {
 					favoriteConstructor,
 					favoriteDriver,
 					imageUrl,
-					isAdmin
+					isAdmin,
+					favoriteProducts,
+					favoriteProductsCount,
+					cartItemsCount
 				})
 			);
 			dispatch(
@@ -46,9 +56,15 @@ const useRefreshToken = () => {
 					favoriteConstructor,
 					favoriteDriver,
 					imageUrl,
-					isAdmin
+					isAdmin,
+					favoriteProductsCount,
+					cartItemsCount
 				)
 			);
+			if (favoriteProducts.length > 0) {
+				console.error('@@@SHOULD DISPATCH ALSO FAVORITES HERE', favoriteProducts);
+				dispatch(shopUserSyncFavorites(favoriteProducts));
+			}
 		}
 		return accessToken;
 	};

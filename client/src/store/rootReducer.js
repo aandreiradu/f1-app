@@ -10,6 +10,7 @@ import { qualyfingReducer } from './Qualyfing/qualyfing.reducer';
 import { addBetReducer } from './AddBet/addBet.reducer';
 import { shopTeamsReducer } from './Shop__Teams/shopTeams.reducer';
 import { shopProductsReducer } from './Shop__Products/shopProducts.reducer';
+import { storeUserReducer } from './Store__UserProducts/store__userProducts.reducer';
 
 const rootReducer = combineReducers({
 	auth: authReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
 	qualyfing: qualyfingReducer,
 	addBet: addBetReducer,
 	shopTeams: shopTeamsReducer,
-	shopProducts: shopProductsReducer
+	shopProducts: shopProductsReducer,
+	shopUser: storeUserReducer
 });
 
 export default rootReducer;

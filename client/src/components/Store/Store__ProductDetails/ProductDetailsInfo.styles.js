@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled, { css, keyframes } from 'styled-components';
 
-const sizeSelectionAnimation = keyframes`
+export const sizeSelectionAnimation = keyframes`
 	from {
 		/* padding: 0; */
 		transform: scale(0);
@@ -70,6 +70,9 @@ export const ProductDetailsInfoDescription = styled.p`
 	font-weight: 400;
 	color: #242424;
 	line-height: 1.5;
+	max-height: 75px;
+	overflow: hidden;
+	overflow-y: auto;
 `;
 
 export const ProductDetailsSizes = styled.div`
@@ -101,13 +104,14 @@ export const ProductDetailsSizeItem = styled.button`
 	font-weight: bold;
 	padding: 2px 10px;
 	cursor: pointer;
+	color: #1f1f1f;
 
 	${(props) =>
 		props.isSelected &&
 		css`
 			background-color: #e10600;
 			color: #fff;
-			border-radius: 50%;
+			border-radius: 90px;
 			animation: ${sizeSelectionAnimation} 0.15s linear;
 		`}
 
@@ -127,4 +131,38 @@ export const ProductDetailsSizeItem = styled.button`
 		transform-origin: 0% 0%;
 		background-color: tomato;
 	}
+
+	&:hover {
+		background-color: #e10600;
+		color: #fff;
+		transition: all 0.15s ease-in;
+	}
+`;
+
+export const OutOfStock = styled.span`
+	position: relative;
+	color: #1f1f1f;
+	width: 100%;
+	text-align: center;
+	font-size: 16px;
+	text-transform: uppercase;
+	font-weight: 700;
+
+	&::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		width: 60px;
+		height: 1px;
+		background-color: red;
+		transform: translate(-50%, -50%);
+	}
+`;
+
+export const RiskStock = styled.span`
+	font-size: 15px;
+	font-weight: 600;
+	text-align: right;
+	animation: ${sizeSelectionAnimation} 0.25s ease;
 `;

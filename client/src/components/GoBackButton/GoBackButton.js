@@ -9,6 +9,7 @@ const GoBackButton = () => {
 	console.log('GoBackButton render');
 	const location = useLocation();
 	const navigate = useNavigate();
+
 	// const [isVisible, setIsVisible] = useState(false);
 
 	// const listenToSroll = () => {

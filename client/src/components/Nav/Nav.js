@@ -1,30 +1,58 @@
-import React, { useState } from 'react';
+import { faHeart as EmptyHeart } from '@fortawesome/free-regular-svg-icons';
+import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion } from 'framer-motion';
-import classes from './Nav.module.css';
+import React, { useState } from 'react';
+import { RiMenu2Line } from 'react-icons/ri';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { driverCards } from '../../animationsPresets/animationsPresets';
-import { RiMenu2Line, RiUser3Fill } from 'react-icons/ri';
-import Sidebar from './Sidebar';
-import { Link } from 'react-router-dom';
-import UserProfilePopUp from '../NavUserProfilePopUp/UserProfilePopUp';
+import { selectFavAndCartCounter } from '../../store/Auth/auth.selector';
+import Badge from '../Badge/Badge';
 import GoBackButton from '../GoBackButton/GoBackButton';
+import classes from './Nav.module.css';
+import Sidebar from './Sidebar';
 
 const Nav = () => {
+	const { favoriteProductsCount, cartItemsCount } = useSelector(selectFavAndCartCounter);
+	console.log({ favoriteProductsCount, cartItemsCount });
+	const navigate = useNavigate();
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [showProfiler, setShowProfiler] = useState(false);
+	// const [showProfiler, setShowProfiler] = useState(false);
 
 	const menuOpenHandler = () => {
 		setMenuOpen((prevState) => !prevState);
 	};
 
-	const handleProfiler = (event) => {
-		event.stopPropagation();
-		setShowProfiler((prev) => !prev);
+	// const handleProfiler = (event) => {
+	// 	event.stopPropagation();
+	// 	setShowProfiler((prev) => !prev);
+	// };
+
+	// const justOpenProfiler = () => setShowProfiler(true);
+
+	const redirectFromNav = (iconName) => {
+		switch (iconName) {
+			case 'favorites': {
+				console.log('redirect to favorites');
+				navigate('/shop/favorites');
+				break;
+			}
+
+			case 'cart': {
+				console.log('redirect to cart');
+				navigate('/shop/cart');
+				break;
+			}
+
+			default:
+				console.log(`Unhandled redirect for ${iconName}`);
+				break;
+		}
 	};
 
-	const justOpenProfiler = () => setShowProfiler(true);
-
 	if (menuOpen) {
-		return <Sidebar onClose={menuOpenHandler} onProfiler={justOpenProfiler} />;
+		return <Sidebar onClose={menuOpenHandler} /*onProfiler={justOpenProfiler}*/ />;
 	} else {
 		return (
 			<>
@@ -59,9 +87,35 @@ const Nav = () => {
 								</motion.svg>
 							</Link>
 						</div>
-						<div className={classes['user-login']} onClick={handleProfiler}>
-							<RiUser3Fill />
-							{showProfiler && <UserProfilePopUp active={showProfiler} />}
+						<div className={classes['nav-right']}>
+							{/* <div className={classes['user-login']} onClick={handleProfiler}>
+								<RiUser3Fill />
+								{showProfiler && <UserProfilePopUp active={showProfiler} />}
+							</div> */}
+							<div className={classes['icon__badge']}>
+								{/* <img src={HeartSVG} alt="" className={classes['icon__navRight']} /> */}
+								<FontAwesomeIcon
+									width="30px"
+									height="25px"
+									cursor="pointer"
+									color="#fff"
+									icon={EmptyHeart}
+									onClick={redirectFromNav.bind(this, 'favorites')}
+								/>
+								<Badge count={favoriteProductsCount || ''} />
+							</div>
+							<div className={classes['icon__badge']}>
+								{/* <img src={HeartSVG} alt="" className={classes['icon__navRight']} /> */}
+								<FontAwesomeIcon
+									width="30px"
+									height="25px"
+									cursor="pointer"
+									color="#fff"
+									icon={faCartPlus}
+									onClick={redirectFromNav.bind(this, 'cart')}
+								/>
+								<Badge count={cartItemsCount || ''} />
+							</div>
 						</div>
 					</div>
 				</nav>

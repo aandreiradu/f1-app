@@ -31,6 +31,7 @@ import ShopByTeam from './components/Store/Store__ShopByTeam/ShopByTeam';
 import Admin from './pages/Admin/Admin';
 import AdminAddProducts from './pages/Admin/AdminAddProducts';
 import ShopProductDeatils from './pages/Shop/Shop__ProductDetails/Shop__ProductDetails';
+import ShopFavoriteItems from './pages/Shop/Shop__FavoriteItems/Shop__FavoriteItems';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -108,8 +109,13 @@ function App() {
 							<Route path="/shop">
 								<Route index element={<Store />} />
 								<Route path="/shop/team/:teamId" element={<ShopByTeam />} />
-								{/* <Route path="/shop/team/:teamId" element={<ShopByTeam />} />/ */}
 								<Route path="/shop/product/:productId" element={<ShopProductDeatils />} />
+
+								{/* List all the favorite items */}
+								<Route path="/shop/favorites" element={<ShopFavoriteItems />} />
+
+								{/* List all the items from cart */}
+								<Route path="/shop/cart" element={<ShopFavoriteItems />} />
 							</Route>
 
 							{/* Store - Shop By Team - Products filtered by team */}

@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductDetailsHeader from '../../../components/Store/Store__ProductDetails/ProductDetails__header';
 import { StoreGlobalSettings } from '../Shop.styles';
@@ -11,13 +10,10 @@ import ProductDetailsActions from '../../../components/Store/Store__ProductDetai
 import Footer from '../../../components/Footer/Footer';
 
 const ShopProductDeatils = () => {
+	const { productId } = useParams();
+	const [isSizeSelected, setIsSizeSelected] = useState(false);
 	const [productDetails, setProductDetails] = useState({});
 	const { sendRequest, error } = useAxiosInterceptors();
-	const { productId } = useParams();
-
-	console.log('@@@productDetails is', productDetails);
-	console.log('@@@productDetails?.product?.imageUrl is', productDetails?.product?.imageUrl);
-	console.log('@@@productDetails?.product?.name is', productDetails?.product?.name);
 
 	useEffect(() => {
 		console.log('@@@ShopProductDeatils useEffect error');
@@ -57,9 +53,12 @@ const ShopProductDeatils = () => {
 		};
 	}, [productId]);
 
-	const productsAvailable = productDetails?.product?.sizeAndAvailableQuantity?.some(
-		(item) => item?.availableQuantity > 0
+	const productsAvailable = productDetails?.product?.sizeAndAvailability?.some(
+		(item) => item?.availability > 0
 	);
+
+	console.log('@@@productDetails is', productDetails);
+	console.log('productsAvailable', productsAvailable);
 
 	return (
 		<>
@@ -73,8 +72,15 @@ const ShopProductDeatils = () => {
 				<ProductDetailsInfo
 					product={productDetails?.product}
 					teamLogo={productDetails?.team?.logoUrl}
+					onSizeSelected={setIsSizeSelected}
+					isSelected={isSizeSelected}
 				/>
-				<ProductDetailsActions hasAvailableProducts={productsAvailable} />
+				<ProductDetailsActions
+					product={productDetails?.product}
+					productsAvailable={productsAvailable}
+					isSizeSelected={isSizeSelected}
+					hasSize={productDetails?.hasSize}
+				/>
 			</ProductDetailsContainer>
 			<Footer />
 		</>

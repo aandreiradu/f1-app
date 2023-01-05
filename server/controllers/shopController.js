@@ -5,8 +5,19 @@ const { removeFile } = require("../utils/files");
 const path = require("path");
 
 const createProduct = async (req, res, next) => {
-  const { title, description, price, details, teamId } = req.body;
+  const {
+    title,
+    description,
+    price,
+    details,
+    teamId,
+    sizeAvailability,
+    itemWithNoSize,
+  } = req.body;
   console.log("req.file", req.file);
+
+  console.log("req.body baa", req.body);
+  // return res.status(200).json({ message: "test" });
 
   if (!title || !description || !price || !teamId) {
     const error = new Error("Invalid request params on Create Product");
@@ -26,11 +37,14 @@ const createProduct = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error(
-      "Validation failed. Entered data is not in correct format"
+      errors.array()[0].msg ||
+        "Validation failed. Entered data is not in correct format"
     );
     error.statusCode = 422;
     console.log("errors.array", errors.array());
     error.data = errors.array()[0];
+
+    console.log("error to return", error);
 
     // remove file in case of error
     const fileToRemove = req?.file?.path || null;
@@ -56,6 +70,19 @@ const createProduct = async (req, res, next) => {
       return next(error);
     }
 
+    console.log("SA", sizeAvailability);
+    if (sizeAvailability) {
+      console.log(
+        "SA PARSED w/ stringify",
+        JSON.stringify(JSON.parse(sizeAvailability))
+      );
+      console.log("sa is array", Array.isArray(sizeAvailability));
+      console.log(
+        "sa is array parsed",
+        Array.isArray(JSON.parse(sizeAvailability))
+      );
+    }
+
     const product = new Product({
       title,
       description,
@@ -64,9 +91,27 @@ const createProduct = async (req, res, next) => {
       price,
       creator: req.userId,
       teamId: teamId,
+      sizeAndAvailability: sizeAvailability
+        ? [...JSON.parse(sizeAvailability)]
+        : [],
+      hasSize: itemWithNoSize,
     });
-
     await product.save();
+
+    console.log("product created", product);
+
+    // const product = {
+    //   title,
+    //   description,
+    //   details,
+    //   imageUrl,
+    //   price,
+    //   creator: req.userId,
+    //   teamId: teamId,
+    //   sizeAndAvailability: [...JSON.parse(sizeAvailability)],
+    // };
+
+    console.log("product created", product);
 
     return res.status(200).json({
       message: "Product created successfully",
@@ -99,7 +144,6 @@ const getProducts = async (req, res, next) => {
       .exec();
 
     console.log("@@getProducts result", products);
-
     if (!products) {
       return res.status(204).json({
         message: "No products found",
@@ -114,8 +158,8 @@ const getProducts = async (req, res, next) => {
   } catch (error) {
     if (!error.statusCode) {
       error.statuCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 
@@ -149,7 +193,8 @@ const getProductById = async (req, res, next) => {
       description: product?.description,
       details: product?.details,
       imageUrl: product?.imageUrl,
-      sizeAndAvailableQuantity: product?.sizeAndAvailableQuantity,
+      sizeAndAvailability: product?.sizeAndAvailability || [],
+      hasSize: product?.hasSize,
     },
     team: {
       ...product?.teamId.toJSON(), // to avoid _doc
@@ -202,8 +247,8 @@ const getProductsByTeamId = async (req, res, next) => {
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 

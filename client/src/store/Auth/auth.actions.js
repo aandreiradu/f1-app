@@ -10,7 +10,9 @@ export const setAccessToken = (
 	favoriteConstructor,
 	favoriteDriver,
 	imageUrl,
-	isAdmin
+	isAdmin,
+	favoriteProductsCount,
+	cartItemsCount
 ) => {
 	return createAction(AUTH_TYPES.AUTH_SET_ACCESS_TOKEN, {
 		accessToken: token,
@@ -21,7 +23,9 @@ export const setAccessToken = (
 		favoriteConstructor,
 		favoriteDriver,
 		imageUrl,
-		isAdmin
+		isAdmin,
+		favoriteProductsCount,
+		cartItemsCount
 	});
 };
 
@@ -34,7 +38,9 @@ export const refreshToken = (
 	favoriteConstructor,
 	favoriteDriver,
 	imageUrl,
-	isAdmin
+	isAdmin,
+	favoriteProductsCount,
+	cartItemsCount
 ) => {
 	return createAction(AUTH_TYPES.AUTH_REFRESH_TOKEN, {
 		accessToken: token,
@@ -45,7 +51,9 @@ export const refreshToken = (
 		favoriteConstructor,
 		favoriteDriver,
 		imageUrl,
-		isAdmin
+		isAdmin,
+		favoriteProductsCount,
+		cartItemsCount
 	});
 };
 
@@ -60,3 +68,9 @@ export const updateProfilePicture = (imageUrl) =>
 
 export const updateProfileInfo = (profileInfo) =>
 	createAction(AUTH_TYPES['PROFILE/UPDATE_PROFILE_INFO'], profileInfo);
+
+export const updateFavItemsCount = (countNo) =>
+	createAction(AUTH_TYPES['SHOP/UPDATE_FAV_ITEMS_COUNT'], countNo);
+
+export const updateCartItemsCount = (countNo) =>
+	createAction(AUTH_TYPES['SHOP/UPDATE_CART_ITEMS_COUNT'], countNo);

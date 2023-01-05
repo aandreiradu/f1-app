@@ -33,15 +33,15 @@ const productSchema = new Schema(
       required: true,
     },
 
-    sizeAndAvailableQuantity: [
+    sizeAndAvailability: [
       {
         size: {
           type: String,
-          required: true,
+          // required: true,
         },
-        availableQuantity: {
+        availability: {
           type: Number,
-          required: true,
+          // required: true,
         },
       },
     ],
@@ -50,6 +50,12 @@ const productSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "f1_teams",
       required: true,
+    },
+
+    hasSize: {
+      type: Boolean,
+      required: true,
+      default: true,
     },
   },
   { timestamps: true }

@@ -75,7 +75,9 @@ const Login = () => {
 			favoriteConstructor,
 			favoriteDriver,
 			imageUrl,
-			isAdmin
+			isAdmin,
+			favoriteProductsCount,
+			cartItemsCount
 		} = stateData || null;
 
 		// happy path, redirect to homepage;
@@ -90,7 +92,9 @@ const Login = () => {
 					favoriteConstructor,
 					favoriteDriver,
 					imageUrl,
-					isAdmin
+					isAdmin,
+					favoriteProductsCount,
+					cartItemsCount
 				)
 			);
 			resetPassword();
@@ -131,7 +135,9 @@ const Login = () => {
 			favoriteConstructor,
 			favoriteDriver,
 			imageUrl,
-			isAdmin
+			isAdmin,
+			favoriteProductsCount,
+			cartItemsCount
 		} = responseLogin || null;
 		if (responseLogin) {
 			setAuth({
@@ -145,7 +151,9 @@ const Login = () => {
 				favoriteConstructor,
 				favoriteDriver,
 				imageUrl,
-				isAdmin
+				isAdmin,
+				favoriteProductsCount,
+				cartItemsCount
 			});
 		}
 	};

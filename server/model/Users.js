@@ -47,6 +47,16 @@ const userSchema = new mongoose.Schema(
 
     raceBets: [RaceBetsModel],
 
+    favoriteProducts: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "f1_products",
+          required: true,
+        },
+      },
+    ],
+
     cart: {
       items: [
         {
@@ -57,6 +67,10 @@ const userSchema = new mongoose.Schema(
           },
           quantity: {
             type: Number,
+            required: true,
+          },
+          size: {
+            type: String,
             required: true,
           },
         },

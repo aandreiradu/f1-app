@@ -120,6 +120,13 @@ export const AddToCartButton = styled.button`
 	text-align: center;
 	cursor: pointer;
 
+	&:disabled {
+		pointer-events: none;
+		background-color: #ccc;
+		color: #1f1f1f;
+		cursor: not-allowed;
+	}
+
 	&:hover,
 	&:focus,
 	&:active {
@@ -133,6 +140,7 @@ export const AddToCartButton = styled.button`
 
 export const BottomAddToCart = styled.div`
 	flex: 1;
-	display: grid;
-	place-items: end;
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
 `;

@@ -57,7 +57,7 @@ const Users = () => {
 					dispatch(fetchScheduleStart());
 					sendRequest(
 						{
-							url: 'http://ergast.com/api/f1/current.json',
+							url: 'https://ergast.com/api/f1/current.json',
 							method: 'GET',
 							withCredentials: false,
 							signal: controller.signal
@@ -100,7 +100,7 @@ const Users = () => {
 					dispatch(fetchDriversStart());
 					sendRequest(
 						{
-							url: 'http://ergast.com/api/f1/current/driverStandings.json',
+							url: 'https://ergast.com/api/f1/current/driverStandings.json',
 							method: 'GET',
 							data: null,
 							headers: null,

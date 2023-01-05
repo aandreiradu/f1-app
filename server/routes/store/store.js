@@ -10,8 +10,17 @@ const {
 } = require("../../controllers/shopController");
 const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
 const populateTeamInfo = require("../../middlewares/populateTeamInfoById");
-const { body } = require("express-validator");
+const { body, oneOf } = require("express-validator");
 const itsAuthorized = require("../../middlewares/shop/itsAuthorized.middleware");
+const isValidProduct = require("../../middlewares/shop/isValidProduct.middleware");
+const addProductToFavorites = require("../../controllers/shop/addProductToFavorites.controller");
+const {
+  getFavoriteProductDetailsByUID,
+  getFavoriteProductsByUID,
+} = require("../../controllers/shop/getFavoriteProducts.controller");
+const isValidProductSA = require("../../middlewares/shop/isValidProductSizeAndAvailability.middleware");
+const addToCartController = require("../../controllers/shop/addToCart.controller");
+const removeFromFavorites = require("../../controllers/shop/removeProductFromFavorites.controller");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -87,6 +96,59 @@ router.post(
 
       return true;
     }),
+    oneOf([
+      body("sizeAvailability")
+        // .exists()
+        .custom((value) => {
+          console.log("sizeAvailability validator", value);
+
+          if (!value && body("itemWithNoSize").equals(true)) {
+            console.log("pass validation for size & availability");
+            return true;
+          }
+          try {
+            console.log("is array?", Array.isArray(JSON.parse(value)));
+            const checkSA = JSON.parse(value);
+            console.log("checkSA", checkSA);
+            console.log("checkSA array", Array.isArray(checkSA));
+            checkSA.forEach((item, idx) => {
+              console.log("item is", item);
+              const { index, size, availability } = item;
+              console.log("for idx", idx, "we receieved this", item);
+              console.log({ index, size, availability });
+
+              if (!size || !availability) {
+                throw new Error("Invalid parameter SIZEAVAILABILITY");
+              }
+              const sizes = ["S", "M", "L", "XL", "XXL"];
+              if (!sizes.includes(size)) {
+                throw new Error("Invalid parameter size");
+              }
+
+              if (availability < 0 || availability > 1000) {
+                throw new Error("Availability out of range");
+              }
+            });
+
+            console.log("Availabilit passed validations");
+            return true;
+          } catch (error) {
+            console.log("catch middleware SAI", error);
+            return Promise.reject(error || "Unexpected error occured");
+          }
+        }),
+      body("itemWithNoSize")
+        // .exists()
+        .custom((noVal) => {
+          console.log("itemWithNoSize", noVal);
+          if (noVal) {
+            console.log(
+              "Item with no size passed as in req body, the validation should be skipped"
+            );
+            return true;
+          }
+        }),
+    ]),
   ],
   createProduct
 );
@@ -96,5 +158,18 @@ router.get("/shop/product/:productId", getProductById);
 
 // Return all the products by teamId
 router.get("/shop/team/:teamId", populateTeamInfo, getProductsByTeamId);
+
+// Return all the favorite items if exists;
+router.get("/shop/getFavorites", getFavoriteProductsByUID);
+
+router.get("/shop/getFavoritesDetails", getFavoriteProductDetailsByUID);
+
+// Add item to favorites in store
+router.post("/shop/addToFavorites", isValidProduct, addProductToFavorites);
+
+router.post("/shop/removeFromFavorites", isValidProduct, removeFromFavorites);
+
+// POST - add item to cart
+router.post("/shop/addToCart", isValidProductSA, addToCartController);
 
 module.exports = router;

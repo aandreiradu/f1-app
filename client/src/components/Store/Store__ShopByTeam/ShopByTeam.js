@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import useAxiosInterceptors from '../../../hooks/useHttpInterceptors';
 import { StoreGlobalSettings, StoreMainContainer } from '../../../pages/Shop/Shop.styles';
 import Footer from '../../Footer/Footer';
@@ -10,11 +9,15 @@ import { ShopByTeamHeader, ShopByTeamHeaderLogo, ShopByTeamHeaderName } from './
 import LoaderIcon from '../../LoaderReusable/LoaderIcon';
 import ShopByTeamProductItem from './ShopByTeamProductItem';
 import { ShopByTeamProductItemWrapper } from './ShopByTeamProductItem.styles';
+import ErrorModal from '../../../components/UI/ErrorModal';
 
 const ShopByTeam = () => {
+	const [errorModal, setErrorModal] = useState({
+		show: false,
+		errorMessage: null
+	});
 	const [shopByTeamData, setShopByTeamData] = useState([]);
-	const { isLoading, sendRequest, responseData, error } = useAxiosInterceptors();
-	const location = useLocation();
+	const { isLoading, sendRequest, error } = useAxiosInterceptors();
 	const { teamId } = useParams();
 	console.log('teamId', teamId);
 
@@ -57,13 +60,35 @@ const ShopByTeam = () => {
 	}, [teamId]);
 
 	useEffect(() => {
-		console.log('@@@shopByTeamData EFFECT@@@', shopByTeamData);
-	}, [shopByTeamData]);
+		console.log('@@@error', error);
+
+		if (error) {
+			setErrorModal({
+				show: true,
+				errorMessage: error?.message || 'Something went wrong'
+			});
+		}
+	}, [error]);
+
+	const confirmErrorModal = () =>
+		setErrorModal({
+			show: false,
+			errorMessage: null
+		});
 
 	return (
 		<>
 			<StoreGlobalSettings />
 			<StoreMainContainer>
+				{/* Error Modal */}
+				{errorModal?.show && (
+					<ErrorModal
+						text="Ooops!"
+						message={errorModal?.errorMessage}
+						onConfirm={confirmErrorModal}
+					/>
+				)}
+
 				<ShopByTeamHeader>
 					<ShopByTeamHeaderLogo
 						src={
