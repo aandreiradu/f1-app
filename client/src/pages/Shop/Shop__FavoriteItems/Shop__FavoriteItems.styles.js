@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const ShopFavoritesTitle = styled.h2`
@@ -36,7 +37,7 @@ export const ShopFavoritesItemsContainer = styled.div`
 	/* padding: 20px; */
 `;
 
-export const FavoriteItem = styled.div`
+export const FavoriteItem = styled(Link)`
 	width: 100%;
 	height: 300px;
 	display: flex;

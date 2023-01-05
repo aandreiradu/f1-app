@@ -62,6 +62,7 @@ export const ProductDetailsInfoTitle = styled.h2`
 export const ProductDetailsInfoPrice = styled.span`
 	font-size: 20px;
 	font-weight: 500;
+	margin-bottom: auto;
 `;
 
 export const ProductDetailsInfoDescription = styled.p`
