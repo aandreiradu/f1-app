@@ -142,7 +142,10 @@ const handleRefreshToken = async (req, res) => {
           imageUrl: findUser.imageUrl,
           favoriteProducts: findUser?.favoriteProducts,
           favoriteProductsCount: findUser.favoriteProducts.length,
-          cartItemsCount: findUser.cart.items.length,
+          cartItemsCount: findUser.cart.items.reduce(
+            (acc, el) => acc + el.quantity,
+            0
+          ),
         });
       }
     );

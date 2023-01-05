@@ -92,6 +92,18 @@ export const authReducer = (state = initialState, action = {}) => {
 				cartItemsCount: 0
 			};
 
+		case AUTH_TYPES['SHOP/UPDATE_FAV_ITEMS_COUNT']:
+			return {
+				...state,
+				favoriteProductsCount: payload
+			};
+
+		case AUTH_TYPES['SHOP/UPDATE_CART_ITEMS_COUNT']:
+			return {
+				...state,
+				cartItemsCount: payload
+			};
+
 		default:
 			return state;
 	}

@@ -87,8 +87,8 @@ const postReset = async (req, res, next) => {
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 
@@ -135,8 +135,8 @@ const getNewPassword = async (req, res, next) => {
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 
@@ -200,8 +200,8 @@ const postNewPassword = async (req, res, next) => {
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 

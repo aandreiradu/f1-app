@@ -68,3 +68,9 @@ export const updateProfilePicture = (imageUrl) =>
 
 export const updateProfileInfo = (profileInfo) =>
 	createAction(AUTH_TYPES['PROFILE/UPDATE_PROFILE_INFO'], profileInfo);
+
+export const updateFavItemsCount = (countNo) =>
+	createAction(AUTH_TYPES['SHOP/UPDATE_FAV_ITEMS_COUNT'], countNo);
+
+export const updateCartItemsCount = (countNo) =>
+	createAction(AUTH_TYPES['SHOP/UPDATE_CART_ITEMS_COUNT'], countNo);

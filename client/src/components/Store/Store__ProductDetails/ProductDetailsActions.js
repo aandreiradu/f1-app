@@ -22,6 +22,9 @@ import {
 import useAxiosInterceptors from '../../../hooks/useHttpInterceptors';
 import { selectFavItemById } from '../../../store/Store__UserProducts/store__userProducts.selector';
 import ErrorModal from '../../UI/ErrorModal';
+import { updateFavItemsCount } from '../../../store/Auth/auth.actions';
+import { shopUserAddToCart } from '../../../store/Store__UserProducts/store__userProducts.actions';
+import { updateCartItemsCount } from '../../../store/Auth/auth.actions';
 
 const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, hasSize }) => {
 	const [showModal, setShowModal] = useState({
@@ -92,6 +95,7 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, has
 							// dispatch and update the store
 							console.log('new redux store will be', favoriteProducts);
 							dispatch(shopUserAddToFavorites(favoriteProducts));
+							dispatch(updateFavItemsCount(favoriteProducts?.length));
 							break;
 						}
 
@@ -99,6 +103,7 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, has
 							console.log('@@added case ', responseData);
 							console.log('new redux store will be', responseData?.favoriteProducts);
 							dispatch(shopUserAddToFavorites(responseData?.favoriteProducts));
+							dispatch(updateFavItemsCount(responseData?.favoriteProducts.length));
 							break;
 						}
 
@@ -154,7 +159,7 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, has
 					const controller = new AbortController();
 					sendRequest(
 						{
-							url: `/shop/cart`,
+							url: `/shop/addToCart`,
 							method: 'POST',
 							withCredentials: true,
 							controller: controller.signal,
@@ -165,6 +170,13 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, has
 						},
 						(responseData) => {
 							console.log('@@response addToCartHandler', responseData);
+							const { message, status, cart, cartItemsCount } = responseData;
+
+							if (status === 200 && message === 'product added to cart') {
+								console.log('all good, product added to cart => close size selection');
+								dispatch(shopUserAddToCart(cart));
+								dispatch(updateCartItemsCount(cartItemsCount));
+							}
 						}
 					);
 				} catch (error) {

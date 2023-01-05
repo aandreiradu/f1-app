@@ -4,7 +4,8 @@ const storeUserInitialState = {
 	isLoading: false,
 	error: null,
 	cart: [],
-	favoriteStoreItems: []
+	favoriteStoreItems: [],
+	favoriteStoreItemsDetails: []
 };
 
 export const storeUserReducer = (state = storeUserInitialState, action = {}) => {
@@ -17,6 +18,22 @@ export const storeUserReducer = (state = storeUserInitialState, action = {}) => 
 			return {
 				...state,
 				isLoading: true
+			};
+
+		// Sync Favorite Items with backend
+		case STORE__USER_PRODUCTS_TYPES.SHOP_FAVORITES_SYNC:
+			return {
+				...state,
+				isLoading: false,
+				favoriteStoreItems: payload
+			};
+
+		// Sync Cart Items with backend
+		case STORE__USER_PRODUCTS_TYPES.SHOP_CART_SYNC:
+			return {
+				...state,
+				isLoading: false,
+				cart: payload
 			};
 
 		// Success fetching cart products from backend
@@ -33,6 +50,14 @@ export const storeUserReducer = (state = storeUserInitialState, action = {}) => 
 				...state,
 				isLoading: false,
 				favoriteStoreItems: payload
+			};
+
+		// Success fetching favorite products DETAILS (imageURL,team,etc) from backend
+		case STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_FAVORITES_DETAILS_SUCESS:
+			return {
+				...state,
+				isLoading: false,
+				favoriteStoreItemsDetails: payload
 			};
 
 		// Success adding item to favorites
@@ -53,7 +78,8 @@ export const storeUserReducer = (state = storeUserInitialState, action = {}) => 
 
 		// Failure fetching cart products/favorites from backend
 		case (STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE,
-		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE):
+		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE,
+		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_FAVORITES_DETAILS_FAILURE):
 			return {
 				...state,
 				isLoading: false,

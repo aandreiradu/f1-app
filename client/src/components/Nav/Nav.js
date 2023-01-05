@@ -18,18 +18,18 @@ const Nav = () => {
 	console.log({ favoriteProductsCount, cartItemsCount });
 	const navigate = useNavigate();
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [showProfiler, setShowProfiler] = useState(false);
+	// const [showProfiler, setShowProfiler] = useState(false);
 
 	const menuOpenHandler = () => {
 		setMenuOpen((prevState) => !prevState);
 	};
 
-	const handleProfiler = (event) => {
-		event.stopPropagation();
-		setShowProfiler((prev) => !prev);
-	};
+	// const handleProfiler = (event) => {
+	// 	event.stopPropagation();
+	// 	setShowProfiler((prev) => !prev);
+	// };
 
-	const justOpenProfiler = () => setShowProfiler(true);
+	// const justOpenProfiler = () => setShowProfiler(true);
 
 	const redirectFromNav = (iconName) => {
 		switch (iconName) {
@@ -52,7 +52,7 @@ const Nav = () => {
 	};
 
 	if (menuOpen) {
-		return <Sidebar onClose={menuOpenHandler} onProfiler={justOpenProfiler} />;
+		return <Sidebar onClose={menuOpenHandler} /*onProfiler={justOpenProfiler}*/ />;
 	} else {
 		return (
 			<>

@@ -1,7 +1,10 @@
 import axios from '../api/axios';
 import { useDispatch } from 'react-redux';
 import { refreshToken } from '../store/Auth/auth.actions';
-import { shopUserAddToFavorites } from '../store/Store__UserProducts/store__userProducts.actions';
+import {
+	shopUserAddToFavorites,
+	shopUserSyncFavorites
+} from '../store/Store__UserProducts/store__userProducts.actions';
 
 const useRefreshToken = () => {
 	const dispatch = useDispatch();
@@ -60,7 +63,7 @@ const useRefreshToken = () => {
 			);
 			if (favoriteProducts.length > 0) {
 				console.error('@@@SHOULD DISPATCH ALSO FAVORITES HERE', favoriteProducts);
-				dispatch(shopUserAddToFavorites(favoriteProducts));
+				dispatch(shopUserSyncFavorites(favoriteProducts));
 			}
 		}
 		return accessToken;

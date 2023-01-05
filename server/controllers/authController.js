@@ -124,7 +124,10 @@ const handleLogin = async (req, res) => {
       favoriteDriver: searchUser?.favoriteDriver,
       imageUrl: searchUser?.imageUrl,
       favoriteProductsCount: searchUser.favoriteProducts.length,
-      cartItemsCount: searchUser.cart.items.length,
+      cartItemsCount: searchUser.cart.items.reduce(
+        (acc, el) => acc + el.quantity,
+        0
+      ),
     });
   } catch (error) {
     console.log("error authController", error);

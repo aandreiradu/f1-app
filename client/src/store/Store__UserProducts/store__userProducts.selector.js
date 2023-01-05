@@ -26,3 +26,11 @@ export const selectFavItemById = (id) =>
 
 		return favItem;
 	});
+
+export const selectFavoriteItemsDetails = createSelector(shopUserReducer, (state) => {
+	return {
+		favoriteStoreItemsDetails: state.favoriteStoreItemsDetails,
+		isLoading: state.isLoading,
+		error: state.error
+	};
+});

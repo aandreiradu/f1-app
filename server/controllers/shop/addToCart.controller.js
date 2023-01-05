@@ -52,12 +52,17 @@ const addToCartController = async (req, res, next) => {
 
     return res.status(200).json({
       message: "product added to cart",
+      cartItemsCount: updatedCartItems.reduce(
+        (acc, el) => acc + el.quantity,
+        0
+      ),
+      cart: updatedCartItems,
     });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 

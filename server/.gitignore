@@ -47,3 +47,16 @@ uploads
 /.env
 
 test.js
+
+productImages
+./productImages
+/productImages
+
+images
+./images
+/images
+
+teamsLogos
+./teamsLogos
+/teamsLogos
+

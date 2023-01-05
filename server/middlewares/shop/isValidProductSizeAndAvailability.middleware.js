@@ -66,8 +66,8 @@ const isValidProductSA = async (req, res, next) => {
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 

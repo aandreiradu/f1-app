@@ -128,8 +128,6 @@ const Store = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log('effect run for getting products');
-		console.log('products', products);
 		// fetch products
 		if (products?.length === 0) {
 			try {
@@ -164,7 +162,6 @@ const Store = () => {
 	}, [dispatch, sendRequest, products, productsPage]);
 
 	useEffect(() => {
-		console.log('@@@ERROR Store useEffect ', error);
 		if (error) {
 			const { message, status, data } = error || {};
 			console.log({ message, status, data });

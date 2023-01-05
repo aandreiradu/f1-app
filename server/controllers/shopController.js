@@ -158,8 +158,8 @@ const getProducts = async (req, res, next) => {
   } catch (error) {
     if (!error.statusCode) {
       error.statuCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 
@@ -247,8 +247,8 @@ const getProductsByTeamId = async (req, res, next) => {
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
-      return next(error);
     }
+    return next(error);
   }
 };
 
