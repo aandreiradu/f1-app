@@ -29,8 +29,8 @@ import Footer from '../Footer/Footer';
 
 const Users = () => {
 	const seasonSchedule = useSelector(selectSchedule);
-	const upcomingRace = useSelector(selectUpcomingEvent);
-	console.error('!!!!!!upcomingRace!!!!', upcomingRace);
+	// const upcomingRace = useSelector(selectUpcomingEvent);
+	// console.error('!!!!!!upcomingRace!!!!', upcomingRace);
 	const drivers = useSelector(selectDrivers);
 	const dispatch = useDispatch();
 	const { isLoading, error, sendRequest } = useAxiosInterceptorsPublic();
@@ -42,52 +42,52 @@ const Users = () => {
 	};
 
 	// upcoming events
-	useEffect(() => {
-		let isMounted = true;
-		const controller = new AbortController();
+	// useEffect(() => {
+	// 	let isMounted = true;
+	// 	const controller = new AbortController();
 
-		const getSchedule = async () => {
-			try {
-				if (seasonSchedule && seasonSchedule?.length > 0) {
-					const upcomingEvent = seasonSchedule?.find(
-						(event) => new Date(`${event?.date} ${event?.time}`) > new Date()
-					);
-					dispatch(setUpcomingEvent(upcomingEvent));
-				} else {
-					dispatch(fetchScheduleStart());
-					sendRequest(
-						{
-							url: 'https://ergast.com/api/f1/current.json',
-							method: 'GET',
-							withCredentials: false,
-							signal: controller.signal
-						},
-						(scheduleResponse) => {
-							const currentSchedule = scheduleResponse?.MRData?.RaceTable?.Races;
-							const upcomingEvent = currentSchedule?.find(
-								(event) => new Date(`${event?.date} ${event?.time}`) > new Date()
-							);
-							isMounted && dispatch(setUpcomingEvent(upcomingEvent));
-							isMounted && dispatch(fetchScheduleSuccess(currentSchedule));
-						}
-					);
-				}
-			} catch (errorSchedule) {
-				dispatch(
-					fetchScheduleFailure(
-						errorSchedule?.message || errorSchedule || 'Someting went wrong! Try again later.'
-					)
-				);
-			}
-		};
+	// 	const getSchedule = async () => {
+	// 		try {
+	// 			if (seasonSchedule && seasonSchedule?.length > 0) {
+	// 				const upcomingEvent = seasonSchedule?.find(
+	// 					(event) => new Date(`${event?.date} ${event?.time}`) > new Date()
+	// 				);
+	// 				dispatch(setUpcomingEvent(upcomingEvent));
+	// 			} else {
+	// 				dispatch(fetchScheduleStart());
+	// 				sendRequest(
+	// 					{
+	// 						url: 'https://ergast.com/api/f1/current.json',
+	// 						method: 'GET',
+	// 						withCredentials: false,
+	// 						signal: controller.signal
+	// 					},
+	// 					(scheduleResponse) => {
+	// 						const currentSchedule = scheduleResponse?.MRData?.RaceTable?.Races;
+	// 						const upcomingEvent = currentSchedule?.find(
+	// 							(event) => new Date(`${event?.date} ${event?.time}`) > new Date()
+	// 						);
+	// 						isMounted && dispatch(setUpcomingEvent(upcomingEvent));
+	// 						isMounted && dispatch(fetchScheduleSuccess(currentSchedule));
+	// 					}
+	// 				);
+	// 			}
+	// 		} catch (errorSchedule) {
+	// 			dispatch(
+	// 				fetchScheduleFailure(
+	// 					errorSchedule?.message || errorSchedule || 'Someting went wrong! Try again later.'
+	// 				)
+	// 			);
+	// 		}
+	// 	};
 
-		getSchedule();
+	// 	getSchedule();
 
-		return () => {
-			isMounted = false;
-			controller.abort();
-		};
-	}, [dispatch, sendRequest, seasonSchedule]);
+	// 	return () => {
+	// 		isMounted = false;
+	// 		controller.abort();
+	// 	};
+	// }, [dispatch, sendRequest, seasonSchedule]);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -147,14 +147,14 @@ const Users = () => {
 		setShowModal(false);
 	};
 
-	const onEventFinished = () => {
-		const nextEvent = seasonSchedule?.find(
-			(event) => new Date(event?.date) > new Date(upcomingRace?.date)
-		);
-		if (nextEvent && Object?.keys(nextEvent)?.length > 0) {
-			dispatch(setUpcomingEvent(nextEvent));
-		}
-	};
+	// const onEventFinished = () => {
+	// 	const nextEvent = seasonSchedule?.find(
+	// 		(event) => new Date(event?.date) > new Date(upcomingRace?.date)
+	// 	);
+	// 	if (nextEvent && Object?.keys(nextEvent)?.length > 0) {
+	// 		dispatch(setUpcomingEvent(nextEvent));
+	// 	}
+	// };
 
 	let content;
 
@@ -169,7 +169,7 @@ const Users = () => {
 						<Loader />
 					) : (
 						<>
-							{upcomingRace && (
+							{/*upcomingRace && (
 								<UpComingRace
 									countryHost={upcomingRace?.Circuit?.Location?.country}
 									raceDate={
@@ -182,11 +182,12 @@ const Users = () => {
 											  )
 											: ''
 									}
-									raceName={upcomingRace?.raceName}
-									upcomingRace={upcomingRace}
-									onEventFinished={onEventFinished}
+									// raceName={upcomingRace?.raceName}
+									// upcomingRace={upcomingRace}
+									// onEventFinished={onEventFinished}
 								/>
-							)}
+								)
+								*/}
 							<SearchDriver onSearch={handleDriverSearch} />
 							<motion.ul
 								variants={driverCards.containerDriverCards}

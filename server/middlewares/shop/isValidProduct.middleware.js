@@ -1,7 +1,6 @@
 const Products = require("../../model/StoreProducts");
 
 const isValidProduct = async (req, res, next) => {
-  console.log("a intrat aici");
   const { productId } = req.body;
 
   if (!productId) {
@@ -12,9 +11,12 @@ const isValidProduct = async (req, res, next) => {
 
   try {
     const product = await Products.findById(productId);
-    console.log("product", product);
 
     if (!product) {
+      console.log(
+        "@@@isValidProduct no product found for productId",
+        productId
+      );
       const error = new Error("Invalid product");
       error.statusCode = 403;
       return next(error);
@@ -22,7 +24,6 @@ const isValidProduct = async (req, res, next) => {
 
     req.productId = product?._id.toString();
     next();
-    console.log("a iesit de aici si am pus pe req asta", req.productId);
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

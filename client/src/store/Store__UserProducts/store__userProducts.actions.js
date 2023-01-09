@@ -5,13 +5,22 @@ import { STORE__USER_PRODUCTS_TYPES } from './store__userProducts.types';
 export const fetchShopCartStart = () =>
 	createAction(STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_START);
 
+export const fetchShopCartDetailsStart = () =>
+	createAction(STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_DETAILS_START);
+
 // Success
 export const fetchShopCartSuccess = (cartItems) =>
 	createAction(STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_SUCCESS, cartItems);
 
+export const fetchShopCartDeatilsSuccess = (cartItems) =>
+	createAction(STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_DETAILS_SUCCESS, cartItems);
+
 // Failure fetch cartItems from backend
 export const fetchShopCartFailure = (error) =>
 	createAction(STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE, error);
+
+export const fetchShopCartDetailsFailure = (error) =>
+	createAction(STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_DETAILS_FAILURE, error);
 
 // Add To Cart
 export const shopUserAddToCart = (product) =>
@@ -49,6 +58,10 @@ export const shopUserSyncCart = (cart) =>
 // Add To Favorites
 export const shopUserAddToFavorites = (product) =>
 	createAction(STORE__USER_PRODUCTS_TYPES.SHOP_FAVORITES_ADD, product);
+
+// Update cart
+export const shopUserUpdateCart = (payloadData) =>
+	createAction(STORE__USER_PRODUCTS_TYPES.SHOP_CART_UPDATE, payloadData);
 
 // Failure add to favorites
 export const shopUserAddToFavoritesFailure = (error) =>
