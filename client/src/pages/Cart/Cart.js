@@ -67,11 +67,7 @@ const Cart = () => {
 				<ShopFavoritesTitle>My Cart</ShopFavoritesTitle>
 
 				{isLoading ? (
-					<LoaderIcon
-						text="Loading your cart, please wait"
-						barsColor="#1f1f1f"
-						textColor={'#1f1f1f'}
-					/>
+					<LoaderIcon text="Loading your cart" barsColor="#1f1f1f" textColor={'#1f1f1f'} />
 				) : cartItemsDetails?.length === 0 ? (
 					<NoFavoritesFallback>
 						<NoFavoritesFallbackText>

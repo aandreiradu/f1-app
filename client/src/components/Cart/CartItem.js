@@ -3,7 +3,8 @@ import {
 	CartItemContainer,
 	CartItemProdImg,
 	CartItemActions,
-	CartItemProdDetails
+	CartItemProdDetails,
+	CartItemActionIcon
 } from './CartItem.styles';
 import F1Logo from '../../components/Nav/f1_logo.svg';
 import apiConfig from '../../constants/apiConfig';
@@ -14,10 +15,37 @@ import {
 	shopUserUpdateCart
 } from '../../store/Store__UserProducts/store__userProducts.actions';
 import { updateCartItemsCount } from '../../store/Auth/auth.actions';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import ErrorModal from '../../components/UI/ErrorModal';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const CartItem = ({ productId, price, imageUrl, title, quantity, size }) => {
 	const dispatch = useDispatch();
+	const [modalError, setModalError] = useState({
+		show: false,
+		message: null
+	});
 	const { sendRequest, isLoading, error } = useAxiosInterceptors();
+
+	useEffect(() => {
+		console.log('error CartItem', error);
+		if (error) {
+			setModalError({
+				show: true,
+				message: error?.message || 'Unexpected error occured'
+			});
+		}
+	}, [error]);
+
+	const confirmErrorModal = useCallback(
+		() =>
+			setModalError({
+				show: false,
+				message: null
+			}),
+		[]
+	);
 
 	const handleCartIncreaseDecreaseQTY = useCallback((productId, size, operation) => {
 		console.log('request with this', productId, size, operation);
@@ -50,6 +78,11 @@ const CartItem = ({ productId, price, imageUrl, title, quantity, size }) => {
 
 	return (
 		<CartItemContainer>
+			{/* Error Modal */}
+			{modalError.show && (
+				<ErrorModal title="Ooops" message={modalError.message} onConfirm={confirmErrorModal} />
+			)}
+
 			<CartItemProdImg
 				src={imageUrl ? `${apiConfig.baseURL}/${imageUrl}` : F1Logo}
 				alt="product image"
@@ -60,9 +93,21 @@ const CartItem = ({ productId, price, imageUrl, title, quantity, size }) => {
 				<span>{size || 'N/A'}</span>
 			</CartItemProdDetails>
 			<CartItemActions>
-				<span onClick={handleCartIncreaseDecreaseQTY.bind(this, productId, size, 'REMOVE')}>-</span>
+				<button
+					disabled={isLoading || modalError.show}
+					style={{ border: 'none', background: 'transparent' }}
+					onClick={handleCartIncreaseDecreaseQTY.bind(this, productId, size, 'ADD')}
+				>
+					<CartItemActionIcon icon={faPlus} />
+				</button>
 				<span>{quantity}</span>
-				<span onClick={handleCartIncreaseDecreaseQTY.bind(this, productId, size, 'ADD')}>+</span>
+				<button
+					disabled={isLoading || modalError.show}
+					onClick={handleCartIncreaseDecreaseQTY.bind(this, productId, size, 'REMOVE')}
+					style={{ border: 'none', background: 'transparent' }}
+				>
+					<CartItemActionIcon icon={faMinus} />
+				</button>
 			</CartItemActions>
 		</CartItemContainer>
 	);

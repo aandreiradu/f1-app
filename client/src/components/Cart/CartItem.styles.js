@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
 export const CartItemContainer = styled.div`
@@ -57,4 +58,14 @@ export const CartItemActions = styled.div`
 	& > span:nth-child(3) {
 		background-color: #e10600;
 	}
+`;
+
+export const CartItemActionIcon = styled(FontAwesomeIcon)`
+	width: 16px;
+	height: 14px;
+	cursor: pointer;
+	background-color: #1f1f1f;
+	padding: 2px;
+	border-radius: 4px;
+	color: #fff;
 `;
