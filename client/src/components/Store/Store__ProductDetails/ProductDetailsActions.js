@@ -186,6 +186,8 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, has
 		}
 	};
 
+	console.log('testing', productsAvailable, hasSize);
+
 	return (
 		<>
 			{hasError?.hasError && <ErrorMessage>{hasError?.errorMessage}</ErrorMessage>}
@@ -201,7 +203,7 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, has
 					disabled={isLoadingAxios}
 				/>
 				<ProductDetailsActionsAddToCartBtn
-					disabled={isLoadingAxios || (!productsAvailable && hasSize) || errorAxios}
+					disabled={isLoadingAxios || errorAxios || (!productsAvailable && hasSize)}
 					onClick={addToCartHandler.bind(this, product)}
 				>
 					<ProductDetailsActionsAddToCartBtnIcon icon={faCartPlus} />

@@ -32,6 +32,7 @@ import Admin from './pages/Admin/Admin';
 import AdminAddProducts from './pages/Admin/AdminAddProducts';
 import ShopProductDeatils from './pages/Shop/Shop__ProductDetails/Shop__ProductDetails';
 import ShopFavoriteItems from './pages/Shop/Shop__FavoriteItems/Shop__FavoriteItems';
+import Cart from './pages/Cart/Cart';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -115,7 +116,7 @@ function App() {
 								<Route path="/shop/favorites" element={<ShopFavoriteItems />} />
 
 								{/* List all the items from cart */}
-								<Route path="/shop/cart" element={<ShopFavoriteItems />} />
+								<Route path="/shop/cart" element={<Cart />} />
 							</Route>
 
 							{/* Store - Shop By Team - Products filtered by team */}

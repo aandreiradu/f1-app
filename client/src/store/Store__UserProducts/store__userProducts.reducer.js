@@ -4,17 +4,22 @@ const storeUserInitialState = {
 	isLoading: false,
 	error: null,
 	cart: [],
+	cartItemsDetails: [],
 	favoriteStoreItems: [],
-	favoriteStoreItemsDetails: []
+	favoriteStoreItemsDetails: [],
+	cartTotalPrice: 0
 };
 
 export const storeUserReducer = (state = storeUserInitialState, action = {}) => {
 	const { type, payload } = action;
 
+	console.log('hmm', type, payload);
+
 	switch (type) {
 		// Initiate loading spinner when fetching products / favorite prods from backend
 		case (STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_START,
-		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_FAVORITES_START):
+		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_FAVORITES_START,
+		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_DETAILS_START):
 			return {
 				...state,
 				isLoading: true
@@ -36,12 +41,29 @@ export const storeUserReducer = (state = storeUserInitialState, action = {}) => 
 				cart: payload
 			};
 
+		// Update Cart Items Details
+		case STORE__USER_PRODUCTS_TYPES.SHOP_CART_UPDATE:
+			return {
+				...state,
+				isLoading: false,
+				cartItemsDetails: payload.cartItemsDetails,
+				cartTotalPrice: payload.cartTotalPrice
+			};
+
 		// Success fetching cart products from backend
 		case STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_SUCCESS:
 			return {
 				...state,
 				isLoading: false,
 				cart: payload
+			};
+
+		case STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_DETAILS_SUCCESS:
+			return {
+				...state,
+				isLoading: false,
+				cartItemsDetails: payload.cartItemsDetails,
+				cartTotalPrice: payload.cartTotalPrice
 			};
 
 		// Success fetching favorite products from backend
@@ -79,6 +101,7 @@ export const storeUserReducer = (state = storeUserInitialState, action = {}) => 
 		// Failure fetching cart products/favorites from backend
 		case (STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE,
 		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE,
+		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_FAVORITES_DETAILS_FAILURE,
 		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_FAVORITES_DETAILS_FAILURE):
 			return {
 				...state,

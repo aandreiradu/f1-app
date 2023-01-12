@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema(
         {
           productId: {
             type: Schema.Types.ObjectId,
-            ref: "Product",
+            ref: "f1_products",
             required: true,
           },
           quantity: {

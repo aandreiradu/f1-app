@@ -79,7 +79,7 @@ const ShopProductDeatils = () => {
 					product={productDetails?.product}
 					productsAvailable={productsAvailable}
 					isSizeSelected={isSizeSelected}
-					hasSize={productDetails?.hasSize}
+					hasSize={productDetails?.product?.hasSize}
 				/>
 			</ProductDetailsContainer>
 			<Footer />

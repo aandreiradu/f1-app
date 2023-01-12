@@ -21,6 +21,8 @@ const {
 const isValidProductSA = require("../../middlewares/shop/isValidProductSizeAndAvailability.middleware");
 const addToCartController = require("../../controllers/shop/addToCart.controller");
 const removeFromFavorites = require("../../controllers/shop/removeProductFromFavorites.controller");
+const getCart = require("../../controllers/shop/getCart.controller");
+const updateCartController = require("../../controllers/shop/updateCart.controller");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -169,7 +171,13 @@ router.post("/shop/addToFavorites", isValidProduct, addProductToFavorites);
 
 router.post("/shop/removeFromFavorites", isValidProduct, removeFromFavorites);
 
+// Get - get all the items from cart
+router.get("/shop/getCart", getCart);
+
 // POST - add item to cart
 router.post("/shop/addToCart", isValidProductSA, addToCartController);
+
+// POST - update items from cart
+router.post("/shop/updateCart", isValidProduct, updateCartController);
 
 module.exports = router;

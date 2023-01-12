@@ -34,3 +34,10 @@ export const selectFavoriteItemsDetails = createSelector(shopUserReducer, (state
 		error: state.error
 	};
 });
+
+export const selectCartItemsDetails = createSelector(shopUserReducer, (state) => {
+	return {
+		cartItemsDetails: state.cartItemsDetails,
+		cartTotal: state.cartTotalPrice
+	};
+});

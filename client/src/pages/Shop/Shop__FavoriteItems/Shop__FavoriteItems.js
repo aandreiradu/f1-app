@@ -134,7 +134,7 @@ const ShopFavoriteItems = () => {
 				) : (
 					<ShopFavoritesItemsContainer>
 						{favoriteStoreItemsDetails?.map((item) => (
-							<FavoriteItem key={item?.product._id}>
+							<FavoriteItem key={item?.product._id} to={`/shop/product/${item?.product?._id}`}>
 								<FavoriteItemRemove
 									icon={faX}
 									onClick={removeFromFavHandler.bind(this, item?.product._id)}
