@@ -11,8 +11,6 @@ const updateCartController = async (req, res, next) => {
       "cart.items.productId"
     );
 
-    console.log("updateCartController prods", products.cart.items);
-
     if (!products || products?.length === 0) {
       const error = new Error("No products found to update in cart");
       error.statusCode = 400;
@@ -24,23 +22,14 @@ const updateCartController = async (req, res, next) => {
         cp?.productId?._id.toString() === productId.toString() &&
         cp.size.toLowerCase() === size?.toLowerCase()
     );
-    console.log("cartProductIndex", cartProductIndex);
 
     if (cartProductIndex > -1) {
-      console.log("item found in cart, look for quantity");
-
       const cartProduct = products.cart.items[cartProductIndex];
-      console.log("cartProduct", cartProduct);
 
       switch (operation) {
         case "ADD": {
-          console.log(
-            "operation update to cart - add, look for quantity and increase"
-          );
-          console.log("old quantity", cartProduct.quantity);
           const newQuantity = cartProduct.quantity + 1;
           cartProduct.quantity = newQuantity;
-          console.log("new cart product that will be saved in db", cartProduct);
           products.cart.items[cartProductIndex] = cartProduct;
 
           await products.save();
@@ -51,8 +40,6 @@ const updateCartController = async (req, res, next) => {
                 return acc + el.quantity * el.productId.price;
               }, 0)
               .toFixed(2) ?? 0;
-
-          console.log("totalCart", totalCart);
 
           return res.status(200).json({
             message: "Cart updated",
@@ -65,15 +52,9 @@ const updateCartController = async (req, res, next) => {
         }
 
         case "REMOVE": {
-          console.log(
-            "operation update to cart - remove, look for quantity and decrease or remove from cart if quantity 1"
-          );
           if (cartProduct.quantity > 1) {
-            console.log("quantity > 1, just decrease");
-            console.log("old quantity", cartProduct.quantity);
             const newQuantity = cartProduct.quantity - 1;
             cartProduct.quantity = newQuantity;
-            console.log("updated product quantity", cartProduct);
 
             products.cart.items[cartProductIndex] = cartProduct;
 
@@ -85,8 +66,6 @@ const updateCartController = async (req, res, next) => {
                   return acc + el.quantity * el.productId.price;
                 }, 0)
                 .toFixed(2) ?? 0;
-
-            console.log("totalCart", totalCart);
 
             return res.status(200).json({
               message: "Cart updated",
@@ -101,12 +80,22 @@ const updateCartController = async (req, res, next) => {
           } else {
             console.log("quantity == 1, remove from cart", cartProduct);
             console.log("cart before", products.cart.items);
-            const updatedCartItems = products.cart.items.filter(
+
+            const restOfItems = products.cart?.items?.filter(
+              (cp) => cp.productId?._id.toString() !== productId.toString()
+            );
+            console.log("restOfItems", restOfItems);
+
+            const productsWithSameIdDiffSize = products.cart?.items?.filter(
               (cp) =>
-                cp.productId?._id.toString() !== productId.toString() &&
+                cp.productId._id.toString() === productId.toString() &&
                 cp.size.toLowerCase() !== size.toLowerCase()
             );
-            console.log("updatedCartItems", updatedCartItems);
+
+            const updatedCartItems = [
+              ...restOfItems,
+              ...productsWithSameIdDiffSize,
+            ];
 
             products.cart.items = updatedCartItems;
             await products.save();
@@ -117,8 +106,6 @@ const updateCartController = async (req, res, next) => {
                   return acc + el.quantity * el.productId.price;
                 }, 0)
                 .toFixed(2) || 0;
-
-            console.log("totalCart", totalCart);
 
             return res.status(200).json({
               message: "Cart updated",
