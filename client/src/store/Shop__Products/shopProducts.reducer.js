@@ -28,17 +28,23 @@ export const shopProductsReducer = (state = initialShopProductsState, action = {
 				error: null
 			};
 
+		case SHOP_PRODUCTS_TYPES.SHOP_PRODUCTS_CHANGE_PAGENO:
+			return {
+				...state,
+				productsPage: payload
+			};
+
+		case SHOP_PRODUCTS_TYPES.FETCH_SHOP_PRODUCTS_QUERY:
+			return {
+				...state,
+				products: payload
+			};
+
 		case SHOP_PRODUCTS_TYPES.FETCH_SHOP_PRODUCTS_FAILURE:
 			return {
 				...state,
 				isLoading: false,
 				error: payload
-			};
-
-		case SHOP_PRODUCTS_TYPES.SHOP_PRODUCTS_CHANGE_PAGENO:
-			return {
-				...state,
-				productsPage: payload
 			};
 
 		default:

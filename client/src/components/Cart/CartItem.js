@@ -29,7 +29,6 @@ const CartItem = ({ productId, price, imageUrl, title, quantity, size }) => {
 	const { sendRequest, isLoading, error } = useAxiosInterceptors();
 
 	useEffect(() => {
-		console.log('error CartItem', error);
 		if (error) {
 			setModalError({
 				show: true,

@@ -17,7 +17,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import LoaderIcon from '../../components/LoaderReusable/LoaderIcon';
 import { selectCartItemsDetails } from '../../store/Store__UserProducts/store__userProducts.selector';
-import CartTotal from '../../components/Cart/CartTotal';
+import CartTotalCheckout from '../../components/Cart/CartTotalCheckout';
 
 const Cart = () => {
 	const dispatch = useDispatch();
@@ -90,7 +90,11 @@ const Cart = () => {
 					</CartItemsWrapper>
 				)}
 			</ShopFavoritesContainer>
-			<CartTotal totalPrice={cartTotal} disabled={cartItemsDetails?.length === 0} />
+			<CartTotalCheckout
+				totalPrice={cartTotal}
+				disabled={cartItemsDetails?.length === 0}
+				products={cartItemsDetails}
+			/>
 		</>
 	);
 };
