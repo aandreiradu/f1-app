@@ -7,6 +7,8 @@ const {
   getProducts,
   getProductById,
   getProductsByTeamId,
+  getProductsByQuery,
+  createCheckoutSession,
 } = require("../../controllers/shopController");
 const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
 const populateTeamInfo = require("../../middlewares/populateTeamInfoById");
@@ -23,6 +25,7 @@ const addToCartController = require("../../controllers/shop/addToCart.controller
 const removeFromFavorites = require("../../controllers/shop/removeProductFromFavorites.controller");
 const getCart = require("../../controllers/shop/getCart.controller");
 const updateCartController = require("../../controllers/shop/updateCart.controller");
+const { stripeWebhook } = require("../../webhooks/stripe_checkout");
 
 // Configure multer
 const fileStorage = multer.diskStorage({
@@ -62,6 +65,9 @@ const fileFilter = (req, file, callback) => {
 
 // Return all products
 router.get("/shop/products", getProducts);
+
+// Return searched product /shop/product?search=scuderria&ferrari
+router.get("/shop/search", getProductsByQuery);
 
 // Create product
 router.post(
@@ -179,5 +185,8 @@ router.post("/shop/addToCart", isValidProductSA, addToCartController);
 
 // POST - update items from cart
 router.post("/shop/updateCart", isValidProduct, updateCartController);
+
+// POST - create STRIPE checkout session
+router.post("/shop/checkout", createCheckoutSession);
 
 module.exports = router;

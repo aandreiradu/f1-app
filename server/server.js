@@ -14,6 +14,8 @@ const authRoutes = require("./routes/auth/auth");
 const userRoutes = require("./routes/user/userRoutes");
 const storeRoutes = require("./routes/store/store");
 const teamsRoutes = require("./routes/teams/teams");
+const { stripeWebhook } = require("./webhooks/stripe_checkout");
+const { createCheckoutSession } = require("./controllers/shopController");
 
 connectDB();
 
@@ -25,7 +27,15 @@ app.use(credentials);
 app.use(cors({ corsOptions, credentials: true, origin: true }));
 
 // built-in middleware for json
-app.use(express.json());
+
+app.use(
+  express.json({
+    limit: "5mb",
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString();
+    },
+  })
+);
 app.use(bodyParser.json()); // for json
 app.use(bodyParser.urlencoded({ extended: true })); // parsing application/xwww-
 
@@ -45,6 +55,9 @@ app.use("/", require("./routes/root"));
 
 // SignIn/SignUp routes
 app.use(authRoutes);
+
+// stripe webhook
+app.use("/webhook/stripe", stripeWebhook);
 
 // Protected Routes below this middleware
 app.use(verifyJWT);

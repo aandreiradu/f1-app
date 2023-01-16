@@ -3,6 +3,7 @@ const Product = require("../model/StoreProducts");
 const { validationResult } = require("express-validator");
 const { removeFile } = require("../utils/files");
 const path = require("path");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const createProduct = async (req, res, next) => {
   const {
@@ -163,6 +164,44 @@ const getProducts = async (req, res, next) => {
   }
 };
 
+const getProductsByQuery = async (req, res, next) => {
+  console.log("req.query", req.query);
+  const { query } = req.query;
+
+  try {
+    const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
+    const searchRgx = rgx(query);
+
+    console.log("searchRgx", searchRgx);
+
+    const searchedProducts = await Product.find({
+      $or: [
+        { title: { $regex: searchRgx, $options: "i" } },
+        { "teamId.teamFullName": { $regex: searchRgx, $options: "i" } },
+      ],
+    }).populate("teamId");
+    // .limit(5);
+
+    console.log("searchedProducts", searchedProducts);
+
+    return res.status(200).json({
+      products: searchedProducts,
+      message:
+        searchedProducts?.length > 0
+          ? "Products fetched successfully"
+          : "No products found",
+      totalProducts: searchedProducts?.length || 0,
+    });
+  } catch (error) {
+    console.log("error", error);
+    next(error);
+  }
+
+  return res.status(200).json({
+    message: "Received this query " + query,
+  });
+};
+
 const getProductById = async (req, res, next) => {
   const { productId } = req.params;
 
@@ -252,9 +291,45 @@ const getProductsByTeamId = async (req, res, next) => {
   }
 };
 
+const createCheckoutSession = async (req, res, next) => {
+  const { products } = req.body;
+
+  if (!products || products.length === 0) {
+    const error = new Error(
+      "No products found in cart in order to create a session"
+    );
+    error.statusCode = 401;
+    return next(error);
+  }
+
+  const stripeSession = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: products.map((p) => {
+      return {
+        name: p.productId.title,
+        description: p.productId.description,
+        amount: p.productId.price * 100,
+        currency: "EUR",
+        quantity: p.quantity,
+      };
+    }),
+    success_url: req.protocol + "://" + req.get("host") + "/checkout/success",
+    cancel_url: req.protocol + "://" + req.get("host") + "/checkout/cancel",
+  });
+
+  // console.log("stripeSession", stripeSession);
+
+  return res.status(200).json({
+    message: "OK",
+    stripeSession,
+  });
+};
+
 module.exports = {
   createProduct,
   getProducts,
   getProductById,
   getProductsByTeamId,
+  getProductsByQuery,
+  createCheckoutSession,
 };
