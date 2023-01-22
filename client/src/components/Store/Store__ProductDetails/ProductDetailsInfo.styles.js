@@ -126,11 +126,14 @@ export const ProductDetailsSizeItem = styled.button`
 	&:disabled::before {
 		content: '';
 		position: absolute;
-		width: 90%;
+		width: 100%;
 		height: 2px;
 		transform: rotate(45deg);
 		transform-origin: 0% 0%;
-		background-color: tomato;
+		transform-origin: -4% 0%;
+		background-color: red;
+		top: 2px;
+		left: 23%;
 	}
 
 	&:hover {
