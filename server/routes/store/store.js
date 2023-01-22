@@ -9,6 +9,7 @@ const {
   getProductsByTeamId,
   getProductsByQuery,
   createCheckoutSession,
+  retrieveCheckoutSession,
 } = require("../../controllers/shopController");
 const verifyExistingTeamById = require("../../middlewares/verifyExistingTeam");
 const populateTeamInfo = require("../../middlewares/populateTeamInfoById");
@@ -188,5 +189,7 @@ router.post("/shop/updateCart", isValidProduct, updateCartController);
 
 // POST - create STRIPE checkout session
 router.post("/shop/checkout", createCheckoutSession);
+
+router.post("/shop/checkout/retrieve-session", retrieveCheckoutSession);
 
 module.exports = router;

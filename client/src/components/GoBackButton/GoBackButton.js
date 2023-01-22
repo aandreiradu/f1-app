@@ -7,10 +7,6 @@ const GoBackButton = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	console.log('location', location);
-
-	console.log('isinchCKECOUT', location?.pathname.includes('/checkout/succes'));
-
 	return (
 		<>
 			{location?.pathname !== '/' && !location?.pathname.includes('/checkout/succes') && (

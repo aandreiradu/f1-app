@@ -22,5 +22,6 @@ export const STORE__USER_PRODUCTS_TYPES = {
 	SHOP_FAVORITES_SYNC: 'store__userProducts/SHOP_FAVORITES_SYNC',
 	SHOP_CART_SYNC: 'store__userProducts/SHOP_CART_SYNC',
 
-	SHOP_CART_UPDATE: 'store__userProducts/SHOP_CART_UPDATE'
+	SHOP_CART_UPDATE: 'store__userProducts/SHOP_CART_UPDATE',
+	SHOP_CART_CLEAR: 'store__userProducts/SHOP_CART_CLEAR'
 };

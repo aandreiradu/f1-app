@@ -33,6 +33,7 @@ import AdminAddProducts from './pages/Admin/AdminAddProducts';
 import ShopProductDeatils from './pages/Shop/Shop__ProductDetails/Shop__ProductDetails';
 import ShopFavoriteItems from './pages/Shop/Shop__FavoriteItems/Shop__FavoriteItems';
 import Cart from './pages/Cart/Cart';
+import CheckoutSuccess from './pages/Checkout/Success/CheckoutSuccess';
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -117,6 +118,12 @@ function App() {
 
 								{/* List all the items from cart */}
 								<Route path="/shop/cart" element={<Cart />} />
+
+								{/* Checkout success */}
+								<Route path="/shop/checkout/success" element={<CheckoutSuccess />} />
+
+								{/* Checkout failed */}
+								<Route path="/shop/checkout/failed" element={<Cart />} />
 							</Route>
 
 							{/* Store - Shop By Team - Products filtered by team */}

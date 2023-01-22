@@ -66,3 +66,5 @@ export const shopUserUpdateCart = (payloadData) =>
 // Failure add to favorites
 export const shopUserAddToFavoritesFailure = (error) =>
 	createAction(STORE__USER_PRODUCTS_TYPES.SHOP_FAVORITES_ADD_FAILURE, error);
+
+export const shopUserClearCart = () => createAction(STORE__USER_PRODUCTS_TYPES.SHOP_CART_CLEAR);

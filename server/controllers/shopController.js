@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const { removeFile } = require("../utils/files");
 const path = require("path");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const { clearCart } = require("../webhookUtils/update");
 
 const createProduct = async (req, res, next) => {
   const {
@@ -98,21 +99,6 @@ const createProduct = async (req, res, next) => {
       hasSize: itemWithNoSize,
     });
     await product.save();
-
-    console.log("product created", product);
-
-    // const product = {
-    //   title,
-    //   description,
-    //   details,
-    //   imageUrl,
-    //   price,
-    //   creator: req.userId,
-    //   teamId: teamId,
-    //   sizeAndAvailability: [...JSON.parse(sizeAvailability)],
-    // };
-
-    console.log("product created", product);
 
     return res.status(200).json({
       message: "Product created successfully",
@@ -294,6 +280,8 @@ const getProductsByTeamId = async (req, res, next) => {
 const createCheckoutSession = async (req, res, next) => {
   const { products } = req.body;
 
+  console.log("checkout products", products);
+
   if (!products || products.length === 0) {
     const error = new Error(
       "No products found in cart in order to create a session"
@@ -302,27 +290,105 @@ const createCheckoutSession = async (req, res, next) => {
     return next(error);
   }
 
-  const stripeSession = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: products.map((p) => {
-      return {
-        name: p.productId.title,
-        description: p.productId.description,
-        amount: p.productId.price * 100,
-        currency: "EUR",
-        quantity: p.quantity,
-      };
-    }),
-    success_url: req.protocol + "://" + req.get("host") + "/checkout/success",
-    cancel_url: req.protocol + "://" + req.get("host") + "/checkout/cancel",
-  });
+  try {
+    const stripeSession = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: products.map((p) => {
+        return {
+          name: p.productId.title,
+          description: p.productId.description,
+          amount: p.productId.price * 100,
+          currency: "EUR",
+          quantity: p.quantity,
+        };
+      }),
+      metadata: {
+        f1_userId: req.userId,
+      },
+      success_url:
+        req.protocol +
+        "://" +
+        "localhost:3000/shop/checkout/success?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url:
+        req.protocol +
+        "://" +
+        "localhost:3000/shop/checkout/failed?session_id={CHECKOUT_SESSION_ID}",
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: "fixed_amount",
+            fixed_amount: { amount: 5 * 100, currency: "eur" },
+            display_name: "Shipping",
+            delivery_estimate: {
+              minimum: { unit: "business_day", value: 5 },
+              maximum: { unit: "business_day", value: 7 },
+            },
+          },
+        },
+      ],
+    });
+    console.log("stripeSession", stripeSession);
 
-  // console.log("stripeSession", stripeSession);
+    return res.status(200).json({
+      message: "OK",
+      stripeSession: {
+        id: stripeSession?.id,
+        subtotal: stripeSession?.amount_subtotal,
+        total: stripeSession?.amount_total,
+        shipping: stripeSession.shipping_options[0]?.shipping_amount,
+      },
+    });
+  } catch (error) {
+    console.log("error createCheckoutSession", error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    return next(error);
+  }
+};
 
-  return res.status(200).json({
-    message: "OK",
-    stripeSession,
-  });
+const retrieveCheckoutSession = async (req, res, next) => {
+  console.log("req.body", req.body);
+  const { stripeSessionId } = req.body;
+
+  console.log("stripeSessionId", stripeSessionId);
+
+  if (!stripeSessionId) {
+    const error = new Error("Invalid Stripe SessionId");
+    error.statusCode = 403;
+    return next(error);
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(stripeSessionId);
+
+    console.log("session", session);
+
+    let cartClear = false;
+    if (session.status === "complete" && session.payment_status === "paid") {
+      console.log("can clear the cart");
+
+      cartClear = await clearCart(req.userId);
+    }
+
+    //TODO! CAN CLEAR CART HERE IF STATUS IS PAID AND CREATE ORDER ON WEBHOOK
+
+    const objToReturn = {
+      session: session,
+      message: "Checkout session retrieved successfully",
+    };
+
+    if (cartClear) {
+      objToReturn.cart = [];
+    }
+
+    return res.status(200).json(objToReturn);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    return next(error);
+  }
 };
 
 module.exports = {
@@ -332,4 +398,5 @@ module.exports = {
   getProductsByTeamId,
   getProductsByQuery,
   createCheckoutSession,
+  retrieveCheckoutSession,
 };

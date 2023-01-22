@@ -78,7 +78,7 @@ const ProductDetailsInfo = ({ product, teamLogo, onSizeSelected, isSelected }) =
 								size={item?.size}
 								onClick={handleSizeSelection.bind(this, item?.size)}
 								isSelected={isSelected === item?.size}
-								disabled={+item?.availableQuantity === 0}
+								disabled={+item?.availability === 0}
 							>
 								{item?.size}
 							</ProductDetailsSizeItem>
