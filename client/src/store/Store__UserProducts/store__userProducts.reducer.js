@@ -98,6 +98,12 @@ export const storeUserReducer = (state = storeUserInitialState, action = {}) => 
 				cart: payload
 			};
 
+		case STORE__USER_PRODUCTS_TYPES.SHOP_CART_CLEAR:
+			return {
+				...state,
+				cart: []
+			};
+
 		// Failure fetching cart products/favorites from backend
 		case (STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE,
 		STORE__USER_PRODUCTS_TYPES.FETCH_SHOP_CART_FAILURE,

@@ -19,6 +19,7 @@ export const CartItemProdImg = styled.img`
 	height: 100%;
 	object-fit: contain;
 	flex: 0.5;
+	border-right: 1px solid #1f1f1f;
 `;
 
 export const CartItemProdDetails = styled.div`

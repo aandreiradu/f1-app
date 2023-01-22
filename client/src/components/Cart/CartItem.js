@@ -10,10 +10,7 @@ import F1Logo from '../../components/Nav/f1_logo.svg';
 import apiConfig from '../../constants/apiConfig';
 import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { useDispatch } from 'react-redux';
-import {
-	shopUserSyncCart,
-	shopUserUpdateCart
-} from '../../store/Store__UserProducts/store__userProducts.actions';
+import { shopUserUpdateCart } from '../../store/Store__UserProducts/store__userProducts.actions';
 import { updateCartItemsCount } from '../../store/Auth/auth.actions';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import ErrorModal from '../../components/UI/ErrorModal';
@@ -29,7 +26,6 @@ const CartItem = ({ productId, price, imageUrl, title, quantity, size }) => {
 	const { sendRequest, isLoading, error } = useAxiosInterceptors();
 
 	useEffect(() => {
-		console.log('error CartItem', error);
 		if (error) {
 			setModalError({
 				show: true,

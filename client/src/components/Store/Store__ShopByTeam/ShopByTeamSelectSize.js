@@ -56,6 +56,8 @@ const ShopByTeamSelectSize = ({ onClose, product }) => {
 
 		const { size, productId, availability } = productData;
 
+		console.log({ size, productId, availability });
+
 		if (size && productId && availability) {
 			console.log('legit to add to cart');
 

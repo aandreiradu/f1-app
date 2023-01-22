@@ -27,6 +27,12 @@ import { shopUserAddToCart } from '../../../store/Store__UserProducts/store__use
 import { updateCartItemsCount } from '../../../store/Auth/auth.actions';
 
 const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, hasSize }) => {
+	console.log('hmm', {
+		productsAvailable,
+		hasSize
+	});
+
+	console.log('@@isSizeSelected', isSizeSelected);
 	const [showModal, setShowModal] = useState({
 		show: false,
 		message: null
@@ -54,10 +60,7 @@ const ProductDetailsActions = ({ product, isSizeSelected, productsAvailable, has
 		});
 
 	useEffect(() => {
-		console.log('isSizeSelected effect', isSizeSelected);
-		console.log('hasError is', hasError);
 		if (isSizeSelected && hasError?.hasError && hasError?.errorMessage) {
-			console.log('a setat pe null');
 			setHasError(null);
 		}
 	}, [isSizeSelected]);

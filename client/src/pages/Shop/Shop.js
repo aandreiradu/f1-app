@@ -70,13 +70,6 @@ const Store = () => {
 				return;
 		}
 
-		console.log('@@@productsPage to fetch is', page);
-
-		// const isAlreadyCached = cachedPages?.find((cachedPage) => +cachedPage === page);
-		// console.log('isAlreadyCached', isAlreadyCached);
-		// if (!isAlreadyCached) {
-		// cachedPages.push(page);
-		// console.log('@@CACHED PAGES WILL BE', cachedPages);
 		// Fetch products
 		const controller = new AbortController();
 		sendRequest(
@@ -242,3 +235,5 @@ const Store = () => {
 };
 
 export default Store;
+
+// RADU X PE INPUT SI FETCH NORMAL IN FUNCTIE DE PAGENO

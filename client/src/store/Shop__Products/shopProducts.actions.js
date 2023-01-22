@@ -17,3 +17,6 @@ export const fetchShopProductsFailure = (error) =>
 
 export const shopProductsChangePageNo = (pageNumber) =>
 	createAction(SHOP_PRODUCTS_TYPES.SHOP_PRODUCTS_CHANGE_PAGENO, pageNumber);
+
+export const fetchShopProductsQuery = (products) =>
+	createAction(SHOP_PRODUCTS_TYPES.FETCH_SHOP_PRODUCTS_QUERY, products);
