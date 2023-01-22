@@ -20,19 +20,10 @@ import useAxiosInterceptors from '../../hooks/useHttpInterceptors';
 import { useNavigate } from 'react-router-dom';
 import SizeAvailability from '../../components/AdminAddProducts__Size&Availability/SizeAvailability';
 import SizeAvailabilityItem from '../../components/AdminAddProducts__Size&Availability/SizeAvailabilityItem';
-import { removeIndexes } from '../../Utils/admin/removeIndexes_addProducts';
 
 const AdminAddProducts = () => {
-	const [noSizeItem, setNoSizeItem] = useState(false);
-	const [canSubmitActivities, setCanSubmitActivities] = useState(false);
 	const { sendRequest, error } = useAxiosInterceptors();
-	const [activities, setActivities] = useState([
-		{
-			index: 0,
-			size: null,
-			availability: null
-		}
-	]);
+	const [sizeSelected, setSizeSelected] = useState('');
 	const [showModal, setShowModal] = useState({
 		show: false,
 		title: null,
@@ -263,6 +254,11 @@ const AdminAddProducts = () => {
 		canSubmit = true;
 	}
 
+	const handleSizeSelection = (size) => {
+		console.log('set state in parent to this', size);
+		setSizeSelected(size);
+	};
+
 	const addProductHandler = (e) => {
 		e.preventDefault();
 		if (canSubmit) {
@@ -452,59 +448,18 @@ const AdminAddProducts = () => {
 						</AddProductsErrorFallback>
 					)}
 				</AddProductActionGroup>
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						gap: '10px',
-						width: '100%',
-						justifyContent: 'flex-end'
-					}}
-				>
-					<label htmlFor="noSizeItem">Item With No Size</label>
-					<input name="noSizeItem" id="noSizeItem" type="checkbox" onChange={handleNoSizeItem} />
-				</div>
-				{!noSizeItem && (
-					<SizeAvailability
-						canSubmit="true"
-						activities={activities}
-						onSubmit={setCanSubmitActivities}
-					>
-						{activities?.map((activity) => (
-							<SizeAvailabilityItem
-								canBeRemoved={activities?.length > 1}
-								key={activity?.index}
-								index={activity?.index}
-								configLeft={{
-									dataSource: ['S', 'M', 'L', 'XL', 'XXL'],
-									// .filter((size) => {
-									// 	const isSelected = activities.find((act) => act.size === size);
-									// 	console.log('isSelected', isSelected);
-									// 	if (!isSelected) return size;
-									// })
-									dataOption: 'selector',
-									onSizeSelected: setActivities,
-									value: activity?.size || ''
-								}}
-								configRight={{
-									dataOption: 'input',
-									dataType: 'number',
-									dataTypeConfig: {
-										min: 1,
-										max: 1000,
-										value: activity?.availability || 'Product Availability',
-										placeholder: 'Product Availability'
-									},
-									stateController: {
-										setter: setActivities
-									}
-								}}
-								onActivityAdded={addActivityHandler}
-								onActivityRemoved={removeActivityHandler}
-							/>
-						))}
-					</SizeAvailability>
-				)}
+				<SizeAvailability>
+					<SizeAvailabilityItem
+						configLeft={{
+							text: 'Size'
+						}}
+						configRight={{
+							dataSource: ['S', 'M', 'L'],
+							dataOption: 'selector'
+						}}
+						onSizeSelected={handleSizeSelection}
+					/>
+				</SizeAvailability>
 				<AddProductButton type="submit" disabled={!canSubmit}>
 					Add Product
 				</AddProductButton>
